@@ -139,6 +139,15 @@ public class Rectangle{
     }
 
     /**
+     * Get method for isVisible property
+     * @return true if component is visible
+     */
+    public boolean isVisible() {
+        return this.isVisible;
+    }
+    
+    
+    /**
      * Change the size to the new size
      * @param newHeight the new height in pixels. newHeight must be >=0.
      * @param newWidht the new width in pixels. newWidth must be >=0.
