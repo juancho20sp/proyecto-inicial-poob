@@ -1,0 +1,33 @@
+Todas las cajas tienen las mismas dimensiones
+Las cajas forman una figura tridimensional
+Hay tres cámaras:
+	frontal -> muestra la altura de la pila más alta de cada columna
+	lateral -> muestra la altura de la pila más alta de cada fila
+	superior -> muestra si una pila está o no vacía
+si hay cambios en alguna de estas imágenes, suena una alarma !
+Como robar
+	frontal -> no mover la pila más alta de la columna
+	lateral -> no mover la pila más alta de la fila
+	superior -> no dejar ninguna celda vacía (a menos que inicie vacía)
+
+Cuando patrick esté adentro, tomará las alturas de las pilas y las enviará
+
+patrick quiere robar tantas cajas como le sea posible
+¿Número máximo de cajas a robar sin activar la alarma?
+
+restricciones:
+	no muevo si es el más alto de la fila
+	no muevo si es el más alto de la columna
+	si hay dos igual de altos, muevo solo uno
+	si está en uno, lo dejo en uno
+
+¿Qué vamos a modelar?
+	Solo construir el simulador
+		crear un juego
+		almacenar una caja en la bodega
+		copiar el estado actual de la bodega en la zona de plan de robo
+		robar y devolver una caja en el plan de robo
+		consultar las piezas robadas en el último plan
+		consultar las cajas que hay en bodega y en el plan de robo
+		hacer visible o invisible el simulador
+		terminar el simulador
