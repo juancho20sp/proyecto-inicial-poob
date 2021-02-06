@@ -24,12 +24,13 @@ public class Rectangle{
      * Create a new rectangle at default position with default color.
      */
     public Rectangle(){
-        height = 30;
-        width = 40;
-        xPosition = 70;
-        yPosition = 15;
-        color = "magenta";
-        isVisible = false;
+        height = 20;
+        width = 20;
+        xPosition = 5;
+        yPosition = 5;
+        color = "gray";
+        
+        this.makeVisible();
     }
     
 

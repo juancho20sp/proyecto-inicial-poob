@@ -7,17 +7,44 @@
 public class Mission
 {
     
-    /**
-     * An example of a method - replace this comment with your own
-     * 
-     * @param  y   a sample parameter for a method
-     * @return     the sum of x and y 
-     */
+    private Rectangle[][] board;
+    private int length;
+    private int width;
+    
+    
     
     /**
      * Mission class constructor
      */
-    public void Mission(int lendth, int width){
+    public Mission(int length, int width){
+        this.length = length;
+        this.width = width;
+        
+        // Creamos el tablero
+        this.createBoard(this.length, this.width);
+    }
+    
+    /**
+     * Method for creating the board
+     * @param   rows    The number of rows on the board
+     * @param   cols    The number of cols on the boad
+     */
+    public void createBoard(int rows, int cols){
+        // Preparamos el espacio en memoria para traer los rectángulos
+        board = new Rectangle[rows][cols];
+        
+        // Tamaño de cada una de las fichas
+        int size = 22;
+        
+        for (int i = 0; i < rows; i++){
+            for(int j = 0; j < cols; j++){
+                board[i][j] = new Rectangle();
+                
+                // Movemos el rectángulo en el tablero
+                board[i][j].moveHorizontal(size * j);
+                board[i][j].moveVertical(size * i);
+            }            
+        }
     }
     
     /**
