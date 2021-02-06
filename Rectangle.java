@@ -24,12 +24,13 @@ public class Rectangle{
      * Create a new rectangle at default position with default color.
      */
     public Rectangle(){
-        height = 30;
-        width = 40;
-        xPosition = 70;
-        yPosition = 15;
-        color = "magenta";
-        isVisible = false;
+        height = 20;
+        width = 20;
+        xPosition = 5;
+        yPosition = 5;
+        color = "green";
+        
+        this.makeVisible();
     }
     
 
@@ -137,6 +138,15 @@ public class Rectangle{
         }
     }
 
+    /**
+     * Get method for isVisible property
+     * @return true if component is visible
+     */
+    public boolean isVisible() {
+        return this.isVisible;
+    }
+    
+    
     /**
      * Change the size to the new size
      * @param newHeight the new height in pixels. newHeight must be >=0.
