@@ -28,7 +28,7 @@ public class Rectangle{
         width = 20;
         xPosition = 5;
         yPosition = 5;
-        color = "gray";
+        color = "green";
         
         this.makeVisible();
     }
