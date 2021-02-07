@@ -112,7 +112,7 @@
         int newRow = row - 1;
         int newCol = column - 1;
         
-        if(newRow <= this.rows && newCol <= this.cols){
+        if(this.isValidPosition(newRow, newCol)){
             // Guardamos la caja en la casilla seleccionada
             this.warehouseValues[newRow][newCol] += 1;
             
@@ -258,7 +258,7 @@
         int newCol = col - 1;
         
         
-        if(newRow < this.rows && newCol < this.cols){
+        if(this.isValidPosition(newRow, newCol)){
             // Verificamos si hay cajas para robar en la posición
             if (this.planningZoneValues[newRow][newCol] > 0){                
                 // Sacamos una caja de la posición objetivo
@@ -328,11 +328,63 @@
     }
     
     /**
-    * Arrange method
-    * @param   from    int[]
-    * @param   to      int[]
+    * Method for arranging the planning zone
+    * @param   from    Array with two values [row, col]
+    * @param   to      Array with two values [row, col]
     */
-    public void arrange(int[] from, int[] to){}
+    public void arrange(int[] from, int[] to){
+        // Guardamos los valores, restamos uno porque nuestros índices inician desde 0
+        // y el usuario ingresa valores desde 1      
+        int oldRow = from[0] - 1;
+        int oldCol = from[1] - 1;
+        
+        int newRow = to[0] - 1;
+        int newCol = to[1] - 1;
+        
+        // Verificamos si la posición anterior es válida
+        if(this.isValidPosition(oldRow, oldCol)){
+            // Verificamos si la posición nueva es válida
+            if(this.isValidPosition(newRow, newCol)){
+                // Verificamos si en esa posición hay una caja    
+                if (this.planningZoneValues[oldRow][oldCol] > 0){
+                    // Retiramos una caja de esa posición
+                    this.planningZoneValues[oldRow][oldCol]--;
+                    
+                    // Agregamos la caja a la nueva posición
+                    this.planningZoneValues[newRow][newCol]++;
+                    
+                    // Pintamos los elementos del tablero
+                    this.colorPlanningZone();
+                    
+                    
+                } else {
+                    JOptionPane.showMessageDialog(null, "¡No hay cajas para ubicar en esa posición!");
+                }  
+            } else {
+                JOptionPane.showMessageDialog(null, "La posición 'to' no es válida");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "La posición 'from' no es válida");
+        } 
+        
+        
+    }
+    
+    /**
+     * Verify if the position is valid 
+     * @return True if it is a reachable position, false otherwise
+     */
+    private boolean isValidPosition(int row, int col){
+        if(row < 0 || col < 0){
+            return false;
+        }
+        
+        if(row < this.rows && col < this.cols){
+            return true;
+        }
+        
+        return false;
+    }
     
     /**
     * Return total of stolen boxes
@@ -342,7 +394,7 @@
         if(this.stolenBoxes == 1){
             JOptionPane.showMessageDialog(null, "Se ha robado 1 caja");
         } else {
-            JOptionPane.showMessageDialog(null, "Se han robado " + this.stolenBoxes + "cajas");
+            JOptionPane.showMessageDialog(null, "Se han robado " + this.stolenBoxes + " cajas");
         }
         
         return this.stolenBoxes;
@@ -352,19 +404,52 @@
     * Warehouse
     * @return  the warehouse matrix
     */
-    public int[][] warehouse(){
-        int[][] temp = new int[1][1];
-        return temp;
+    public int[][] warehouse(){    
+        // Contamos la cantidad de cajas en la bodega
+        int numBoxes = this.countBoxes(this.warehouseValues);
+        
+        // Mostramos el resultado en pantalla
+        if(numBoxes == 1){
+            JOptionPane.showMessageDialog(null, "En la bodega hay 1 caja");
+        } else {
+            JOptionPane.showMessageDialog(null, "En la bodega hay " + numBoxes + " cajas");
+        }        
+        
+        return this.warehouseValues;
     }
     
     /**
     * Layout method
     * @return  the layout method
     */
-    public int[][] layout(){
-    int[][] temp = new int[1][1];
+    public int[][] layout(){ 
+        // Contamos la cantidad de cajas en la zona de planeación
+        int numBoxes = this.countBoxes(this.planningZoneValues);
+        
+        // Mostramos el resultado en pantalla
+        if(numBoxes == 1){
+            JOptionPane.showMessageDialog(null, "En la zona de planeación hay 1 caja");
+        } else {
+            JOptionPane.showMessageDialog(null, "En la zona de planeación hay " + numBoxes + " cajas");
+        } 
+       
+        return this.planningZoneValues;
+    }
     
-    return temp;
+    /**
+     * Method for counting the boxes of the given location
+     * @return  int     number of boxes of the given location
+     */
+    private int countBoxes(int[][] location){
+        int totalBoxes = 0;
+        
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                totalBoxes += location[i][j];
+            }
+        }
+        
+        return totalBoxes;
     }
     
     
@@ -399,9 +484,12 @@
     }
     
     /**
-    * Finish
+    * Method for finishing the simulator
     */
-    public void finish(){}
+    public void finish(){
+        JOptionPane.showMessageDialog(null, "Terminando simulador...");        
+    }  
+   
     
     /**
     * Method for checking if the last action was valid
