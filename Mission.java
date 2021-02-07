@@ -10,7 +10,12 @@
     {
     
     private Rectangle[][] warehouse;
+    private Rectangle[][] warehouseFront;
+    private Rectangle[][] warehouseSide;
+    
     private Rectangle[][] planningZone;
+    private Rectangle[][] planningZoneFront;
+    private Rectangle[][] planningZoneSide;
     
     // Dimensiones de las bodegas
     private int rows;
@@ -56,14 +61,19 @@
     }
     
     /**
-    * Method for creating the board
+    * Method for creating the boards
     * @param   rows    The number of rows on the board
     * @param   cols    The number of cols on the boad
     */
     private void createBoards(int rows, int cols){
         // Preparamos el espacio en memoria para traer los rectángulos
         warehouse = new Rectangle[rows][cols];
-        planningZone = new Rectangle[rows][cols];        
+        warehouseFront = new Rectangle[rows][cols];
+        warehouseSide = new Rectangle[rows][cols];
+        
+        planningZone = new Rectangle[rows][cols]; 
+        planningZoneFront = new Rectangle[rows][cols]; 
+        planningZoneSide = new Rectangle[rows][cols]; 
         
         // Creamos las matrices que contendrán los valores de cada espacio
         this.prepareMatrix(rows, cols);
@@ -72,19 +82,36 @@
             for(int j = 0; j < cols; j++){
                 // Creamos las casillas de la bodega
                 this.warehouse[i][j] = new Rectangle();
+                this.warehouseFront[i][j] = new Rectangle();
+                this.warehouseSide[i][j] = new Rectangle();
                 
                 // Creamos las casillas de la zona de plan de robo
                 this.planningZone[i][j] = new Rectangle();
+                this.planningZoneFront[i][j] = new Rectangle();
+                this.planningZoneSide[i][j] = new Rectangle();
+                
                 
                 // Apagamos las casillas de la zona de plan de robo
                 this.planningZone[i][j].makeInvisible();
+                this.planningZoneFront[i][j].makeInvisible();
+                this.planningZoneSide[i][j].makeInvisible();
                 
                 // Inicializamos la posición en 0
                 this.warehouseValues[i][j] = 0;
                 
-                // Movemos el rectángulo en el tablero
-                this.warehouse[i][j].moveHorizontal(this.size * j);
-                this.warehouse[i][j].moveVertical(this.size * i);
+                // Movemos el tablero de la vista frontal de la bodega
+                this.warehouseFront[i][j].moveHorizontal(this.size * j);
+                this.warehouseFront[i][j].moveVertical(this.size * i);
+                
+                // Movemos el tablero de la vista lateral de la bodega
+                this.warehouseSide[i][j].moveHorizontal((this.size * this.cols) +
+                    this.size * j + 25);
+                this.warehouseSide[i][j].moveVertical(this.size * i);
+                
+                // Movemos el tablero de la vista superior de la bodega
+                this.warehouse[i][j].moveHorizontal((this.size * this.cols * 2) +
+                    this.size * j + 50);
+                this.warehouse[i][j].moveVertical(this.size * i);              
             }            
         }       
     }
@@ -185,13 +212,27 @@
         if (this.isPlanningCreated == false){   
             for(int i = 0; i < this.rows; i++){
                 for(int j = 0; j < this.cols; j++){
-                    // Hacemos visible el tablero de la zona de planeación
-                    this.planningZone[i][j].makeVisible();               
+                    // Hacemos visibles las vistas tablero de la zona de planeación
+                    this.planningZone[i][j].makeVisible();
+                    this.planningZoneFront[i][j].makeVisible(); 
+                    this.planningZoneSide[i][j].makeVisible(); 
                     
-                    // Los ubicamos en el canvas
+                    // Movemos el tablero de la vista frontal de la bodega
+                    this.planningZoneFront[i][j].moveHorizontal(this.size * j);
+                    this.planningZoneFront[i][j].moveVertical((this.size * this.rows) +
+                    this.size * i + 25);
+                    
+                    // Movemos el tablero de la vista lateral de la bodega
+                    this.planningZoneSide[i][j].moveHorizontal((this.size * this.cols) +
+                        this.size * j + 25);
+                    this.planningZoneSide[i][j].moveVertical((this.size * this.rows) +
+                    this.size * i + 25);
+                    
+                    // Movemos el tablero de la vista superior de la bodega
+                    this.planningZone[i][j].moveHorizontal((this.size * this.cols * 2) +
+                        this.size * j + 50);
                     this.planningZone[i][j].moveVertical((this.size * this.rows) +
                     this.size * i + 25);
-                    this.planningZone[i][j].moveHorizontal(this.size * j);
                 }
             } 
             
