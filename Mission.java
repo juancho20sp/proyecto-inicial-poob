@@ -1,5 +1,7 @@
     import javax.swing.JOptionPane;
     import java.util.ArrayList;
+    import java.util.Arrays;
+    
     /**
     * Initial project for POOB
     * 
@@ -151,8 +153,8 @@
     }
     
     /**
-    * Store method
-    * @param   crate   int[]
+    * Method for storing a new box on the warehouse board
+    * @param   crate   Array[row, col]
     */
     public void store(int [] crate){
         // Tomamos los valores del arreglo
@@ -253,6 +255,10 @@
                 this.planningZoneValues[i][j] = this.warehouseValues[i][j]; 
             }
         }
+        
+        // Imprimimos valores máximo por fila y columna
+        this.maxValuePerColumn(this.warehouseValues);
+        this.maxValuePerRow(this.warehouseValues);
     }
     
     /**
@@ -272,7 +278,7 @@
     }
     
     /**
-    * Color the planning zone boxes
+    * Color the warehouse boxes
     */
     private void colorWarehouse(){
         for(int i = 0; i < this.rows; i++){
@@ -287,9 +293,60 @@
         }
     }
     
+    /**
+     * Verify max values per column for the locations
+     * @param   int[][]     matrix with the values of the boxes per index of the location
+     */
+    private int[] maxValuePerColumn(int[][] location){
+        int[] res = new int[this.cols];
+        
+        // Inicializamos los valores del arreglo respuesta
+        for(int i = 0; i < this.cols; i++){
+            res[i] = 0;
+        }
+        
+        // Buscamos mayores valores por columna
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if(location[i][j] > res[j]){
+                    res[j] = location[i][j];
+                }
+            }
+        }
+        
+        System.out.println("Column: " +Arrays.toString(res));
+        
+        return res;
+    }
     
     /**
-    * Steal method
+     * Verify max values per row for the locations
+     * @param   int[][]     matrix with the values of the boxes per index of the location
+     */
+    private int[] maxValuePerRow(int[][] location){
+        int[] res = new int[this.rows];
+        
+        // Inicializamos los valores del arreglo respuesta
+        for(int i = 0; i < this.rows; i++){
+            res[i] = 0;
+        }
+        
+        // Buscamos mayores valores por fila
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if(location[i][j] > res[i]){
+                    res[i] = location[i][j];
+                }
+            }
+        }
+        
+        System.out.println("Row: " + Arrays.toString(res));
+        
+        return res;
+    }
+    
+    /**
+    * Method for stealing a box from the planning zone
     * @param   row     int
     * @param   column  int
     */
