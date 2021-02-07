@@ -128,6 +128,12 @@
     * @param   crate   int[]
     */
     public void store(int [] crate){
+        // Tomamos los valores del arreglo
+        int newRow = crate[0];
+        int newCol = crate[1];
+        
+        // Guardamos la caja
+        this.store(newRow, newCol);
     
     }
     
@@ -333,7 +339,13 @@
     * @return  Total of stolen boxed
     */
     public int stolen(){
-        return 0;
+        if(this.stolenBoxes == 1){
+            JOptionPane.showMessageDialog(null, "Se ha robado 1 caja");
+        } else {
+            JOptionPane.showMessageDialog(null, "Se han robado " + this.stolenBoxes + "cajas");
+        }
+        
+        return this.stolenBoxes;
     }
     
     /**
