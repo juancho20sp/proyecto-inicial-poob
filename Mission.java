@@ -209,8 +209,16 @@
         // Actualizamos los valores de la zona de planeación
         this.copyValues();
         
-        // Coloreamos la zona de planeación
+        // Coloreamos la vista frontal de la zona de planeación
+        this.colorPlanningZoneFront();
+        
+        // Coloreamos la vista lateral de la zona de planeación
+        this.colorPlanningZoneSide();
+        
+        // Coloreamos la vista superior zona de planeación
         this.colorPlanningZone();
+        
+         
     }
     
     /**
@@ -263,8 +271,8 @@
         }
         
         // Imprimimos valores máximo por fila y columna
-        this.maxValuePerColumn(this.warehouseValues);
-        this.maxValuePerRow(this.warehouseValues);
+        //this.maxValuePerColumn(this.warehouseValues);
+        //this.maxValuePerRow(this.warehouseValues);
     }
     
     /**
@@ -283,13 +291,18 @@
         }
     }
     
-    
-    public void setWarehouseValues(int[][] values){
+    /**
+     * Test method for entering the matrix as a parameter
+     */
+    private void setWarehouseValues(int[][] values){
         this.warehouseValues = values;
         
-        this.colorWarehouse();
+            // Valores
+            // {{1,4,0,5,2}, {2,1,2,0,1}, {0,2,3,4,4}, {0,3,0,3,1}, {1,2,2,1,1}}
         
-        // Dibujamos la vista frontal
+            this.colorWarehouse();
+            
+            // Dibujamos la vista frontal
             this.colorWarehouseFront();
             
             // Dibujamos la vista lateral
@@ -357,6 +370,50 @@
     }
     
     /**
+    * Color the planning zone front boxes
+    */
+    private void colorPlanningZoneFront(){
+        // Traemos los máximos por columna
+        int[] valuesFront = this.maxValuePerColumn(this.planningZoneValues);
+        
+        // Corregimos los valores para evitar errores al dibujar
+        for(int i = 0; i < this.rows; i++){
+            if(valuesFront[i] > this.rows){
+                valuesFront[i] = this.rows - 1;
+            }
+        }
+        
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < valuesFront[i]; j++){
+                this.planningZoneFront[this.rows - j - 1][i].changeColor("black");            
+            }
+        }
+    }
+    
+    /**
+    * Color the planning zone side boxes
+    */
+    private void colorPlanningZoneSide(){
+        // Traemos los máximos por fila
+        int[] valuesSide = this.maxValuePerRow(this.planningZoneValues);
+        
+        // Corregimos los valores para evitar errores al dibujar
+        for(int i = 0; i < this.rows; i++){
+            if(valuesSide[i] > this.rows){
+                valuesSide[i] = this.rows - 1;
+            }
+        }
+        
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < valuesSide[i]; j++){
+                this.planningZoneSide[this.rows - j - 1][i].changeColor("black");            
+            }
+        }
+    }
+    
+    /**
      * Verify max values per column for the locations
      * @param   int[][]     matrix with the values of the boxes per index of the location
      */
@@ -409,6 +466,21 @@
     }
     
     /**
+     * Method for resetting the original color of the planning zone
+     */
+    private void resetPlanningZoneColor(){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                // Vista frontal
+                this.planningZoneFront[i][j].changeColor("green");
+                
+                // Vista lateral
+                this.planningZoneSide[i][j].changeColor("green");
+            }
+        }
+    }
+    
+    /**
     * Method for stealing a box from the planning zone
     * @param   row     int
     * @param   column  int
@@ -428,7 +500,16 @@
                 // Sumamos uno a la cantidad de cajas robadas
                 this.stolenBoxes++;
                 
-                // Re coloreamos la zona de planeación
+                // Re seteamos el color
+                this.resetPlanningZoneColor();
+                
+                // Re coloreamos la vista frontal de la zona de planeación
+                this.colorPlanningZoneFront();
+                
+                // Re coloreamos la vista lateral de la zona de planeación
+                this.colorPlanningZoneSide();
+                
+                // Re coloreamos la vista superior de la zona de planeación
                 this.colorPlanningZone();
                 
                 // Le damos formato a la tupla
@@ -474,7 +555,16 @@
             // Aumentamos el contador de cajas en esa posición
             this.planningZoneValues[newRow][newCol]++;
             
-            // Pintamos la caja
+            // Re seteamos el color
+            this.resetPlanningZoneColor();
+            
+            // Re coloreamos la vista frontal de la zona de planeación
+            this.colorPlanningZoneFront();
+            
+            // Re coloreamos la vista lateral de la zona de planeación
+            this.colorPlanningZoneSide();
+            
+            // Re coloreamos la vista superior de la zona de planeación
             this.colorPlanningZone();
             
             // Modificamos la cantidad de cajas a arreglar
