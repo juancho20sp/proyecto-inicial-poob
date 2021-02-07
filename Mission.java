@@ -23,6 +23,9 @@
     // Tamaño de cada una de las fichas
     private int size = 22;
     
+    // Cantidad de cajas robadas
+    private int stolenBoxes = 0;
+    
     // Historial de posiciones de cajas robadas
     private ArrayList<String> stealHistorial = new ArrayList<String>();
     
@@ -255,8 +258,8 @@
                 // Sacamos una caja de la posición objetivo
                 this.planningZoneValues[newRow][newCol]--;
             
-                // Sumamos uno a la cantidad de cajas por organizar
-                this.boxesToArrange++;
+                // Sumamos uno a la cantidad de cajas robadas
+                this.stolenBoxes++;
                 
                 // Re coloreamos la zona de planeación
                 this.colorPlanningZone();
@@ -269,6 +272,8 @@
             } else {
                 JOptionPane.showMessageDialog(null, "¡No hay nada para robar en esa posición!");
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Posición no existente, inténtelo nuevamente");     
         }
     }
     
@@ -276,7 +281,14 @@
     * Steal method
     * @param   crate   int[]
     */
-    public void steal(int crate){}
+    public void steal(int[] crate){
+        // Tomamos los índices
+        int newRow = crate[0];
+        int newCol = crate[1];
+        
+        // Robamos la caja en dicha posición
+        this.steal(newRow, newCol);
+    }
     
     /**
     * Undo the last movement (steal) on the planning zone
@@ -299,7 +311,7 @@
             this.colorPlanningZone();
             
             // Modificamos la cantidad de cajas a arreglar
-            this.boxesToArrange--;
+            this.stolenBoxes--;
             
             // Eliminamos el movimiento del historial
             this.stealHistorial.remove(this.stealHistorial.size() - 1);
@@ -314,7 +326,7 @@
     * @param   from    int[]
     * @param   to      int[]
     */
-    public void arrange(int from, int to){}
+    public void arrange(int[] from, int[] to){}
     
     /**
     * Return total of stolen boxes
