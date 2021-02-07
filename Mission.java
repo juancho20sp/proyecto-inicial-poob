@@ -251,71 +251,24 @@
         
         if(newRow < this.rows && newCol < this.cols){
             // Verificamos si hay cajas para robar en la posición
-            if (this.warehouseValues[newRow][newCol] > 0){
-                // Verificamos si quiere devolver el último robo o hacer uno nuevo
-                // 1. Nuevo robo
-                // 2. Devolver el anterior
-                // 3. Cancelar
-                
-                int option = Integer.parseInt(JOptionPane.showInputDialog("Bienvenido!" +
-                                "\n¿Qué desea hacer?" +
-                                "\n 1. Hacer un nuevo robo." +
-                                "\n 2. Devolver el robo anterior." +
-                                "\n 3. Cancelar"));
-                
-                switch(option){
-                    case 1:
-                        // Sacamos una caja de la posición objetivo
-                        this.warehouseValues[newRow][newCol]--;
-                    
-                        // Sumamos uno a la cantidad de cajas por organizar
-                        this.boxesToArrange++;
-                        
-                        // Re coloreamos la bodega
-                        this.colorWarehouse();
-                        
-                        // Le damos formato a la tupla
-                        String tuple = newRow + "-" + newCol;
+            if (this.planningZoneValues[newRow][newCol] > 0){                
+                // Sacamos una caja de la posición objetivo
+                this.planningZoneValues[newRow][newCol]--;
             
-                        // Guardamos la tupla
-                        this.stealHistorial.add(tuple);
-                        break;
-                    case 2:
-                        // Si no hay elementos 
-                        if (this.stealHistorial.size() > 0){
-                            String lastMove = this.stealHistorial.get(this.stealHistorial.size() - 1);
-                            String pos[] = lastMove.split("-");
-                            
-                            // Sumamos 1 porque el método store resta 1
-                            int rowReturn = Integer.parseInt(pos[0]) + 1;
-                            int colReturn = Integer.parseInt(pos[1]) + 1;
-                            
-                            // Devolvemos la caja
-                            this.store(rowReturn, colReturn);
-                            
-                            // Modificamos la cantidad de cajas a arreglar
-                            this.boxesToArrange--;
-                            
-                            // Eliminamos el movimiento del historial
-                            this.stealHistorial.remove(this.stealHistorial.size() - 1);
-                            
-                        } else {
-                            JOptionPane.showMessageDialog(null, 
-                            "¡No hay cajas para devolver!");
-                        }
-                    default:
-                        break;
-                }
+                // Sumamos uno a la cantidad de cajas por organizar
+                this.boxesToArrange++;
                 
+                // Re coloreamos la zona de planeación
+                this.colorPlanningZone();
                 
+                // Le damos formato a la tupla
+                String tuple = newRow + "-" + newCol;
+    
+                // Guardamos la tupla
+                this.stealHistorial.add(tuple);
             } else {
                 JOptionPane.showMessageDialog(null, "¡No hay nada para robar en esa posición!");
             }
-            
-            
-            
-            
-    
         }
     }
     
@@ -326,10 +279,35 @@
     public void steal(int crate){}
     
     /**
-    * Return method
+    * Undo the last movement (steal) on the planning zone
     * 
     */
-    public void returnBox(){}
+    public void returnBox(){      
+        // Si hay movimientos, podemos deshacerlos
+        if(this.stealHistorial.size() > 0){
+            // Tomamos el movimiento
+            String lastMove = this.stealHistorial.get(this.stealHistorial.size() - 1);
+            String pos[] = lastMove.split("-");
+            
+            int newRow = Integer.parseInt(pos[0]);
+            int newCol = Integer.parseInt(pos[1]);
+            
+            // Aumentamos el contador de cajas en esa posición
+            this.planningZoneValues[newRow][newCol]++;
+            
+            // Pintamos la caja
+            this.colorPlanningZone();
+            
+            // Modificamos la cantidad de cajas a arreglar
+            this.boxesToArrange--;
+            
+            // Eliminamos el movimiento del historial
+            this.stealHistorial.remove(this.stealHistorial.size() - 1);
+        } else {
+            JOptionPane.showMessageDialog(null, 
+                            "¡No hay cajas para devolver!");
+        }      
+    }
     
     /**
     * Arrange method
