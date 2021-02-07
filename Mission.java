@@ -147,6 +147,12 @@
             
             // Dibujamos la caja
             this.warehouse[newRow][newCol].changeColor("black");
+            
+            // Dibujamos la vista frontal
+            this.colorWarehouseFront();
+            
+            // Dibujamos la vista lateral
+            this.colorWarehouseSide();
         } else {
             JOptionPane.showMessageDialog(null, "La posición ingresada no es válida");
         }
@@ -277,8 +283,21 @@
         }
     }
     
+    
+    public void setWarehouseValues(int[][] values){
+        this.warehouseValues = values;
+        
+        this.colorWarehouse();
+        
+        // Dibujamos la vista frontal
+            this.colorWarehouseFront();
+            
+            // Dibujamos la vista lateral
+            this.colorWarehouseSide();
+    }
+    
     /**
-    * Color the warehouse boxes
+    * Color the warehouse top view boxes
     */
     private void colorWarehouse(){
         for(int i = 0; i < this.rows; i++){
@@ -289,6 +308,50 @@
                 } else {
                 this.warehouse[i][j].changeColor("green");
                 }
+            }
+        }
+    }
+    
+    /**
+    * Color the warehouse front boxes
+    */
+    private void colorWarehouseFront(){
+        // Traemos los máximos por columna
+        int[] valuesFront = this.maxValuePerColumn(this.warehouseValues);
+        
+        // Corregimos los valores para evitar errores al dibujar
+        for(int i = 0; i < this.rows; i++){
+            if(valuesFront[i] > this.rows){
+                valuesFront[i] = this.rows - 1;
+            }
+        }
+        
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < valuesFront[i]; j++){
+                this.warehouseFront[this.rows - j - 1][i].changeColor("black");            
+            }
+        }
+    }
+    
+    /**
+    * Color the warehouse side boxes
+    */
+    private void colorWarehouseSide(){
+        // Traemos los máximos por fila
+        int[] valuesSide = this.maxValuePerRow(this.warehouseValues);
+        
+        // Corregimos los valores para evitar errores al dibujar
+        for(int i = 0; i < this.rows; i++){
+            if(valuesSide[i] > this.rows){
+                valuesSide[i] = this.rows - 1;
+            }
+        }
+        
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < valuesSide[i]; j++){
+                this.warehouseSide[this.rows - j - 1][i].changeColor("black");            
             }
         }
     }
@@ -312,9 +375,9 @@
                     res[j] = location[i][j];
                 }
             }
-        }
-        
-        System.out.println("Column: " +Arrays.toString(res));
+        }        
+               
+        System.out.println("Column: " +Arrays.toString(res));        
         
         return res;
     }
