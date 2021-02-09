@@ -44,6 +44,9 @@
     
     // ¿Ya se creó la zona de planeación?
     private boolean isPlanningCreated = false;
+    
+    // ¿Las bodegas son iguales?
+    private boolean areEqual = true;
   
     // Colores de las zonas
     private String wareHouseColor = "green";
@@ -51,6 +54,7 @@
     
     private String planningZoneColor = "magenta";
     private String planningZoneBoxColor = "blue";
+    private String planningZoneDangerColor = "red";
     
     
     
@@ -220,14 +224,9 @@
         // Actualizamos los valores de la zona de planeación
         this.copyValues();
         
-        // Coloreamos la vista frontal de la zona de planeación
-        this.colorPlanningZoneFront();
-        
-        // Coloreamos la vista lateral de la zona de planeación
-        this.colorPlanningZoneSide();
-        
-        // Coloreamos la vista superior zona de planeación
-        this.colorPlanningZone();       
+        // Pintamos la zona de planeación
+        this.repaintPlanningZone();
+       
          
     }
     
@@ -289,13 +288,20 @@
     * Color the planning zone boxes
     */
     private void colorPlanningZone(){
+        String color = this.planningZoneColor;
+        
+        // Verificamos la igualdad de las bodegas
+        if(!this.areEqual){
+            color = this.planningZoneDangerColor;
+        }
+        
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){                
                 // Si hay una o más cajas, las dibujamos
                 if(0 < this.planningZoneValues[i][j]){
                 this.planningZone[i][j].changeColor(this.planningZoneBoxColor);
                 } else {
-                this.planningZone[i][j].changeColor(this.planningZoneColor);
+                this.planningZone[i][j].changeColor(color);
                 }
             }
         }
@@ -382,7 +388,8 @@
     /**
     * Color the planning zone front boxes
     */
-    private void colorPlanningZoneFront(){
+    private void colorPlanningZoneFront(){       
+        
         // Traemos los máximos por columna
         int[] valuesFront = this.maxValuePerColumn(this.planningZoneValues);
         
@@ -478,16 +485,64 @@
     /**
      * Method for resetting the original color of the planning zone
      */
-    private void resetPlanningZoneColor(){
+    private void resetPlanningZoneColor(){ 
+        String color = this.planningZoneColor;
+        
+        if(this.areEqual == false){
+            color = this.planningZoneDangerColor;
+        }
+        
         for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
+            for(int j = 0; j < this.cols; j++){                
                 // Vista frontal
-                this.planningZoneFront[i][j].changeColor(this.planningZoneColor);
+                this.planningZoneFront[i][j].changeColor(color);
                 
                 // Vista lateral
-                this.planningZoneSide[i][j].changeColor(this.planningZoneColor);
+                this.planningZoneSide[i][j].changeColor(color);
             }
         }
+    }   
+    
+    
+    /**
+     * Method for verifying if the warehouse and the planning zone have the same views on the cameras
+     */
+    private void verifyEquality(){
+        boolean areEqual = true;
+        
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                // Si en la zona de planeación no hay cajas pero si hay en la bodega
+                // esto indica que las bodegas son diferentes, así que se le comunica esta diferencia al usuario
+                // cambiando el color de fondo de la zona de planeación               
+                
+                // Igualdad de la vista principal
+                if(this.planningZoneValues[i][j] == 0 && this.warehouseValues[i][j] > 0){                    
+                    areEqual &= false;
+                }
+                
+                // Igualdad de la vista lateral 
+                if(this.warehouseSide[i][j].getColor() == this.warehouseBoxColor 
+                    && this.planningZoneSide[i][j].getColor() != this.planningZoneBoxColor){
+                    areEqual &= false;
+                    
+                    //JOptionPane.showMessageDialog(null, "Error en vista lateral");
+                }
+                
+                // Igualdad de la vista frontal 
+                if(this.warehouseFront[i][j].getColor() == this.warehouseBoxColor 
+                    && this.planningZoneFront[i][j].getColor() != this.planningZoneBoxColor){
+                    areEqual &= false;
+                    
+                    //JOptionPane.showMessageDialog(null, "Error en vista frontal");
+                }
+                    
+            }
+        }
+        
+        JOptionPane.showMessageDialog(null, "Equal: " + areEqual);
+        
+        this.areEqual = areEqual;
     }
     
     /**
@@ -510,17 +565,8 @@
                 // Sumamos uno a la cantidad de cajas robadas
                 this.stolenBoxes++;
                 
-                // Re seteamos el color
-                this.resetPlanningZoneColor();
-                
-                // Re coloreamos la vista frontal de la zona de planeación
-                this.colorPlanningZoneFront();
-                
-                // Re coloreamos la vista lateral de la zona de planeación
-                this.colorPlanningZoneSide();
-                
-                // Re coloreamos la vista superior de la zona de planeación
-                this.colorPlanningZone();
+                // Re pintamos la zona de planeación
+                this.repaintPlanningZone();
                 
                 // Le damos formato a la tupla
                 String tuple = newRow + "-" + newCol;
@@ -563,19 +609,15 @@
             int newCol = Integer.parseInt(pos[1]);
             
             // Aumentamos el contador de cajas en esa posición
-            this.planningZoneValues[newRow][newCol]++;
+            this.planningZoneValues[newRow][newCol]++;           
+                       
+            // Re pintamos la devolución de la caja
+            this.repaintPlanningZone();           
+             
             
-            // Re seteamos el color
-            this.resetPlanningZoneColor();
+            // Repintamos con el color adecuado
+            this.repaintPlanningZone();           
             
-            // Re coloreamos la vista frontal de la zona de planeación
-            this.colorPlanningZoneFront();
-            
-            // Re coloreamos la vista lateral de la zona de planeación
-            this.colorPlanningZoneSide();
-            
-            // Re coloreamos la vista superior de la zona de planeación
-            this.colorPlanningZone();
             
             // Modificamos la cantidad de cajas a arreglar
             this.stolenBoxes--;
@@ -586,6 +628,39 @@
             JOptionPane.showMessageDialog(null, 
                             "¡No hay cajas para devolver!");
         }      
+    }
+    
+    /**
+     * Method for repainting the planning zone
+     */
+    private void repaintPlanningZone(){
+        // Re seteamos el color
+        this.resetPlanningZoneColor();
+        
+        // Re coloreamos la vista frontal de la zona de planeación
+        this.colorPlanningZoneFront();
+        
+        // Re coloreamos la vista lateral de la zona de planeación
+        this.colorPlanningZoneSide();
+        
+        // Re coloreamos la vista superior de la zona de planeación
+        this.colorPlanningZone();
+        
+        // Verificamos si son iguales las bodegas
+        this.verifyEquality();
+        
+        // Re seteamos el color
+        this.resetPlanningZoneColor();
+        
+        // Re coloreamos la vista frontal de la zona de planeación
+        this.colorPlanningZoneFront();
+        
+        // Re coloreamos la vista lateral de la zona de planeación
+        this.colorPlanningZoneSide();
+        
+        // Re coloreamos la vista superior de la zona de planeación
+        this.colorPlanningZone();
+        
     }
     
     /**
@@ -614,17 +689,8 @@
                     // Agregamos la caja a la nueva posición
                     this.planningZoneValues[newRow][newCol]++;
                     
-                    // Re seteamos el color
-                    this.resetPlanningZoneColor();
-                    
-                    // Re coloreamos la vista frontal de la zona de planeación
-                    this.colorPlanningZoneFront();
-                    
-                    // Re coloreamos la vista lateral de la zona de planeación
-                    this.colorPlanningZoneSide();
-                    
-                    // Re coloreamos la vista superior de la zona de planeación
-                    this.colorPlanningZone();
+                    // Re pintamos la zona de planeación
+                    this.repaintPlanningZone();
                     
                     
                 } else {
