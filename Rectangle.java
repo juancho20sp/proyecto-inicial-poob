@@ -169,6 +169,14 @@ public class Rectangle{
         draw();
     }
 
+    /**
+     * Getter for the color attribute
+     * @return  String      color of the rectangle
+     */
+    public String getColor(){
+        return this.color;
+    }
+    
     /*
      * Draw the rectangle with current specifications on screen.
      */
