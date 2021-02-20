@@ -47,6 +47,9 @@
     
     // ¿Las bodegas son iguales?
     private boolean areEqual = true;
+    
+    // ¿Acción válida?
+    private boolean isOk = false;
   
     // Colores de las zonas
     private String wareHouseColor = "green";
@@ -71,6 +74,14 @@
         // Hacemos visible el tablero
         this.isVisible = true;
     }
+    
+    /**
+     * Mission class constructor for creating the warehouse 
+     * with a blue print
+     */
+    public Mission(int length, int width, int[][] heights){
+    }
+    
     
     /**
     * Method for creating the boards
@@ -583,7 +594,7 @@
     
     /**
     * Steal method
-    * @param   crate   int[]
+    * @param   crate[]   Array having the position of the crate: [row, col]
     */
     public void steal(int[] crate){
         // Tomamos los índices
@@ -592,6 +603,13 @@
         
         // Robamos la caja en dicha posición
         this.steal(newRow, newCol);
+    }
+    
+    /**
+     * Consults the position of the stolen crates
+     */
+    public int[][] toSteal(){
+        return null;
     }
     
     /**
@@ -631,6 +649,18 @@
     }
     
     /**
+     * Undo the last valid action 
+     */
+    public void undo(){
+    }
+    
+    /**
+     * Redo the last undone action
+     */
+    public void redo(){
+    }
+    
+    /**
      * Method for repainting the planning zone
      */
     private void repaintPlanningZone(){
@@ -661,6 +691,13 @@
         // Re coloreamos la vista superior de la zona de planeación
         this.colorPlanningZone();
         
+    }
+    
+    /**
+     * Method for zooming in the warehouse
+     * @param z     Char -> '+': 10% zoom in, '-': 10% zoom out
+     */
+    public void zoom(char z){
     }
     
     /**
@@ -737,7 +774,7 @@
     }
     
     /**
-    * Warehouse
+    * Checks the warehouse matrix
     * @return  the warehouse matrix
     */
     public int[][] warehouse(){    
@@ -755,8 +792,8 @@
     }
     
     /**
-    * Layout method
-    * @return  the layout method
+    * Checks the amount of boxes in the planning zone
+    * @return  The matrix with the values of the planning zone
     */
     public int[][] layout(){ 
         // Contamos la cantidad de cajas en la zona de planeación
@@ -840,7 +877,23 @@
     * @return  true if the last movement was valid
     */
     public boolean ok(){
-    return true;
+        return this.isOk;
+    }
+    
+    /**
+     * Setter for the 'isOk' attribute
+     * @param The new attribute for 'isOk'
+     */
+    public void setIsOk(boolean isOk){
+        this.isOk = isOk;
+    }
+    
+    /**
+     * Getter for the 'isOk' attribute
+     * @return The value of 'isOk'
+     */
+    public boolean getIsOk(){
+        return this.isOk;   
     }
     
     }
