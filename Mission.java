@@ -59,6 +59,9 @@
     private String planningZoneBoxColor = "blue";
     private String planningZoneDangerColor = "red";
     
+    // ¿La entrada de datos del usuario está habilitada?
+    private boolean inputsAndNotificationsEnabled = false;
+    
     
     
     /**
@@ -73,6 +76,9 @@
         
         // Hacemos visible el tablero
         this.isVisible = true;
+        
+        // La creación fue exitosa
+        this.setIsOk(true);
     }
     
     /**
@@ -90,13 +96,13 @@
     */
     private void createBoards(int rows, int cols){
         // Preparamos el espacio en memoria para traer los rectángulos
-        warehouse = new Rectangle[rows][cols];
-        warehouseFront = new Rectangle[rows][cols];
-        warehouseSide = new Rectangle[rows][cols];
+        this.warehouse = new Rectangle[rows][cols];
+        this.warehouseFront = new Rectangle[rows][cols];
+        this.warehouseSide = new Rectangle[rows][cols];
         
-        planningZone = new Rectangle[rows][cols]; 
-        planningZoneFront = new Rectangle[rows][cols]; 
-        planningZoneSide = new Rectangle[rows][cols]; 
+        this.planningZone = new Rectangle[rows][cols]; 
+        this.planningZoneFront = new Rectangle[rows][cols]; 
+        this.planningZoneSide = new Rectangle[rows][cols]; 
         
         // Creamos las matrices que contendrán los valores de cada espacio
         this.prepareMatrix(rows, cols);
@@ -141,7 +147,7 @@
                     this.size * j + 50);
                 this.warehouse[i][j].moveVertical(this.size * i);              
             }            
-        }       
+        }
     }
     
     /**
@@ -154,13 +160,13 @@
         warehouseValues = new int[rows][cols];        
         
         // Preparamos la matriz que tendrá el registro de las cajas por espacio en bodega
-        planningZoneValues = new int[rows][cols]; 
+        planningZoneValues = new int[rows][cols]; ;
     }
     
     /**
     * Store a single box on the warehouse, positions start at 1
-    * @param   row     int
-    * @param   col     int
+    * @param   row     The row where we want to put the box
+    * @param   col     The col where we want to put the box
     */
     public void store(int row, int column){
         // Arreglamos índices
@@ -179,8 +185,16 @@
             
             // Dibujamos la vista lateral
             this.colorWarehouseSide();
+            
+            // La operación 'store' fue exitosa
+            this.setIsOk(true);
         } else {
-            JOptionPane.showMessageDialog(null, "La posición ingresada no es válida");
+            // Imprimimos el output
+            this.printOutput("La posición ingresada no es válida");      
+            
+            // La operación 'store' fue no exitosa
+            this.setIsOk(false);
+            
         }
     }
     
@@ -194,8 +208,7 @@
         int newCol = crate[1];
         
         // Guardamos la caja
-        this.store(newRow, newCol);
-    
+        this.store(newRow, newCol);    
     }
     
     /**
@@ -289,6 +302,9 @@
                 this.planningZoneValues[i][j] = this.warehouseValues[i][j]; 
             }
         }
+        
+        // La operación 'store' fue exitosa
+        this.setIsOk(true);
         
         // Imprimimos valores máximo por fila y columna
         //this.maxValuePerColumn(this.warehouseValues);
@@ -551,7 +567,7 @@
             }
         }
         
-        JOptionPane.showMessageDialog(null, "Equal: " + areEqual);
+        //JOptionPane.showMessageDialog(null, "Equal: " + areEqual);
         
         this.areEqual = areEqual;
     }
@@ -584,11 +600,22 @@
     
                 // Guardamos la tupla
                 this.stealHistorial.add(tuple);
+                
+                // La operación 'steal' fue exitosa
+                this.setIsOk(true);
             } else {
-                JOptionPane.showMessageDialog(null, "¡No hay nada para robar en esa posición!");
+                // Imprimimos el output
+                this.printOutput("¡No hay nada para robar en esa posición!");
+                
+                // La operación 'steal' no fue exitosa
+                this.setIsOk(true);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Posición no existente, inténtelo nuevamente");     
+            // Imprimimos el output
+            this.printOutput("Posición no existente, inténtelo nuevamente");   
+            
+            // La operación 'steal' no fue exitosa
+            this.setIsOk(false);
         }
     }
     
@@ -642,9 +669,15 @@
             
             // Eliminamos el movimiento del historial
             this.stealHistorial.remove(this.stealHistorial.size() - 1);
+            
+            // La operación 'returnBox' fue exitosa
+            this.setIsOk(true);
         } else {
-            JOptionPane.showMessageDialog(null, 
-                            "¡No hay cajas para devolver!");
+            // Imprimimos el output
+            this.printOutput("Posición no existente, inténtelo nuevamente");
+            
+            // La operación 'returnBox' no fue exitosa
+            this.setIsOk(false);
         }      
     }
     
@@ -729,15 +762,29 @@
                     // Re pintamos la zona de planeación
                     this.repaintPlanningZone();
                     
+                    // La operación 'arrange' fue exitosa
+                    this.setIsOk(true);
                     
                 } else {
-                    JOptionPane.showMessageDialog(null, "¡No hay cajas para ubicar en esa posición!");
+                    // Imprimimos el output
+                    this.printOutput("¡No hay cajas para ubicar en esa posición!");
+                    
+                    // La operación 'arrange' no fue exitosa
+                    this.setIsOk(false);
                 }  
             } else {
-                JOptionPane.showMessageDialog(null, "La posición 'to' no es válida");
+                // Imprimimos el output
+                this.printOutput("La posición 'to' no es válida");
+                
+                // La operación 'arrange' no fue exitosa
+                this.setIsOk(false);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "La posición 'from' no es válida");
+            // Imprimimos el output
+            this.printOutput("La posición 'from' no es válida"); 
+            
+            // La operación 'arrange' no fue exitosa
+            this.setIsOk(false);
         } 
         
         
@@ -766,9 +813,11 @@
     */
     public int stolen(){
         if(this.stolenBoxes == 1){
-            JOptionPane.showMessageDialog(null, "Se ha robado 1 caja");
+            // Imprimimos el output
+            this.printOutput("Se ha robado 1 caja");
         } else {
-            JOptionPane.showMessageDialog(null, "Se han robado " + this.stolenBoxes + " cajas");
+            // Imprimimos el output
+            this.printOutput("Se han robado " + this.stolenBoxes + " cajas");            
         }
         
         return this.stolenBoxes;
@@ -784,9 +833,11 @@
         
         // Mostramos el resultado en pantalla
         if(numBoxes == 1){
-            JOptionPane.showMessageDialog(null, "En la bodega hay 1 caja");
+            // Imprimimos el output
+            this.printOutput("En la bodega hay 1 caja");            
         } else {
-            JOptionPane.showMessageDialog(null, "En la bodega hay " + numBoxes + " cajas");
+            // Imprimimos el output
+            this.printOutput("En la bodega hay " + numBoxes + " cajas");            
         }        
         
         return this.warehouseValues;
@@ -802,9 +853,11 @@
         
         // Mostramos el resultado en pantalla
         if(numBoxes == 1){
-            JOptionPane.showMessageDialog(null, "En la zona de planeación hay 1 caja");
+            // Imprimimos el output
+            this.printOutput("En la zona de planeación hay 1 caja");
         } else {
-            JOptionPane.showMessageDialog(null, "En la zona de planeación hay " + numBoxes + " cajas");
+            // Imprimimos el output
+            this.printOutput("En la zona de planeación hay " + numBoxes + " cajas");
         } 
        
         return this.planningZoneValues;
@@ -884,12 +937,40 @@
     
     /**
      * Setter for the 'isOk' attribute
-     * @param The new attribute for 'isOk'
+     * @param The new value for 'isOk'
      */
     public void setIsOk(boolean isOk){
         this.isOk = isOk;
     }
     
+    /**
+     * Getter for the 'inputsAndNotificationsEnabled' attribute
+     * @return True if the inputs and notifications are enabled, false otherwise
+     */
+    public boolean getInputsAndNotificationsEnabled(){
+        return this.inputsAndNotificationsEnabled;
+    }
+    
+    
+    /**
+     * Toggle notification pop-ups ON/OFF (default is OFF)
+     */
+    public void toggleInputsAndNotifications(){
+        this.inputsAndNotificationsEnabled = !this.inputsAndNotificationsEnabled;
+    }
+    
+    /**
+     * Method for printing messages for the user
+     * @param The message to be displayed
+     */
+    private void printOutput(String message){
+        // Si las notificaciones están habilitadas, las mostramos
+        if (this.getInputsAndNotificationsEnabled()){
+            JOptionPane.showMessageDialog(null, message); 
+        } else {
+            System.out.println(message);
+        }  
+    }
     
     
     }
