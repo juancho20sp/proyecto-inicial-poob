@@ -922,7 +922,7 @@
     * Method for finishing the simulator
     */
     public void finish(){
-        JOptionPane.showMessageDialog(null, "Terminando simulador...");        
+        this.printOutput("Terminando simulador...");         
         System.exit(0);
     }  
    
