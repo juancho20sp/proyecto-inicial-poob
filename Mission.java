@@ -443,7 +443,7 @@
     
     /**
      * Verify max values per column for the locations
-     * @param   int[][]     matrix with the values of the boxes per index of the location
+     * @param   int     matrix with the values of the boxes per index of the location
      */
     private int[] maxValuePerColumn(int[][] location){
         int[] res = new int[this.cols];
@@ -594,7 +594,7 @@
     
     /**
     * Steal method
-    * @param   crate[]   Array having the position of the crate: [row, col]
+    * @param   crate   Array having the position of the crate: [row, col]
     */
     public void steal(int[] crate){
         // Tomamos los índices
@@ -748,15 +748,16 @@
      * @return True if it is a reachable position, false otherwise
      */
     private boolean isValidPosition(int row, int col){
-        if(row < 0 || col < 0){
-            return false;
-        }
+        boolean res = false;
+        //if(row < 0 || col < 0){
+          //  res = false;
+        //}
         
         if(row < this.rows && col < this.cols){
-            return true;
+            res = true;
         }
         
-        return false;
+        return res;
     }
     
     /**
@@ -869,13 +870,14 @@
     */
     public void finish(){
         JOptionPane.showMessageDialog(null, "Terminando simulador...");        
+        System.exit(0);
     }  
    
     
-    /**
-    * Method for checking if the last action was valid
-    * @return  true if the last movement was valid
-    */
+   /**
+     * Getter for the 'isOk' attribute
+     * @return The value of 'isOk'
+     */
     public boolean ok(){
         return this.isOk;
     }
@@ -888,12 +890,6 @@
         this.isOk = isOk;
     }
     
-    /**
-     * Getter for the 'isOk' attribute
-     * @return The value of 'isOk'
-     */
-    public boolean getIsOk(){
-        return this.isOk;   
-    }
+    
     
     }
