@@ -3,7 +3,7 @@ import java.awt.*;
 /**
  * A rectangle that can be manipulated and that draws itself on a canvas.
  * 
- * @author  Michael Kolling and David J. Barnes (Modified)
+ * @author  Michael Kolling and David J. Barnes (Modified), Juan David Murillo, Carlos Orduz
  * @version 1.0  (15 July 2000)()
  */
 
