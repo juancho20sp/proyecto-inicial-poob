@@ -41,7 +41,7 @@
     
     //---
     // Cantidad de cajas robadas
-    private int stolenBoxes = 0;
+    //private int stolenBoxes = 0;
     //---
     
     //---
@@ -51,12 +51,12 @@
     
     // ---
     // Cajas pendientes por organizar
-    private int boxesToArrange = 0;
+    //private int boxesToArrange = 0;
     //---
     
     // ----
     // ¿El simulador es visible?
-    private boolean isVisible; 
+    //private boolean isVisible; 
     // ---
     
     // ¿Ya se creó la zona de planeación?
@@ -104,7 +104,7 @@
         this.planningZone.moveVertical((this.size * this.rows) + this.size); 
         
         // Hacemos visible el tablero
-        this.isVisible = true;
+        //this.isVisible = true;
         
         // La creación fue exitosa
         this.setIsOk(true);
@@ -355,7 +355,7 @@
                 this.printOutput("¡No hay nada para robar en esa posición!");
                 
                 // La operación 'steal' no fue exitosa
-                this.setIsOk(true);
+                this.setIsOk(false);
             }
         } else {
             // Imprimimos el output
@@ -555,7 +555,7 @@
             this.printOutput("Se ha robado 1 caja");
         } else {
             // Imprimimos el output
-            this.printOutput("Se han robado " + this.stolenBoxes + " cajas");            
+            this.printOutput("Se han robado " + this.planningZone.getStolenBoxes() + " cajas");            
         }
         
         return this.planningZone.getStolenBoxes();
@@ -646,7 +646,7 @@
                 this.warehouse.makeInvisible();
                 
                 // Apagamos la zona de planeación
-                this.planningZone.makeInvisible();
+                this.planningZone.makeInvisible();               
             }
         }
     }

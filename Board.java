@@ -31,10 +31,10 @@ public class Board
     private ArrayList<String> stealHistorial = new ArrayList<String>();
     
     // Cajas pendientes por organizar
-    private int boxesToArrange = 0;
+    //private int boxesToArrange = 0;
     
     // ¿El simulador es visible?
-    private boolean isVisible = false; 
+    //private boolean isVisible = false; 
     
     // ¿Acción válida?
     private boolean isOk = false;
@@ -337,7 +337,7 @@ public class Board
      * Getter for the 'isVisible' attribute
      * @return True if the board is visible, false otherwise
      */
-    public boolean getIsVisible(){
+    /*public boolean getIsVisible(){
         return this.isVisible;
     }
     
@@ -345,27 +345,15 @@ public class Board
      * Setter for the 'isVisible' attribute
      * @param The new value for the 'isVisible' attribute
      */
-    public void setIsVisible(boolean isVisible){
+    /*public void setIsVisible(boolean isVisible){
         this.isVisible = isVisible;
-    }
+    }*/
     
     /**
      * Getter for the 'values' attribute
      * @return An array with all the values of the actual board
      */
     public int[][] getValues(){
-        /*int[][] res = new  int[this.rows][this.cols];
-        
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                res[i][j] = this.values[i][j];
-            }
-        }*/
-        
-        
-        
-        //System.out.println("any value: " +this.values[0][0]);
-        //System.out.println("getValues(): " + Arrays.toString(res));
         return this.values;
     }
 
