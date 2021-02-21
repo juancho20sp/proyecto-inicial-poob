@@ -64,7 +64,7 @@ public class MissionTestC2
         planningZone = new int[this.rows][this.cols];
         
         // Mantenemos el tablero invisible
-        //mission.makeInvisible();
+        mission.makeInvisible();
     }
     
     
@@ -308,6 +308,6 @@ public class MissionTestC2
     @After
     public void tearDown()
     {
-        //mission.makeInvisible();
+        mission.makeInvisible();
     }
 }

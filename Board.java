@@ -96,14 +96,28 @@ public class Board
         this.values[row][col]++;
         
         // Dibujamos la caja
-        this.topView[row][col].changeColor(color);
+        this.colorTopView(color);
+        //this.topView[row][col].changeColor(color);
         
         // Dibujamos la vista frontal
         this.colorFrontView(color);
         
         // Dibujamos la vista lateral
         this.colorSideView(color);
-    }   
+    }  
+    
+    /**
+     * Method for removing a box from the board
+     * @param   row     The row where we want to insert the box
+     * @param   col     The column where we want to insert the box
+     */
+    public void removeBox(int row, int col){
+        // Actualizamos la cantidad de cajas en la posición dada
+        this.values[row][col]--;
+        
+        // Sumamos uno a la cantidad de cajas robadas
+        this.stolenBoxes++;
+    }
     
     /**
      * Method for coloring an specific box
@@ -340,13 +354,13 @@ public class Board
      * @return An array with all the values of the actual board
      */
     public int[][] getValues(){
-        int[][] res = new  int[this.rows][this.cols];
+        /*int[][] res = new  int[this.rows][this.cols];
         
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 res[i][j] = this.values[i][j];
             }
-        }
+        }*/
         
         
         
@@ -365,6 +379,30 @@ public class Board
                 this.values[i][j] = board.getValues()[i][j];
             }
         }
+    }
+    
+    /**
+     * Getter for the 'stolenBoxes' attribute
+     * @return The amount of stolen boxes
+     */
+    public int getStolenBoxes(){        
+        return this.stolenBoxes;
+    }
+    
+    /**
+     * Getter for the front view
+     * @return The array of rectangles corresponding to the front view
+     */
+    public Rectangle[][] getFrontView(){        
+        return this.frontView;
+    }
+    
+    /**
+     * Getter for the side view
+     * @return The array of rectangles corresponding to the side view
+     */
+    public Rectangle[][] getSideView(){        
+        return this.sideView;
     }
     
 }
