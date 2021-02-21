@@ -204,16 +204,17 @@
         
         if(this.isValidPosition(newRow, newCol)){
             // Guardamos la caja en la casilla seleccionada
-            this.warehouseValues[newRow][newCol] += 1;
+            this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor);
+            //this.warehouseValues[newRow][newCol] += 1;
             
             // Dibujamos la caja
             //this.warehouse[newRow][newCol].changeColor(this.warehouseBoxColor);
             
             // Dibujamos la vista frontal
-            this.colorWarehouseFront();
+            //this.colorWarehouseFront();
             
             // Dibujamos la vista lateral
-            this.colorWarehouseSide();
+            //this.colorWarehouseSide();
             
             // La operación 'store' fue exitosa
             this.setIsOk(true);
@@ -441,6 +442,7 @@
         }
     }
     
+    // YA REFACTORIZADO
     /**
     * Color the planning zone front boxes
     */
@@ -486,6 +488,8 @@
         }
     }
     
+    
+    // YA REFACTORIZADO
     /**
      * Verify max values per column for the locations
      * @param   int     matrix with the values of the boxes per index of the location
@@ -512,6 +516,7 @@
         return res;
     }
     
+    // YA REFACTORIZADO
     /**
      * Verify max values per row for the locations
      * @param   int[][]     matrix with the values of the boxes per index of the location

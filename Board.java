@@ -85,6 +85,133 @@ public class Board
         }
     }
     
+    /**
+     * Method for adding a box to the board
+     * @param   row     The row where we want to insert the box
+     * @param   col     The column where we want to insert the box
+     * @param   color   The color of the boxes. ie 'black', 'red', 'blue'
+     */
+    public void insertBox(int row, int col, String color){
+        // Actualizamos la cantidad de cajas en la posición dada
+        this.values[row][col]++;
+        
+        // Dibujamos la caja
+        this.topView[row][col].changeColor(color);
+        
+        // Dibujamos la vista frontal
+        this.colorFrontView(color);
+        
+        // Dibujamos la vista lateral
+        this.colorSideView(color);
+    }   
+    
+    
+    /**
+     * Method for coloring the boxes of the front view
+     * @param The color of the boxes. ie 'black', 'red', 'blue'
+     */
+    private void colorFrontView(String boxColor){
+        // Traemos los máximos por columna
+        int[] valuesFront = this.maxValuePerColumn(this.values);
+        
+        // Corregimos los valores para evitar errores al dibujar
+        for(int i = 0; i < this.rows; i++){
+            if(valuesFront[i] > this.rows){
+                valuesFront[i] = this.rows - 1;
+            }
+        }
+        
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < valuesFront[i]; j++){
+                this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
+            }
+        }
+    }
+    
+    
+    /**
+     * Method for coloring the boxes of the side view
+     * @param The color of the boxes. ie 'black', 'red', 'blue'
+     */
+    private void colorSideView(String boxColor){
+        // Traemos los máximos por fila
+        int[] valuesSide = this.maxValuePerRow(this.values);
+        
+        // Corregimos los valores para evitar errores al dibujar
+        for(int i = 0; i < this.rows; i++){
+            if(valuesSide[i] > this.rows){
+                valuesSide[i] = this.rows - 1;
+            }
+        }
+        
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < valuesSide[i]; j++){
+                this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
+            }
+        }
+    }
+    
+    
+    
+    /**
+     * Verify max values per column for the locations
+     * @param  location A matrix with the values of the boxes per index of the location
+     */
+    private int[] maxValuePerColumn(int[][] location){
+        int[] res = new int[this.cols];
+        
+        // Inicializamos los valores del arreglo respuesta
+        for(int i = 0; i < this.cols; i++){
+            res[i] = 0;
+        }
+        
+        // Buscamos mayores valores por columna
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if(location[i][j] > res[j]){
+                    res[j] = location[i][j];
+                }
+            }
+        }        
+               
+        //System.out.println("Column: " +Arrays.toString(res));        
+        
+        return res;
+    }
+    
+    
+    /**
+     * Verify max values per row for the locations
+     * @param   location   A matrix with the values of the boxes per index of the location
+     */
+    private int[] maxValuePerRow(int[][] location){
+        int[] res = new int[this.rows];
+        
+        // Inicializamos los valores del arreglo respuesta
+        for(int i = 0; i < this.rows; i++){
+            res[i] = 0;
+        }
+        
+        // Buscamos mayores valores por fila
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if(location[i][j] > res[i]){
+                    res[i] = location[i][j];
+                }
+            }
+        }
+        
+        //System.out.println("Row: " + Arrays.toString(res));
+        
+        return res;
+    }
+    
+    
+    
+    
+    
     
     
     /**
