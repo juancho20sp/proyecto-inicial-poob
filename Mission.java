@@ -117,7 +117,7 @@
     public Mission(int length, int width, int[][] heights){
     }
     
-    
+    // YA REFACTORIZADO
     /**
     * Method for creating the boards
     * @param   rows    The number of rows on the board
@@ -179,6 +179,7 @@
         }
     }
     
+    // YA REFACTORIZADO
     /**
     * Create the matrixes that will have the number of boxes in each zone
     * @param   rows    number of rows
@@ -192,6 +193,7 @@
         planningZoneValues = new int[rows][cols]; ;
     }
     
+    // YA REFACTORIZADO -> SE QUEDA
     /**
     * Store a single box on the warehouse, positions start at 1
     * @param   row     The row where we want to put the box
@@ -228,6 +230,7 @@
         }
     }
     
+    // YA RERACTORIZADO -> SE QUEDA
     /**
     * Method for storing a new box on the warehouse board
     * @param   crate   Array[row, col]
@@ -273,7 +276,7 @@
     */
     public void copy(){
         // Dibujamos la zona de planeación
-        this.createPlanningZone();
+        //this.createPlanningZone();
         
         // Actualizamos los valores de la zona de planeación
         this.copyValues();
@@ -329,7 +332,8 @@
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 // Agregamos los valores de las cajas en bodega
-                this.planningZoneValues[i][j] = this.warehouseValues[i][j]; 
+                //this.planningZoneValues[i][j] = this.warehouseValues[i][j]; 
+                this.planningZone.copyValues(this.warehouse);
             }
         }
         
@@ -352,13 +356,17 @@
             color = this.planningZoneDangerColor;
         }
         
+        //this.planningZone.changeColor(color);
+        
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){                
                 // Si hay una o más cajas, las dibujamos
-                if(0 < this.planningZoneValues[i][j]){
-                //this.planningZone[i][j].changeColor(this.planningZoneBoxColor);
+                if(0 < this.planningZone.getValues()[i][j]){
+                    this.planningZone.paintBox(i, j, 't', this.planningZoneBoxColor);
+                    //this.planningZone[i][j].changeColor(this.planningZoneBoxColor);
                 } else {
-                //this.planningZone[i][j].changeColor(color);
+                    this.planningZone.paintBox(i, j, 't', color);
+                    //this.planningZone[i][j].changeColor(color);
                 }
             }
         }
@@ -403,7 +411,7 @@
     */
     private void colorWarehouseFront(){
         // Traemos los máximos por columna
-        int[] valuesFront = this.maxValuePerColumn(this.warehouseValues);
+        int[] valuesFront = this.maxValuePerColumn(this.warehouse.getValues());
         
         // Corregimos los valores para evitar errores al dibujar
         for(int i = 0; i < this.rows; i++){
@@ -415,7 +423,7 @@
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
-                this.warehouseFront[this.rows - j - 1][i].changeColor(this.warehouseBoxColor);            
+                //this.warehouseFront[this.rows - j - 1][i].changeColor(this.warehouseBoxColor);            
             }
         }
     }
@@ -425,7 +433,7 @@
     */
     private void colorWarehouseSide(){
         // Traemos los máximos por fila
-        int[] valuesSide = this.maxValuePerRow(this.warehouseValues);
+        int[] valuesSide = this.maxValuePerRow(this.warehouse.getValues());
         
         // Corregimos los valores para evitar errores al dibujar
         for(int i = 0; i < this.rows; i++){
@@ -437,7 +445,7 @@
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesSide[i]; j++){
-                this.warehouseSide[this.rows - j - 1][i].changeColor(this.warehouseBoxColor);            
+                //this.warehouseSide[this.rows - j - 1][i].changeColor(this.warehouseBoxColor);            
             }
         }
     }
@@ -449,7 +457,7 @@
     private void colorPlanningZoneFront(){       
         
         // Traemos los máximos por columna
-        int[] valuesFront = this.maxValuePerColumn(this.planningZoneValues);
+        int[] valuesFront = this.maxValuePerColumn(this.planningZone.getValues());
         
         // Corregimos los valores para evitar errores al dibujar
         for(int i = 0; i < this.rows; i++){
@@ -461,17 +469,19 @@
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
-                this.planningZoneFront[this.rows - j - 1][i].changeColor(this.planningZoneBoxColor);            
+                //this.planningZoneFront[this.rows - j - 1][i].changeColor(this.planningZoneBoxColor);            
             }
         }
     }
     
+    
+    // YA REFACTORIZADO
     /**
     * Color the planning zone side boxes
     */
     private void colorPlanningZoneSide(){
         // Traemos los máximos por fila
-        int[] valuesSide = this.maxValuePerRow(this.planningZoneValues);
+        int[] valuesSide = this.maxValuePerRow(this.planningZone.getValues());
         
         // Corregimos los valores para evitar errores al dibujar
         for(int i = 0; i < this.rows; i++){
@@ -553,15 +563,17 @@
             color = this.planningZoneDangerColor;
         }
         
-        for(int i = 0; i < this.rows; i++){
+        this.planningZone.changeColor(color);
+        
+        /*for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){                
                 // Vista frontal
-                this.planningZoneFront[i][j].changeColor(color);
+                //this.planningZone[i][j].changeColor(color);
                 
                 // Vista lateral
-                this.planningZoneSide[i][j].changeColor(color);
+                //this.planningZoneSide[i][j].changeColor(color);
             }
-        }
+        }*/
     }   
     
     
@@ -578,12 +590,14 @@
                 // cambiando el color de fondo de la zona de planeación               
                 
                 // Igualdad de la vista principal
-                if(this.planningZoneValues[i][j] == 0 && this.warehouseValues[i][j] > 0){                    
+                if(this.planningZone.getValues()[i][j] == 0 && this.warehouse.getValues()[i][j] > 0){                    
                     areEqual &= false;
                 }
                 
+                //PENDIENTE POR MODIFICAR
+                
                 // Igualdad de la vista lateral 
-                if(this.warehouseSide[i][j].getColor() == this.warehouseBoxColor 
+                /*if(this.warehouseSide[i][j].getColor() == this.warehouseBoxColor 
                     && this.planningZoneSide[i][j].getColor() != this.planningZoneBoxColor){
                     areEqual &= false;
                     
@@ -596,7 +610,7 @@
                     areEqual &= false;
                     
                     //JOptionPane.showMessageDialog(null, "Error en vista frontal");
-                }
+                }*/
                     
             }
         }
@@ -735,28 +749,33 @@
         this.resetPlanningZoneColor();
         
         // Re coloreamos la vista frontal de la zona de planeación
-        this.colorPlanningZoneFront();
+        this.planningZone.colorFrontView(this.planningZoneBoxColor);
+        //this.colorPlanningZoneFront();
         
         // Re coloreamos la vista lateral de la zona de planeación
-        this.colorPlanningZoneSide();
+        this.planningZone.colorSideView(this.planningZoneBoxColor);
+        //this.colorPlanningZoneSide();
         
         // Re coloreamos la vista superior de la zona de planeación
-        this.colorPlanningZone();
+        this.planningZone.colorTopView(this.planningZoneBoxColor);
+        //this.colorPlanningZone();
         
         // Verificamos si son iguales las bodegas
         this.verifyEquality();
         
         // Re seteamos el color
-        this.resetPlanningZoneColor();
+        //this.resetPlanningZoneColor();
         
         // Re coloreamos la vista frontal de la zona de planeación
-        this.colorPlanningZoneFront();
+        //this.planningZone.colorFrontView(this.planningZoneBoxColor);
+        //this.colorPlanningZoneFront();
         
         // Re coloreamos la vista lateral de la zona de planeación
-        this.colorPlanningZoneSide();
+        //this.planningZone.colorSideView(this.planningZoneBoxColor);
+        //this.colorPlanningZoneSide();
         
         // Re coloreamos la vista superior de la zona de planeación
-        this.colorPlanningZone();
+        //this.colorPlanningZone();
         
     }
     
@@ -886,7 +905,7 @@
     */
     public int[][] layout(){ 
         // Contamos la cantidad de cajas en la zona de planeación
-        int numBoxes = this.countBoxes(this.planningZoneValues);
+        int numBoxes = this.countBoxes(this.planningZone.getValues());
         
         // Mostramos el resultado en pantalla
         if(numBoxes == 1){
@@ -897,7 +916,7 @@
             this.printOutput("En la zona de planeación hay " + numBoxes + " cajas");
         } 
        
-        return this.planningZoneValues;
+        return this.planningZone.getValues();
     }
     
     /**
@@ -1000,9 +1019,9 @@
      * Method for printing messages for the user
      * @param The message to be displayed
      */
-    private void printOutput(String message){
+    static void printOutput(String message){
         // Si las notificaciones están habilitadas, las mostramos
-        if (this.getInputsAndNotificationsEnabled()){
+        if (Mission.inputsAndNotificationsEnabled){
             JOptionPane.showMessageDialog(null, message); 
         } else {
             System.out.println(message);

@@ -288,6 +288,18 @@ public class MissionTestC2
         
     }
     
+    
+    
+    @Test
+    public void shouldRepaint() {
+        // Guardamos una caja
+        mission.store(1, 1);
+        
+        // Copiamos la caja a la zona de planeación
+        mission.copy();
+    }
+    
+    
     /**
      * Tears down the test fixture.
      *

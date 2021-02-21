@@ -105,12 +105,38 @@ public class Board
         this.colorSideView(color);
     }   
     
+    /**
+     * Method for coloring an specific box
+     * @param   row     The row where the box is placed
+     * @param   col     The column where the box is placed
+     * @param   view    't': top, 'f': front, 's': side
+     * @param   color   The color which the box will be painted with
+     */
+    public void paintBox(int row, int col, char view, String color){
+        switch(view){
+            case 'f':
+                    this.frontView[row][col].changeColor(color);
+                    break;
+            case 't':
+                    this.topView[row][col].changeColor(color);
+                    break;
+            case 's':
+                    this.sideView[row][col].changeColor(color);
+                    break;
+            default:
+                Mission.printOutput("El caracter ingresado no es válido, ingrese 't' o 's' o 'f' ");
+                break;
+        }
+        
+    }
+    
+    
     
     /**
      * Method for coloring the boxes of the front view
      * @param The color of the boxes. ie 'black', 'red', 'blue'
      */
-    private void colorFrontView(String boxColor){
+    public void colorFrontView(String boxColor){
         // Traemos los máximos por columna
         int[] valuesFront = this.maxValuePerColumn(this.values);
         
@@ -124,7 +150,8 @@ public class Board
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
-                this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
+                this.paintBox(this.rows - j - 1, i, 'f', boxColor);
+                //this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
     }
@@ -134,7 +161,7 @@ public class Board
      * Method for coloring the boxes of the side view
      * @param The color of the boxes. ie 'black', 'red', 'blue'
      */
-    private void colorSideView(String boxColor){
+    public void colorSideView(String boxColor){
         // Traemos los máximos por fila
         int[] valuesSide = this.maxValuePerRow(this.values);
         
@@ -148,12 +175,28 @@ public class Board
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesSide[i]; j++){
-                this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
+                this.paintBox(this.rows - j - 1, i, 's', boxColor);
+                //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
     }
     
-    
+    /**
+     * Method for coloring the boxes of the top view
+     * @param The color of the boxes. ie 'black', 'red', 'blue'
+     */
+    public void colorTopView(String boxColor){
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if (this.getValues()[i][j] > 0){
+                    this.paintBox(i, j, 't', boxColor);
+                }
+                
+                //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
+            }
+        }
+    }
     
     /**
      * Verify max values per column for the locations
@@ -312,5 +355,16 @@ public class Board
         return this.values;
     }
 
+    /**
+     * Method for copying the values of the given matrix into the actual one
+     * @param   board   An array containing all the values of a board
+     */
+    public void copyValues(Board board){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.values[i][j] = board.getValues()[i][j];
+            }
+        }
+    }
     
 }
