@@ -250,8 +250,8 @@
         
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
-            warehouseRes += this.warehouseValues[i][j];
-            planningZoneRes += this.planningZoneValues[i][j];
+            warehouseRes += this.warehouse.getValues()[i][j];
+            planningZoneRes += this.planningZone.getValues()[i][j];
             }
             warehouseRes += "\n";
             planningZoneRes += "\n";
@@ -859,11 +859,11 @@
     
     /**
     * Checks the warehouse matrix
-    * @return  the warehouse matrix
+    * @return  the warehouse values matrix
     */
     public int[][] warehouse(){    
         // Contamos la cantidad de cajas en la bodega
-        int numBoxes = this.countBoxes(this.warehouseValues);
+        int numBoxes = this.countBoxes(this.warehouse.getValues());
         
         // Mostramos el resultado en pantalla
         if(numBoxes == 1){
@@ -874,7 +874,10 @@
             this.printOutput("En la bodega hay " + numBoxes + " cajas");            
         }        
         
-        return this.warehouseValues;
+        //System.out.println("Warehouse values: " + Arrays.toString(this.warehouse.getValues()));       
+        
+        
+        return this.warehouse.getValues();
     }
     
     /**

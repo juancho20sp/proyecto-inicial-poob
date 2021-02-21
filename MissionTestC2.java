@@ -64,7 +64,7 @@ public class MissionTestC2
         planningZone = new int[this.rows][this.cols];
         
         // Mantenemos el tablero invisible
-        mission.makeInvisible();
+        //mission.makeInvisible();
     }
     
     
@@ -107,6 +107,7 @@ public class MissionTestC2
         // Verificamos que se haya guardado
         // Restamos 1 a cada posición porque según el negocio los 
         // índices empiezan en 1
+        System.out.println("test 1: " + mission.warehouse()[row - 1][col - 1]);
         assertEquals(++totalBoxes, mission.warehouse()[row - 1][col - 1]);
         
         
@@ -114,6 +115,8 @@ public class MissionTestC2
         // Usamos la segunda versión del método
         int[] position = {row, col};
         mission.store(position);
+        
+        System.out.println("HOliw" + mission.warehouse()[row - 1][col - 1]);
         
         // Verificamos que se haya guardado
         // Restamos 1 a cada posición porque según el negocio los 
@@ -293,6 +296,6 @@ public class MissionTestC2
     @After
     public void tearDown()
     {
-        mission.makeInvisible();
+        //mission.makeInvisible();
     }
 }

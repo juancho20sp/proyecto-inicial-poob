@@ -208,12 +208,6 @@ public class Board
         return res;
     }
     
-    
-    
-    
-    
-    
-    
     /**
      * Method for changing the board color
      * @param The new color. ie 'black', 'blue', 'red'
@@ -298,7 +292,25 @@ public class Board
         this.isVisible = isVisible;
     }
     
-    
+    /**
+     * Getter for the 'values' attribute
+     * @return An array with all the values of the actual board
+     */
+    public int[][] getValues(){
+        int[][] res = new  int[this.rows][this.cols];
+        
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                res[i][j] = this.values[i][j];
+            }
+        }
+        
+        
+        
+        //System.out.println("any value: " +this.values[0][0]);
+        //System.out.println("getValues(): " + Arrays.toString(res));
+        return this.values;
+    }
 
     
 }
