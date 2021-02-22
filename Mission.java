@@ -11,57 +11,16 @@
     public class Mission
     {
     
-    //---
-    //private Rectangle[][] warehouse;
-    //private Rectangle[][] warehouseFront;
-    //private Rectangle[][] warehouseSide;
-    //----
-    
-    //private Rectangle[][] planningZone;
-    //private Rectangle[][] planningZoneFront;
-    //private Rectangle[][] planningZoneSide;
-    
-    //----
     // Dimensiones de las bodegas
     private int rows;
     private int cols;
-    //----
     
-    //---
-    // Matriz de almacenamiento
-    //private int[][] warehouseValues;
-    //----
-    
-    //private int[][] planningZoneValues;
-    
-    //---
     // Tamaño de cada una de las fichas
     private int size = 22;
-    //---
     
-    //---
-    // Cantidad de cajas robadas
-    //private int stolenBoxes = 0;
-    //---
-    
-    //---
     // Historial de posiciones de cajas robadas
     private ArrayList<String> stealHistorial = new ArrayList<String>();
-    // ---
-    
-    // ---
-    // Cajas pendientes por organizar
-    //private int boxesToArrange = 0;
-    //---
-    
-    // ----
-    // ¿El simulador es visible?
-    //private boolean isVisible; 
-    // ---
-    
-    // ¿Ya se creó la zona de planeación?
-    //private boolean isPlanningCreated = false;
-    
+        
     // ¿Las bodegas son iguales?
     private boolean areEqual = true;
     
@@ -94,9 +53,6 @@
         this.rows = length;
         this.cols = width;
         
-        // Creamos los tableros
-        //this.createBoards(this.rows, this.cols);
-        
         this.warehouse = new Board(this.rows, this.cols);
         this.planningZone = new Board(this.rows, this.cols);
         
@@ -105,9 +61,6 @@
         
         // Movemos la zona de planeación verticalmente
         this.planningZone.moveVertical((this.size * this.rows) + this.size); 
-        
-        // Hacemos visible el tablero
-        //this.isVisible = true;
         
         // La creación fue exitosa
         this.setIsOk(true);
@@ -225,10 +178,7 @@
         this.copyValues();
         
         // Pintamos la zona de planeación
-        this.repaintPlanningZone();
-        
-        //this.refreshBoards();
-         
+        this.repaintPlanningZone();         
     }
     
     
@@ -246,10 +196,6 @@
         
         // La operación 'store' fue exitosa
         this.setIsOk(true);
-        
-        // Imprimimos valores máximo por fila y columna
-        //this.maxValuePerColumn(this.warehouseValues);
-        //this.maxValuePerRow(this.warehouseValues);
     }
     
     /**
@@ -263,7 +209,6 @@
             color = this.planningZoneDangerColor;
         }
         
-        //this.planningZone.changeColor(color);
         
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){                
@@ -328,8 +273,7 @@
                     areEqual &= false;
                 }
                 
-                //PENDIENTE POR MODIFICAR
-                
+                                
                 // Igualdad de la vista lateral 
                 if(this.warehouse.getSideView()[i][j].getColor() == this.warehouseBoxColor 
                     && this.planningZone.getSideView()[i][j].getColor() != this.planningZoneBoxColor){

@@ -29,13 +29,7 @@ public class Board
     
     // Historial de posiciones de cajas robadas
     private ArrayList<String> stealHistorial = new ArrayList<String>();
-    
-    // Cajas pendientes por organizar
-    //private int boxesToArrange = 0;
-    
-    // ¿El simulador es visible?
-    //private boolean isVisible = false; 
-    
+        
     // ¿Acción válida?
     private boolean isOk = false;
     
@@ -57,8 +51,7 @@ public class Board
         // Preparamos la matriz de valores
         this.values = new int[rows][cols];
         
-        // Inicializamos cada posición de los tableros
-        //this.paintBoard(true);
+        // Inicializamos cada posición de los tableros        
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 // Agregamos un rectángulo a cada posición
@@ -122,7 +115,8 @@ public class Board
     }
     
     /**
-     * 
+     * Method for refreshing the board
+     * @param   The color of the boxes
      */
     public void refreshBoard(String color){
         // Dibujamos la caja
@@ -410,23 +404,7 @@ public class Board
             }
         }
     }
-    
-    /**
-     * Getter for the 'isVisible' attribute
-     * @return True if the board is visible, false otherwise
-     */
-    /*public boolean getIsVisible(){
-        return this.isVisible;
-    }
-    
-    /**
-     * Setter for the 'isVisible' attribute
-     * @param The new value for the 'isVisible' attribute
-     */
-    /*public void setIsVisible(boolean isVisible){
-        this.isVisible = isVisible;
-    }*/
-    
+        
     /**
      * Getter for the 'values' attribute
      * @return An array with all the values of the actual board
@@ -469,7 +447,6 @@ public class Board
      */
     public Rectangle[][] getSideView(){        
         return this.sideView;
-    }
-    
+    }   
         
 }
