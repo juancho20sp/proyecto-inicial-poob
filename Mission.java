@@ -118,6 +118,17 @@
     } 
     
     /**
+     * Method for refreshing the boards
+     */
+    public void refreshBoards(){
+        // Le cambiamos el color a la zona de planeación
+        this.planningZone.changeColor(this.planningZoneColor);
+        
+        // Movemos la zona de planeación verticalmente
+        this.planningZone.moveVertical((this.size * this.rows) + this.size); 
+    }
+    
+    /**
     * Store a single box on the warehouse, positions start at 1
     * @param   row     The row where we want to put the box
     * @param   col     The col where we want to put the box
@@ -195,7 +206,8 @@
         
         // Pintamos la zona de planeación
         this.repaintPlanningZone();
-       
+        
+        this.refreshBoards();
          
     }
     
@@ -470,6 +482,29 @@
      * @param z     Char -> '+': 10% zoom in, '-': 10% zoom out
      */
     public void zoom(char z){
+        switch(z){
+            case '+':
+                // Aumentamos el tamaño
+                this.size += 2;
+                
+                this.warehouse.zoom(z);
+                this.planningZone.zoom(z);
+                
+                this.refreshBoards();
+                break;
+            case '-':
+                // Aumentamos el tamaño
+                this.size -= 2;
+                
+                this.warehouse.zoom(z);
+                this.planningZone.zoom(z);
+                
+                this.refreshBoards();
+                break;
+            default:
+                this.printOutput("¡Ingrese una opción válida para el zoom! ('+', '-')");
+                break;
+        }              
     }
     
     /**
@@ -705,5 +740,11 @@
         }  
     }
     
-    
+    /**
+     * Getter for the 'size' attribute
+     */
+    public int getSize(){
+        return this.size;
     }
+    
+}

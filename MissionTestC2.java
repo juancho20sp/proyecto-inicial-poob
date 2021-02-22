@@ -63,6 +63,11 @@ public class MissionTestC2
         // Creamos el croquis de la zona de planeación
         planningZone = new int[this.rows][this.cols];
         
+        
+        mission.zoom('+');
+        mission.zoom('-');
+        mission.zoom('+');
+        mission.zoom('+');
         // Mantenemos el tablero invisible
         mission.makeInvisible();
     }

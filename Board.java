@@ -22,7 +22,7 @@ public class Board
     private int[][] values;
     
     // Tamaño de cada una de las fichas
-    private int size = 22;
+    private int size = 22;   
     
     // Cantidad de cajas robadas
     private int stolenBoxes = 0;
@@ -58,12 +58,13 @@ public class Board
         this.values = new int[rows][cols];
         
         // Inicializamos cada posición de los tableros
+        //this.paintBoard(true);
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 // Agregamos un rectángulo a cada posición
-                this.topView[i][j] = new Rectangle();
-                this.frontView[i][j] = new Rectangle();
-                this.sideView[i][j] = new Rectangle();
+                this.topView[i][j] = new Rectangle(this.size - 2);
+                this.frontView[i][j] = new Rectangle(this.size - 2);
+                this.sideView[i][j] = new Rectangle(this.size - 2);
                 
                 // Inicializamos los valores
                 this.values[i][j] = 0;
@@ -84,6 +85,42 @@ public class Board
             }
         }
     }
+    
+    /**
+     * Method for painting and repainting the board
+     * @param True if it is a new board, false if it is a repaint
+     */
+    private void paintBoard(boolean newBoard){
+        // Inicializamos cada posición de los tableros
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.topView[i][j].makeInvisible();
+                this.frontView[i][j].makeInvisible();
+                this.sideView[i][j].makeInvisible();
+                
+                // Agregamos un rectángulo a cada posición
+                this.topView[i][j] = new Rectangle(this.size - 2);
+                this.frontView[i][j] = new Rectangle(this.size - 2);
+                this.sideView[i][j] = new Rectangle(this.size - 2);               
+                
+                
+                // Movemos la vista frontal a la posición adecuada
+                this.frontView[i][j].moveHorizontal(this.size * j);
+                this.frontView[i][j].moveVertical(this.size * i);
+                
+                // Movemos la vista lateral a la posición adecuada
+                this.sideView[i][j].moveHorizontal((this.size * this.cols) +
+                    this.size * j + 25);
+                this.sideView[i][j].moveVertical(this.size * i);
+                
+                // Movemos la vista superior a la posición adecuada
+                this.topView[i][j].moveHorizontal((this.size * this.cols * 2) +
+                    this.size * j + 50);
+                this.topView[i][j].moveVertical(this.size * i); 
+            }
+        }
+    }
+    
     
     /**
      * Method for adding a box to the board
@@ -306,6 +343,33 @@ public class Board
     }
     
     /**
+     * Method for zooming in / zooming out the board
+     * @param '+' for zooming in, '-' for zooming out
+     */
+    public void zoom(char z){
+        switch(z){
+            case '+':
+                this.size += 2;
+                break;
+            case '-':
+                this.size -= 2;
+                break;
+        } 
+        
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.topView[i][j].zoom(z);
+                this.frontView[i][j].zoom(z);
+                this.sideView[i][j].zoom(z);
+            }
+        }
+        
+        // Repintamos el tablero
+        this.paintBoard(false);
+    }
+    
+    
+    /**
      * Method for moving the board vertically
      * @param   The number of units the board will move vertically
      */
@@ -393,4 +457,5 @@ public class Board
         return this.sideView;
     }
     
+        
 }
