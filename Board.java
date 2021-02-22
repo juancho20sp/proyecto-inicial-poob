@@ -118,9 +118,23 @@ public class Board
                     this.size * j + 50);
                 this.topView[i][j].moveVertical(this.size * i); 
             }
-        }
+        } 
     }
     
+    /**
+     * 
+     */
+    public void refreshBoard(String color){
+        // Dibujamos la caja
+        this.colorTopView(color);
+        //this.topView[row][col].changeColor(color);
+        
+        // Dibujamos la vista frontal
+        this.colorFrontView(color);
+        
+        // Dibujamos la vista lateral
+        this.colorSideView(color);
+    }
     
     /**
      * Method for adding a box to the board

@@ -84,6 +84,9 @@
     Board warehouse;
     Board planningZone;
     
+    // ¿Está copiada la bodega?
+    private boolean isCopied = false;
+    
     /**
     * Mission class constructor
     */
@@ -121,11 +124,25 @@
      * Method for refreshing the boards
      */
     public void refreshBoards(){
+        // Pintamos las cajas de la bodega
+        this.warehouse.refreshBoard(this.warehouseBoxColor);
+        
         // Le cambiamos el color a la zona de planeación
         this.planningZone.changeColor(this.planningZoneColor);
         
         // Movemos la zona de planeación verticalmente
         this.planningZone.moveVertical((this.size * this.rows) + this.size); 
+        
+        // Si la zona de planeación fue copiada antes de hacer zoom, 
+        // actualizamos las cajas
+        if (this.isCopied){
+            // Pintamos únicamente las cajas copiadas
+            this.planningZone.refreshBoard(this.planningZoneBoxColor);
+            
+            // Si las vistas de la zona de planeación son diferentes a las de la bodega,
+            // pintamos la zona de planeación de color rojo
+            this.repaintPlanningZone();
+        }
     }
     
     /**
@@ -201,13 +218,16 @@
         // Dibujamos la zona de planeación
         //this.createPlanningZone();
         
+        // Actualizamos la bandera
+        this.isCopied = true;
+        
         // Actualizamos los valores de la zona de planeación
         this.copyValues();
         
         // Pintamos la zona de planeación
         this.repaintPlanningZone();
         
-        this.refreshBoards();
+        //this.refreshBoards();
          
     }
     
@@ -745,6 +765,6 @@
      */
     public int getSize(){
         return this.size;
-    }
+    }    
     
 }
