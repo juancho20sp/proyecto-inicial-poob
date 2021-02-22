@@ -3,7 +3,7 @@ import java.awt.*;
 /**
  * A rectangle that can be manipulated and that draws itself on a canvas.
  * 
- * @author  Michael Kolling and David J. Barnes (Modified)
+ * @author  Michael Kolling and David J. Barnes (Modified), Juan David Murillo, Carlos Orduz
  * @version 1.0  (15 July 2000)()
  */
 
@@ -31,6 +31,59 @@ public class Rectangle{
         color = "green";
         
         this.makeVisible();
+    }
+    
+    /**
+     * Create a new rectangle at default position with an specific size
+     */
+    public Rectangle(int size){
+        this.height = size;
+        this.width = size;
+        
+        xPosition = 5;
+        yPosition = 5;
+        color = "green";
+        
+        this.makeVisible();
+    }
+    
+    /**
+     * Method for zooming in / out 10% 
+     * @param '+' for zooming in, '-' for zooming out
+     */
+    public void zoom(char z){
+        // Eliminamos el cuadro
+        this.erase();
+        
+        float newHeight = this.height * 0.1f;
+        float newWidth = this.width * 0.1f;
+        
+        switch(z){
+            case '+':
+                this.height = this.height + (int)newHeight;
+                this.width = this.width + (int)newWidth;   
+                break;
+            case '-':
+                this.height = this.height - (int)newHeight;
+                this.width = this.width - (int)newWidth;
+                break;
+        }       
+        
+        
+        // Dibujamos el cuadro
+        this.draw();
+    }   
+    
+    /**
+     * Method for resetting the position of the rectangle
+     */
+    public void resetPosition(){
+        this.erase();
+        
+        this.xPosition = 5;
+        this.yPosition = 5;
+        
+        this.draw();
     }
     
 
