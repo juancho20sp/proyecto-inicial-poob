@@ -357,9 +357,18 @@
     
     /**
      * Consults the position of the stolen crates
+     * @return the position of the Stolen Crates
      */
     public int[][] toSteal(){
-        return null;
+        int[][] stolenCrates = new int[this.stealHistorial.size()][2];
+        for(int i=0; i<stealHistorial.size();i++){
+            String tuple = this.stealHistorial.get(i);
+            int[] tup = {Character.getNumericValue(tuple.charAt(0)),Character.getNumericValue(tuple.charAt(2))};
+            stolenCrates[i] = tup;
+
+        }
+        
+        return stolenCrates;
     }
     
     /**
@@ -710,5 +719,21 @@
     public int getSize(){
         return this.size;
     }    
-    
+
+    public static void main(String[] args){
+        Mission mis = new Mission(3,3);
+        mis.store(1, 1);
+        mis.store(1, 2);
+
+        mis.copy();
+        mis.steal(1, 1);
+        mis.steal(1, 2);
+
+
+       int [][] stolenBoxesPosition = mis.toSteal();
+
+       for(int i=0;i<stolenBoxesPosition.length;i++){
+           System.out.println(stolenBoxesPosition[i][0]+"---"+stolenBoxesPosition[i][1]);
+       }
+    }
 }
