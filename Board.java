@@ -78,6 +78,9 @@ public class Board
             }
         }
     }
+    public void subtractValuesPosition(int row,int col){
+        this.values[row][col]--;
+    }
     
     /**
      * Method for painting and repainting the board
@@ -153,8 +156,8 @@ public class Board
     
     /**
      * Method for removing a box from the board
-     * @param   row     The row where we want to insert the box
-     * @param   col     The column where we want to insert the box
+     * @param   row     The row where we want to remove the box
+     * @param   col     The column where we want to remove the box
      */
     public void removeBox(int row, int col){
         // Actualizamos la cantidad de cajas en la posición dada
@@ -250,6 +253,8 @@ public class Board
             for(int j = 0; j < this.cols; j++){
                 if (this.getValues()[i][j] > 0){
                     this.paintBox(i, j, 't', boxColor);
+                }else if(this.getValues()[i][j] == 0){
+                    this.paintBox(i, j, 't', "green");
                 }
                 
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            

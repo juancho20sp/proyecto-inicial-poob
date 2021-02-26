@@ -1,6 +1,10 @@
     import javax.swing.JOptionPane;
-    import java.util.ArrayList;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
     import java.util.Arrays;
+import java.util.Deque;
+import java.util.Stack;
     
     /**
     * Initial project for POOB
@@ -10,7 +14,10 @@
     */
     public class Mission
     {
-    
+    //Stack para el metodo unDo
+    Deque<String> unDo;
+    //Stack para el metodo reDo
+    Deque<String> reDo;
     // Dimensiones de las bodegas
     private int rows;
     private int cols;
@@ -55,6 +62,8 @@
         
         this.warehouse = new Board(this.rows, this.cols);
         this.planningZone = new Board(this.rows, this.cols);
+        this.unDo = new ArrayDeque<>();
+        this.reDo = new ArrayDeque<>();
         
         // Le cambiamos el color a la zona de planeación
         this.planningZone.changeColor(this.planningZoneColor);
@@ -109,8 +118,12 @@
         int newCol = column - 1;
         
         if(this.isValidPosition(newRow, newCol)){
+            String stringForRow = String.valueOf(newRow);
+            String stringForCol = String.valueOf(newCol);
             // Guardamos la caja en la casilla seleccionada
-            this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor);            
+            this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor);
+            unDo.push("s"+stringForRow+stringForCol);
+            reDo.push("s"+stringForRow+stringForCol);  
             
             // La operación 'store' fue exitosa
             this.setIsOk(true);
@@ -132,9 +145,16 @@
         // Tomamos los valores del arreglo
         int newRow = crate[0];
         int newCol = crate[1];
+
+        String strForRow = String.valueOf(newRow);
+        String strForCol = String.valueOf(newCol);
         
         // Guardamos la caja
-        this.store(newRow, newCol);    
+        this.store(newRow, newCol);
+        if(this.isOk){
+            this.unDo.push("S"+strForRow+strForCol);
+            this.reDo.push("S"+strForRow+strForCol);
+        }
     }
     
     /**
@@ -410,12 +430,39 @@
      * Undo the last valid action 
      */
     public void undo(){
+        if(!this.unDo.isEmpty()){
+            char[] actions = this.unDo.pop().toCharArray();
+            switch(actions[0]){
+                case 's':
+                    this.storeUnDo(Character.getNumericValue(actions[1]), Character.getNumericValue(actions[2]));
+                    break;
+                case 'S':
+                    this.storeUnDo(Character.getNumericValue(actions[1]), Character.getNumericValue(actions[2]));
+                    break;
+                
+
+            }
+        }
     }
     
     /**
      * Redo the last undone action
      */
     public void redo(){
+        if(!this.reDo.isEmpty()){
+            char[] actions = this.reDo.pop().toCharArray();
+            switch(actions[0]){
+                case 's':
+                    this.store(Character.getNumericValue(actions[1]), Character.getNumericValue(actions[2]));
+                    break;
+                case 'S':
+                    this.store(Character.getNumericValue(actions[1]), Character.getNumericValue(actions[2]));
+                    break;
+                
+                
+
+            }
+        }
     }
     
     /**
@@ -718,22 +765,21 @@
      */
     public int getSize(){
         return this.size;
-    }    
+    } 
+    
+    public void storeUnDo(int row, int col){
+        this.warehouse.subtractValuesPosition(row, col);
+        
+        if(this.warehouse.getValues()[row][col] < 1){
+            this.warehouse.colorFrontView(this.wareHouseColor);
+            this.warehouse.colorSideView(this.wareHouseColor);
+            this.warehouse.colorTopView(this.wareHouseColor);
+        }
+    }
 
     public static void main(String[] args){
         Mission mis = new Mission(3,3);
-        mis.store(1, 1);
-        mis.store(1, 2);
-
-        mis.copy();
-        mis.steal(1, 1);
-        mis.steal(1, 2);
-
-
-       int [][] stolenBoxesPosition = mis.toSteal();
-
-       for(int i=0;i<stolenBoxesPosition.length;i++){
-           System.out.println(stolenBoxesPosition[i][0]+"---"+stolenBoxesPosition[i][1]);
-       }
+        mis.store(1,1);
+        //mis.undo();
     }
 }
