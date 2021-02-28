@@ -359,7 +359,15 @@
      * Consults the position of the stolen crates
      */
     public int[][] toSteal(){
-        return null;
+        int[][] stolenCrates = new int[this.stealHistorial.size()][2];
+        for(int i=0; i<stealHistorial.size();i++){
+            String tuple = this.stealHistorial.get(i);
+            int[] tup = {Character.getNumericValue(tuple.charAt(0)),Character.getNumericValue(tuple.charAt(2))};
+            stolenCrates[i] = tup;
+
+        }
+
+        return stolenCrates;
     }
     
     /**

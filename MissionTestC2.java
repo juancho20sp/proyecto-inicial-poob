@@ -64,10 +64,10 @@ public class MissionTestC2
         planningZone = new int[this.rows][this.cols];
         
         
-        mission.zoom('+');
-        mission.zoom('-');
-        mission.zoom('+');
-        mission.zoom('+');
+        //mission.zoom('+');
+        //mission.zoom('-');
+        //mission.zoom('+');
+        //mission.zoom('+');
         // Mantenemos el tablero invisible
         mission.makeInvisible();
     }
@@ -293,7 +293,25 @@ public class MissionTestC2
         
     }
     
-    
+    @Test
+    public void shouldConsultPositionOT(){
+        mission.store(1, 1);
+        mission.store(1,2);
+
+        mission.copy();
+        this.copyPlanningZone();
+
+        mission.steal(1, 1);
+        mission.steal(1, 2);
+
+        this.planningZone[0][0] -= 1;
+        this.planningZone[0][1] -= 1;
+
+        int[][] answer = {{0,0},{0,1}};
+
+        assertArrayEquals(answer, mission.toSteal());
+
+    }
     
     @Test
     public void shouldRepaint() {
