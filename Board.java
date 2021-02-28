@@ -117,17 +117,18 @@ public class Board
     /**
      * Method for refreshing the board
      * @param   The color of the boxes
+     * @param   The background color
      */
-    public void refreshBoard(String color){
+    public void refreshBoard(String color, String bgColor){
         // Dibujamos la caja
-        this.colorTopView(color);
+        this.colorTopView(color, bgColor);
         //this.topView[row][col].changeColor(color);
         
         // Dibujamos la vista frontal
-        this.colorFrontView(color);
+        this.colorFrontView(color, bgColor);
         
         // Dibujamos la vista lateral
-        this.colorSideView(color);
+        this.colorSideView(color, bgColor);
     }
     
     /**
@@ -135,34 +136,39 @@ public class Board
      * @param   row     The row where we want to insert the box
      * @param   col     The column where we want to insert the box
      * @param   color   The color of the boxes. ie 'black', 'red', 'blue'
+     * @param   bgColor The background color
      */
-    public void insertBox(int row, int col, String color){
+    public void insertBox(int row, int col, String color, String bgColor){
         // Actualizamos la cantidad de cajas en la posición dada
         this.values[row][col]++;
         
         // Dibujamos la caja
-        this.colorTopView(color);
+        this.colorTopView(color, bgColor);
         //this.topView[row][col].changeColor(color);
         
         // Dibujamos la vista frontal
-        this.colorFrontView(color);
+        this.colorFrontView(color, bgColor);
         
         // Dibujamos la vista lateral
-        this.colorSideView(color);
+        this.colorSideView(color, bgColor);
     }  
     
     /**
      * Method for removing a box from the board
      * @param   row     The row where we want to insert the box
-     * @param   col     The column where we want to insert the box
+     * @param   col     The column where we want to insert the box     * 
+     * @param   isStore The box to remove is placed on the warehouse
      */
-    public void removeBox(int row, int col){
+    public void removeBox(int row, int col, boolean isStore){
         // Actualizamos la cantidad de cajas en la posición dada
         this.values[row][col]--;
         
-        // Sumamos uno a la cantidad de cajas robadas
-        this.stolenBoxes++;
-    }
+        if(!isStore){
+            // Sumamos uno a la cantidad de cajas robadas
+            this.stolenBoxes++;
+        }        
+    }   
+    
     
     /**
      * Method for coloring an specific box
@@ -194,8 +200,9 @@ public class Board
     /**
      * Method for coloring the boxes of the front view
      * @param The color of the boxes. ie 'black', 'red', 'blue'
+     * @param The background color
      */
-    public void colorFrontView(String boxColor){
+    public void colorFrontView(String boxColor, String bgColor){
         // Traemos los máximos por columna
         int[] valuesFront = this.maxValuePerColumn(this.values);
         
@@ -213,14 +220,24 @@ public class Board
                 //this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
+        
+        // Repintamos del color original si tiene posiciones vacías
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if(this.getValues()[i][j] == 0){
+                    this.paintBox(this.rows - j - 1, i, 'f', bgColor);
+                }
+            }
+        }
     }
     
     
     /**
      * Method for coloring the boxes of the side view
      * @param The color of the boxes. ie 'black', 'red', 'blue'
+     * @param The background color
      */
-    public void colorSideView(String boxColor){
+    public void colorSideView(String boxColor, String bgColor){
         // Traemos los máximos por fila
         int[] valuesSide = this.maxValuePerRow(this.values);
         
@@ -238,18 +255,30 @@ public class Board
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
+        
+        // Repintamos del color original si tiene posiciones vacías
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if(this.getValues()[i][j] == 0){
+                    this.paintBox(this.rows - j - 1, i, 's', bgColor);
+                }
+            }
+        }
     }
     
     /**
      * Method for coloring the boxes of the top view
      * @param The color of the boxes. ie 'black', 'red', 'blue'
+     * @param The background color
      */
-    public void colorTopView(String boxColor){
+    public void colorTopView(String boxColor, String bgColor){
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 if (this.getValues()[i][j] > 0){
                     this.paintBox(i, j, 't', boxColor);
+                }else {
+                    this.paintBox(i, j, 't', bgColor);
                 }
                 
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
@@ -283,6 +312,20 @@ public class Board
         return res;
     }
     
+    /**
+     * Method for resetting the board
+     * @param boxColor -> The color of the boxes
+     * @param bgColor -> The background color
+     */
+    public void resetBoard(String boxColor, String bgColor){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.values[i][j] = 0;
+            }
+        }
+        
+        this.refreshBoard(boxColor, bgColor);
+    }
     
     /**
      * Verify max values per row for the locations

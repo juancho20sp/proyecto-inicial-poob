@@ -24,6 +24,7 @@ public class MissionTestC2
     private int[][] planningZone;
     
     /**
+     * segunMG
      * Verifies if two arrays are equal.
      * @param   The first array.
      * @param   The second array
@@ -74,6 +75,7 @@ public class MissionTestC2
     
     
     /**
+     * segunMG
      * Test for creating boards
      * @result The boards were created correctly.
      */
@@ -95,6 +97,7 @@ public class MissionTestC2
     }
     
     /**
+     * segunMG
      * Test for storing boxes on the warehouse
      * @result The box was stored correctly.
      */
@@ -130,6 +133,7 @@ public class MissionTestC2
     }
     
     /**
+     * segunMG
      * Test for copying the warehouse
      * @result The boards were copied correctly.
      */
@@ -159,6 +163,7 @@ public class MissionTestC2
     }
     
     /**
+     * segunMG
      * Test for stealing a box of the planning zone.
      * @result The box was stealed successfully.
      */
@@ -221,6 +226,7 @@ public class MissionTestC2
     }
     
     /**
+     * segunMG
      * Test for returning the last stolen box.
      * @result The box was returned successfully.
      */
@@ -260,6 +266,7 @@ public class MissionTestC2
     }
     
     /**
+     * segunMG
      * Test for arranging the planning zone.
      * @result The box was arranged successfully.
      */
@@ -293,6 +300,10 @@ public class MissionTestC2
         
     }
     
+    /**
+     * Test for verifying the positions of the stolen boxes
+     * @result the positions of the stolen boxes are valid
+     */    
     @Test
     public void shouldConsultPositionOT(){
         mission.store(1, 1);

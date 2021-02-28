@@ -1,6 +1,7 @@
     import javax.swing.JOptionPane;
     import java.util.ArrayList;
     import java.util.Arrays;
+    import java.util.Stack;
     
     /**
     * Initial project for POOB
@@ -46,6 +47,13 @@
     // ¿Está copiada la bodega?
     private boolean isCopied = false;
     
+    // Stack de acciones para realizar undo
+    // nombre-POS1,POS2 -> store-1,1    
+    Stack<String> undoStack;
+    
+    // Stack de acciones para realizar redo
+    Stack<String> redoStack;
+    
     /**
     * Mission class constructor
     */
@@ -61,6 +69,10 @@
         
         // Movemos la zona de planeación verticalmente
         this.planningZone.moveVertical((this.size * this.rows) + this.size); 
+        
+        // Creamos los stacks para el manejo de acciones
+        this.redoStack = new Stack<String>();
+        this.undoStack = new Stack<String>();
         
         // La creación fue exitosa
         this.setIsOk(true);
@@ -78,7 +90,7 @@
      */
     public void refreshBoards(){
         // Pintamos las cajas de la bodega
-        this.warehouse.refreshBoard(this.warehouseBoxColor);
+        this.warehouse.refreshBoard(this.warehouseBoxColor, this.wareHouseColor);
         
         // Le cambiamos el color a la zona de planeación
         this.planningZone.changeColor(this.planningZoneColor);
@@ -90,7 +102,7 @@
         // actualizamos las cajas
         if (this.isCopied){
             // Pintamos únicamente las cajas copiadas
-            this.planningZone.refreshBoard(this.planningZoneBoxColor);
+            this.planningZone.refreshBoard(this.planningZoneBoxColor, this.planningZoneColor);
             
             // Si las vistas de la zona de planeación son diferentes a las de la bodega,
             // pintamos la zona de planeación de color rojo
@@ -110,7 +122,13 @@
         
         if(this.isValidPosition(newRow, newCol)){
             // Guardamos la caja en la casilla seleccionada
-            this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor);            
+            this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor, this.wareHouseColor);            
+            
+            // Preparamos la cadena para el stack
+            String pos = "store-"+ newRow + "," + newCol;
+            
+            // Agregamos la información al stack
+            undoStack.push(pos);
             
             // La operación 'store' fue exitosa
             this.setIsOk(true);
@@ -313,7 +331,7 @@
             // Verificamos si hay cajas para robar en la posición
             if (this.planningZone.getValues()[newRow][newCol] > 0){                
                 // Sacamos una caja de la posición objetivo
-                this.planningZone.removeBox(newRow, newCol);
+                this.planningZone.removeBox(newRow, newCol, false);
                 
                 // Re pintamos la zona de planeación
                 this.repaintPlanningZone();
@@ -385,7 +403,7 @@
             int newCol = Integer.parseInt(pos[1]);
             
             // Aumentamos el contador de cajas en esa posición
-            this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor);
+            this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
             //this.planningZoneValues[newRow][newCol]++;           
                        
             // Re pintamos la devolución de la caja
@@ -409,12 +427,120 @@
      * Undo the last valid action 
      */
     public void undo(){
+        // nombre-POS1,POS2
+        // nombre-POS1,POS2|POS1,POS2
+        // Tomamos la última acción
+        String action = undoStack.pop();
+        
+        // Separamos la acción por componentes
+        String[] actionParts = action.split("-");   
+        
+        System.out.println("Action parts: " + Arrays.toString(actionParts));
+        
+        String name = actionParts[0];
+        String positions = actionParts[1];
+        
+        String[] positionParts;
+        String[] fromParts;
+        String[] toParts;
+        
+        int[] from = new int[2];
+        int[] to = new int[2];
+        
+        // Separamos las coordenadas
+        if(positions.contains("|")){
+            positionParts = positions.split("|");
+            System.out.println("Position parts: " + Arrays.toString(positionParts));
+            
+            fromParts = positionParts[0].split(",");
+            toParts = positionParts[0].split(",");
+            
+            from[0] = Integer.parseInt(fromParts[0]);
+            from[1] = Integer.parseInt(fromParts[1]);
+            
+            to[0] = Integer.parseInt(toParts[0]);
+            to[1] = Integer.parseInt(toParts[1]);
+            
+        } else {
+            fromParts = positions.split(",");
+            System.out.println("from parts: " + Arrays.toString(fromParts));
+            
+            from[0] = Integer.parseInt(fromParts[0]);
+            from[1] = Integer.parseInt(fromParts[1]);
+        } 
+        
+        switch(name){
+            case "store":
+                this.warehouse.removeBox(from[0], from[1], true);
+                this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
+                this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                break;
+        }
+        
+        
+        
+        
+        // La agregamos al stack de cosas por rehacer
+        redoStack.add(action);
     }
     
     /**
      * Redo the last undone action
      */
     public void redo(){
+        // nombre-POS1,POS2
+        // nombre-POS1,POS2|POS1,POS2
+        // Tomamos la última acción
+        String action = redoStack.pop();
+        
+        // Separamos la acción por componentes
+        String[] actionParts = action.split("-");   
+        
+        System.out.println("Action parts: " + Arrays.toString(actionParts));
+        
+        String name = actionParts[0];
+        String positions = actionParts[1];
+        
+        String[] positionParts;
+        String[] fromParts;
+        String[] toParts;
+        
+        int[] from = new int[2];
+        int[] to = new int[2];
+        
+        // Separamos las coordenadas
+        if(positions.contains("|")){
+            positionParts = positions.split("|");
+            System.out.println("Position parts: " + Arrays.toString(positionParts));
+            
+            fromParts = positionParts[0].split(",");
+            toParts = positionParts[0].split(",");
+            
+            from[0] = Integer.parseInt(fromParts[0]);
+            from[1] = Integer.parseInt(fromParts[1]);
+            
+            to[0] = Integer.parseInt(toParts[0]);
+            to[1] = Integer.parseInt(toParts[1]);
+            
+        } else {
+            fromParts = positions.split(",");
+            System.out.println("from parts: " + Arrays.toString(fromParts));
+            
+            from[0] = Integer.parseInt(fromParts[0]);
+            from[1] = Integer.parseInt(fromParts[1]);
+        } 
+        
+        switch(name){
+            case "store":
+                //this.warehouse.removeBox(from[0], from[1], true);
+                this.store(from[0] + 1, from[1] + 1);
+                this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                //this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
+                break;
+        }
+        
+        // La agregamos al stack de cosas por deshacer
+        undoStack.add(action);
     }
     
     /**
@@ -425,13 +551,13 @@
         this.resetPlanningZoneColor();       
          
         // Re coloreamos la vista frontal de la zona de planeación
-        this.planningZone.colorFrontView(this.planningZoneBoxColor);
+        this.planningZone.colorFrontView(this.planningZoneBoxColor, this.planningZoneColor);
         
         // Re coloreamos la vista lateral de la zona de planeación
-        this.planningZone.colorSideView(this.planningZoneBoxColor);
+        this.planningZone.colorSideView(this.planningZoneBoxColor, this.planningZoneColor);
         
         // Re coloreamos la vista superior de la zona de planeación
-        this.planningZone.colorTopView(this.planningZoneBoxColor);
+        this.planningZone.colorTopView(this.planningZoneBoxColor, this.planningZoneColor);
         
         // Verificamos si son iguales las bodegas
         this.verifyEquality();
@@ -440,13 +566,13 @@
         this.resetPlanningZoneColor();       
          
         // Re coloreamos la vista frontal de la zona de planeación
-        this.planningZone.colorFrontView(this.planningZoneBoxColor);
+        this.planningZone.colorFrontView(this.planningZoneBoxColor, this.planningZoneColor);
         
         // Re coloreamos la vista lateral de la zona de planeación
-        this.planningZone.colorSideView(this.planningZoneBoxColor);
+        this.planningZone.colorSideView(this.planningZoneBoxColor, this.planningZoneColor);
         
         // Re coloreamos la vista superior de la zona de planeación
-        this.planningZone.colorTopView(this.planningZoneBoxColor);
+        this.planningZone.colorTopView(this.planningZoneBoxColor, this.planningZoneColor);
     }
     
     /**
@@ -500,11 +626,11 @@
                 // Verificamos si en esa posición hay una caja    
                 if (this.planningZone.getValues()[oldRow][oldCol] > 0){
                     // Retiramos una caja de esa posición
-                    this.planningZone.removeBox(oldRow, oldCol);
+                    this.planningZone.removeBox(oldRow, oldCol, false);
                     //this.planningZoneValues[oldRow][oldCol]--;
                     
                     // Agregamos la caja a la nueva posición
-                    this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor);
+                    this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
                     //this.planningZoneValues[newRow][newCol]++;
                     
                     // Re pintamos la zona de planeación
