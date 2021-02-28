@@ -225,7 +225,7 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 if(this.getValues()[i][j] == 0){
-                    this.paintBox(this.rows - j - 1, i, 'f', bgColor);
+                    //this.paintBox(this.rows - j - 1, i, 'f', bgColor);
                 }
             }
         }
@@ -260,7 +260,7 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 if(this.getValues()[i][j] == 0){
-                    this.paintBox(this.rows - j - 1, i, 's', bgColor);
+                    //this.paintBox(this.rows - j - 1, i, 's', bgColor);
                 }
             }
         }
@@ -278,7 +278,7 @@ public class Board
                 if (this.getValues()[i][j] > 0){
                     this.paintBox(i, j, 't', boxColor);
                 }else {
-                    this.paintBox(i, j, 't', bgColor);
+                    //this.paintBox(i, j, 't', bgColor);
                 }
                 
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            

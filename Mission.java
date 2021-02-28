@@ -336,6 +336,10 @@
                 // Re pintamos la zona de planeación
                 this.repaintPlanningZone();
                 
+                // Agregamos la acción de robo al stack de cosas por deshacer
+                String res = "steal-" + newRow + "," + newCol;
+                this.undoStack.push(res);
+                
                 // Le damos formato a la tupla
                 String tuple = newRow + "-" + newCol;
     
@@ -430,7 +434,12 @@
         // nombre-POS1,POS2
         // nombre-POS1,POS2|POS1,POS2
         // Tomamos la última acción
-        String action = undoStack.pop();
+        String action = "";
+        if (this.undoStack.size() > 0){
+            action = undoStack.pop();
+        } else {
+            printOutput("No hay nada por deshacer");
+        }
         
         // Separamos la acción por componentes
         String[] actionParts = action.split("-");   
@@ -475,6 +484,9 @@
                 this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
                 this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
                 break;
+            case "steal":
+                this.returnBox();
+                break;
         }
         
         
@@ -491,7 +503,13 @@
         // nombre-POS1,POS2
         // nombre-POS1,POS2|POS1,POS2
         // Tomamos la última acción
-        String action = redoStack.pop();
+        String action = "";
+        if (this.redoStack.size() > 0){
+            action = redoStack.pop();
+        } else {
+            printOutput("No hay nada por rehacer");
+        }
+        
         
         // Separamos la acción por componentes
         String[] actionParts = action.split("-");   
@@ -536,6 +554,24 @@
                 this.store(from[0] + 1, from[1] + 1);
                 this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
                 //this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
+                break;
+            case "steal":
+                this.steal(from[0] + 1, from[1] + 1);
+                //this.planningZone.insertBox(from[0], from[1], this.planningZoneBoxColor, this.planningZoneColor);
+                //this.planningZone.refreshBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                //this.repaintPlanningZone();
+                //this.verifyEquality();
+                // Re seteamos el color
+                //this.resetPlanningZoneColor();       
+                 
+                // Re coloreamos la vista frontal de la zona de planeación
+                //this.planningZone.colorFrontView(this.planningZoneBoxColor, this.planningZoneColor);
+                
+                // Re coloreamos la vista lateral de la zona de planeación
+                //this.planningZone.colorSideView(this.planningZoneBoxColor, this.planningZoneColor);
+                
+                // Re coloreamos la vista superior de la zona de planeación
+                //this.planningZone.colorTopView(this.planningZoneBoxColor, this.planningZoneColor);
                 break;
         }
         
