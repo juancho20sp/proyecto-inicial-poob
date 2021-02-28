@@ -130,6 +130,10 @@
             // Agregamos la información al stack
             undoStack.push(pos);
             
+            // Reset a la zona de planeación
+            this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+            this.resetPlanningZoneColor();
+            
             // La operación 'store' fue exitosa
             this.setIsOk(true);
         } else {
@@ -457,12 +461,15 @@
         int[] to = new int[2];
         
         // Separamos las coordenadas
-        if(positions.contains("|")){
-            positionParts = positions.split("|");
+        if(positions.contains(";")){
+            positionParts = positions.split(";");
             System.out.println("Position parts: " + Arrays.toString(positionParts));
             
             fromParts = positionParts[0].split(",");
-            toParts = positionParts[0].split(",");
+            toParts = positionParts[1].split(",");
+            
+            System.out.println("fromParts parts: " + Arrays.toString(fromParts));
+            System.out.println("toParts parts: " + Arrays.toString(toParts));
             
             from[0] = Integer.parseInt(fromParts[0]);
             from[1] = Integer.parseInt(fromParts[1]);
@@ -486,6 +493,12 @@
                 break;
             case "steal":
                 this.returnBox();
+                break;
+            case "arrange":
+                int[] myFrom = {to[0] + 1, to[1] + 1};
+                int[] myTo = {from[0] + 1, from[1] + 1};
+                this.arrange(myFrom, myTo);
+                System.out.println("UNDO DONE!");
                 break;
         }
         
@@ -527,12 +540,12 @@
         int[] to = new int[2];
         
         // Separamos las coordenadas
-        if(positions.contains("|")){
-            positionParts = positions.split("|");
+        if(positions.contains(";")){
+            positionParts = positions.split(";");
             System.out.println("Position parts: " + Arrays.toString(positionParts));
             
             fromParts = positionParts[0].split(",");
-            toParts = positionParts[0].split(",");
+            toParts = positionParts[1].split(",");
             
             from[0] = Integer.parseInt(fromParts[0]);
             from[1] = Integer.parseInt(fromParts[1]);
@@ -556,23 +569,12 @@
                 //this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
                 break;
             case "steal":
-                this.steal(from[0] + 1, from[1] + 1);
-                //this.planningZone.insertBox(from[0], from[1], this.planningZoneBoxColor, this.planningZoneColor);
-                //this.planningZone.refreshBoard(this.planningZoneBoxColor, this.planningZoneColor);
-                //this.repaintPlanningZone();
-                //this.verifyEquality();
-                // Re seteamos el color
-                //this.resetPlanningZoneColor();       
-                 
-                // Re coloreamos la vista frontal de la zona de planeación
-                //this.planningZone.colorFrontView(this.planningZoneBoxColor, this.planningZoneColor);
-                
-                // Re coloreamos la vista lateral de la zona de planeación
-                //this.planningZone.colorSideView(this.planningZoneBoxColor, this.planningZoneColor);
-                
-                // Re coloreamos la vista superior de la zona de planeación
-                //this.planningZone.colorTopView(this.planningZoneBoxColor, this.planningZoneColor);
+                this.steal(from[0] + 1, from[1] + 1);                
                 break;
+            case "arrange":
+                int[] myFrom = {from[0] + 1, from[1] + 1};
+                int[] myTo = {to[0] + 1, to[1] + 1};
+                this.arrange(myFrom, myTo);
         }
         
         // La agregamos al stack de cosas por deshacer
@@ -668,6 +670,11 @@
                     // Agregamos la caja a la nueva posición
                     this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
                     //this.planningZoneValues[newRow][newCol]++;
+                    
+                    // Guardamos la información para undo/redo
+                    // nombre-POS1,POS2;POS1,POS2
+                    String res = "arrange-" + oldRow + "," + oldCol + ";" + newRow + "," + newCol;
+                    this.undoStack.push(res);
                     
                     // Re pintamos la zona de planeación
                     this.repaintPlanningZone();
