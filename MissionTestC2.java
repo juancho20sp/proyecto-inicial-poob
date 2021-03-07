@@ -291,16 +291,13 @@ public class MissionTestC2
         int col = 1;
                 
         // Agregamos una caja a la bodega
-        mission.store(row, col);
-        
-        // Copiamos la bodega
-        mission.copy();        
+        mission.store(row, col);        
         
         // Eliminamos la caja de la bodega
         mission.undo();   
         
         // Al editar la bodega debemos hacer un reset de la zona de planeación
-        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};        
+        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};         
         assertArrayEquals(res, mission.warehouse());
                 
         // Al hacer redo volvemos la caja a la posición (1,1) de la bodega
@@ -310,8 +307,7 @@ public class MissionTestC2
         assertArrayEquals(res2, mission.warehouse());
         
         // La función copy debe dejar la zona de planeación con una caja en la posición (1,1)
-        mission.copy();
-        
+        mission.copy();        
         assertArrayEquals(res2, mission.layout());     
     }
     

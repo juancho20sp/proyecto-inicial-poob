@@ -387,22 +387,7 @@ public class Board
         return res;
     }
     
-    /**
-     * Method for resetting the board
-     * @param boxColor -> The color of the boxes
-     * @param bgColor -> The background color
-     */
-    public void resetBoard(String boxColor, String bgColor){
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                this.uncolorRefresh(i, j, bgColor);
-                this.values[i][j] = 0;                
-            }
-        }        
-        
-        this.refreshBoard(boxColor, bgColor);
-    }
-    
+       
     /**
      * Method for restarting the boards
      * @param The background color of the board
@@ -410,6 +395,8 @@ public class Board
     public void restartBoard(String bgColor){
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
+                this.values[i][j] = 0;
+                
                 this.topView[i][j].changeColor(bgColor);
                 this.frontView[i][j].changeColor(bgColor);
                 this.sideView[i][j].changeColor(bgColor);

@@ -126,17 +126,11 @@
             // Guardamos la caja en la casilla seleccionada
             this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor, this.wareHouseColor);            
             
-            // Preparamos la cadena para el stack
-            undoStack.push(new Action("store", newRow, newCol));
-            
-            /*String pos = "store-"+ newRow + "," + newCol;
-            
-            // Agregamos la información al stack
-            undoStack.push(pos);*/
+            // Agregamos la acción al stack
+            undoStack.push(new Action("store", newRow, newCol)); 
             
             // Reset a la zona de planeación
             this.restartPlanningZone();
-            this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
                         
             // La operación 'store' fue exitosa
             this.setIsOk(true);
@@ -193,7 +187,18 @@
     /**
     * Copy actual state of the warehouse into the planning zone
     */
-    public void copy(){        
+    public void copy(){   
+        // Agregamos la acción al stack        
+        if (undoStack.size() > 0){
+             Action lastAction = undoStack.peek();
+             
+             if(!lastAction.getAction().equals("copy")){
+                 undoStack.push(new Action("copy", -1, -1));
+            }
+        } else {
+            undoStack.push(new Action("copy", -1, -1));
+        }
+        
         // Actualizamos la bandera
         this.isCopied = true;
         
@@ -340,11 +345,7 @@
                 
                 // Preparamos la cadena para el stack
                 undoStack.push(new Action("steal", newRow, newCol));
-                
-                // Agregamos la acción de robo al stack de cosas por deshacer
-                /*String res = "steal-" + newRow + "," + newCol;
-                this.undoStack.push(res);*/
-                
+                                
                 // Le damos formato a la tupla
                 String tuple = newRow + "-" + newCol;
     
@@ -442,8 +443,7 @@
             
             switch(action.getAction()){
             case "store":                
-                this.warehouse.uncolorRefresh(action.getInitialRow(), action.getInitialCol(), this.wareHouseColor);                
-                //this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                this.warehouse.uncolorRefresh(action.getInitialRow(), action.getInitialCol(), this.wareHouseColor); 
                 this.restartPlanningZone();
                 break;
                 
@@ -455,6 +455,10 @@
                 int[] myFrom = {action.getFinalRow() + 1, action.getFinalCol() + 1};
                 int[] myTo = {action.getInitialRow() + 1, action.getInitialCol() + 1};
                 this.arrange(myFrom, myTo);
+                break;
+                
+            case "copy":
+                this.restartPlanningZone();
                 break;
         }
         
@@ -489,6 +493,11 @@
                 int[] myFrom = {action.getInitialRow() + 1, action.getInitialRow() + 1};
                 int[] myTo = {action.getFinalRow() + 1, action.getFinalCol() + 1};
                 this.arrange(myFrom, myTo);
+                break;
+                
+            case "copy":
+                this.copy();
+                break;
         }
         
         // La agregamos al stack de cosas por deshacer
