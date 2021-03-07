@@ -312,7 +312,8 @@ public class MissionTestC2
         // La función copy debe dejar la zona de planeación con una caja en la posición (1,1)
         mission.copy();
         
-        assertArrayEquals(res2, mission.layout());     }
+        assertArrayEquals(res2, mission.layout());     
+    }
     
     /**
      * Verifies if the undo/redo method works for the steal method
@@ -337,26 +338,51 @@ public class MissionTestC2
         
         assertArrayEquals(res, mission.layout());
         
-        // Al hacer redo volvemos la caja a la posición (1,1) de la bodega
+        // Al hacer undo volvemos la caja a la posición (1,1) de la bodega
         mission.undo();
         
         int[][] res2 = {{1,0,0},{0,0,0},{0,0,0}};
         assertArrayEquals(res2, mission.layout());
         
-        // Al hacer undo volvemos a robar la caja de la posición (1,1) de la zona de planeación
+        // Al hacer redo volvemos a robar la caja de la posición (1,1) de la zona de planeación
         mission.redo();        
         assertArrayEquals(res, mission.layout()); 
     }
     
+    /**
+     * Verifies if the undo/redo method works for the arrange method
+     * @result True if works, false otherwise
+     */
     @Test
-    public void shouldRepaint() {
-        // Guardamos una caja
-        mission.store(1, 1);
+    public void shouldUndoRedoArrangeMG(){
+        int row = 1;
+        int col = 1;
         
-        // Copiamos la caja a la zona de planeación
+        // Agregamos una caja a la bodega
+        mission.store(row, col);
+        
+        // Copiamos la bodega
         mission.copy();
+        
+        // Eliminamos la caja de la bodega
+        int[] from = {row, col};
+        int[] to = {row+1, col+1};
+        
+        mission.arrange(from, to);        
+        
+        int[][] res = {{0,0,0},{0,1,0},{0,0,0}};
+        assertArrayEquals(res, mission.layout());
+        
+        // Al hacer undo volvemos la caja a la posición (1,1) de la bodega
+        mission.undo();
+        
+        int[][] res2 = {{1,0,0},{0,0,0},{0,0,0}};
+        assertArrayEquals(res2, mission.layout());
+        
+        // Al hacer redo volvemos a dejar la caja en la posición (2,2) de la zona de planeación
+        mission.redo();        
+        assertArrayEquals(res, mission.layout()); 
     }
-    
     
     /**
      * Tears down the test fixture.
