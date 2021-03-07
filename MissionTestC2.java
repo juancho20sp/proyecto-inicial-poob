@@ -381,6 +381,39 @@ public class MissionTestC2
     }
     
     /**
+     * Verifies if the undo/redo method works for the copy method
+     * @result True if works, false otherwise
+     */
+    @Test
+    public void shouldUndoRedoCopyMG(){
+        int row = 1;
+        int col = 1;
+        
+        // Agregamos una caja a la bodega
+        mission.store(row, col);
+        
+        // La zona de planeación inicia vacía
+        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};
+        assertArrayEquals(res, mission.layout());
+        
+        // Copiamos la bodega
+        mission.copy();
+                   
+        // Luego de copiar debemos tener la posición (1,1) llena
+        int[][] res2 = {{1,0,0},{0,0,0},{0,0,0}};
+        assertArrayEquals(res2, mission.layout());
+                
+        
+        // Al hacer undo la zona de planeación queda vacía
+        mission.undo();
+        assertArrayEquals(res, mission.layout());
+        
+        // Al hacer redo volvemos a tener una caja en la posición (1,1)
+        mission.redo();        
+        assertArrayEquals(res2, mission.layout()); 
+    }
+    
+    /**
      * Tears down the test fixture.
      *
      * Called after every test case method.
