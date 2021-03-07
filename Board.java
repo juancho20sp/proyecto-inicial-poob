@@ -345,7 +345,9 @@ public class Board
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
-    }
+    }   
+    
+    
     // -------------------
     
     /**
@@ -382,9 +384,13 @@ public class Board
     public void resetBoard(String boxColor, String bgColor){
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
-                this.values[i][j] = 0;
+                if (this.values[i][j] > 0){
+                    this.uncolorRefresh(i, j, bgColor);
+                }                
+                this.values[i][j] = 0;                
             }
         }
+        
         
         this.refreshBoard(boxColor, bgColor);
     }
