@@ -414,6 +414,21 @@ public class Board
     }
     
     /**
+     * Method for restarting the boards
+     * @param The background color of the board
+     */
+    public void restartBoard(String bgColor){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.topView[i][j].changeColor(bgColor);
+                this.frontView[i][j].changeColor(bgColor);
+                this.sideView[i][j].changeColor(bgColor);
+            }
+        }
+    }
+    
+    
+    /**
      * Verify max values per row for the locations
      * @param   location   A matrix with the values of the boxes per index of the location
      */

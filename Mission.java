@@ -102,10 +102,12 @@
         // actualizamos las cajas
         if (this.isCopied){
             // Pintamos únicamente las cajas copiadas
+            
             this.planningZone.refreshBoard(this.planningZoneBoxColor, this.planningZoneColor);
             
             // Si las vistas de la zona de planeación son diferentes a las de la bodega,
             // pintamos la zona de planeación de color rojo
+            
             this.repaintPlanningZone();
         }
     }
@@ -131,9 +133,9 @@
             undoStack.push(pos);
             
             // Reset a la zona de planeación
+            this.restartPlanningZone();
             this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
-            this.resetPlanningZoneColor();
-            
+                        
             // La operación 'store' fue exitosa
             this.setIsOk(true);
         } else {
@@ -277,6 +279,12 @@
         this.planningZone.changeColor(color); 
     }   
     
+    /**
+     * Method for restarting the planning zone
+     */    
+    private void restartPlanningZone(){
+        this.planningZone.restartBoard(this.planningZoneColor);
+    }
     
     /**
      * Method for verifying if the warehouse and the planning zone have the same views on the cameras
@@ -487,8 +495,12 @@
         
         switch(name){
             case "store":                
-                this.warehouse.uncolorRefresh(from[0], from[1], this.wareHouseColor);
-                this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                this.warehouse.uncolorRefresh(from[0], from[1], this.wareHouseColor);                
+                //this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                this.restartPlanningZone();
+                
+                
+                
                 break;
             case "steal":
                 this.returnBox();
@@ -564,8 +576,13 @@
             case "store":
                 //this.warehouse.removeBox(from[0], from[1], true);
                 this.store(from[0] + 1, from[1] + 1);
-                this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                
+                this.areEqual = true;
+                //this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
+                this.restartPlanningZone();
                 //this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
+                
+                
                 break;
             case "steal":
                 this.steal(from[0] + 1, from[1] + 1);                
