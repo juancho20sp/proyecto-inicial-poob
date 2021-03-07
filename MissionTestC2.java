@@ -24,28 +24,6 @@ public class MissionTestC2
     private int[][] planningZone;
     
     /**
-     * segunMG
-     * Verifies if two arrays are equal.
-     * @param   The first array.
-     * @param   The second array
-     */
-    private boolean areEqualArrays(int[][] array1, int[][] array2){
-        boolean areEqual = true;
-        
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                if (array1[i][j] != array2[i][j]){
-                    areEqual = false;
-                    break;
-                }                
-            }
-        }
-        
-        return areEqual;
-    }
-    
-    
-    /**
      * Creates a copy of the mission's planning zone
      */
     private void copyPlanningZone() {
@@ -64,23 +42,16 @@ public class MissionTestC2
         // Creamos el croquis de la zona de planeación
         planningZone = new int[this.rows][this.cols];
         
-        
-        //mission.zoom('+');
-        //mission.zoom('-');
-        //mission.zoom('+');
-        //mission.zoom('+');
-        // Mantenemos el tablero invisible
         mission.makeInvisible();
     }
     
     
     /**
-     * segunMG
      * Test for creating boards
      * @result The boards were created correctly.
      */
     @Test    
-    public void shouldCreateBoards(){
+    public void shouldCreateBoardsMG(){
         // Verificamos los tamaños de los tableros de valores
         // Warehouse values
         assertEquals(rows, mission.warehouse().length);
@@ -97,12 +68,11 @@ public class MissionTestC2
     }
     
     /**
-     * segunMG
      * Test for storing boxes on the warehouse
      * @result The box was stored correctly.
      */
     @Test
-    public void shouldStore() {
+    public void shouldStoreMG() {
         int row = 1;
         int col = 1;
         
@@ -133,20 +103,18 @@ public class MissionTestC2
     }
     
     /**
-     * segunMG
      * Test for copying the warehouse
      * @result The boards were copied correctly.
      */
     @Test
-    public void shouldCopy(){
+    public void shouldCopyMG(){
         int[][] warehouse = mission.warehouse();
         
         // Copiamos el estado del warehouse
         mission.copy();        
               
         // Verificamos la igualdad componente a componente
-        assertEquals(true, areEqualArrays(warehouse, mission.layout()));
-        
+        assertArrayEquals(warehouse, mission.layout());
         
         // Agregamos 4 cajas a la bodega 
         mission.store(1,1);
@@ -158,17 +126,15 @@ public class MissionTestC2
         mission.copy();
         
         // Verificamos la igualdad componente a componente
-        assertEquals(true, areEqualArrays(warehouse, mission.layout()));
-                
+        assertArrayEquals(warehouse, mission.layout());
     }
     
     /**
-     * segunMG
      * Test for stealing a box of the planning zone.
      * @result The box was stealed successfully.
      */
     @Test
-    public void shouldSteal() {
+    public void shouldStealMG() {
         int stolenBoxes = 0;
         
         // Agregamos 5 cajas a la bodega
@@ -195,8 +161,7 @@ public class MissionTestC2
         stolenBoxes += 1;
         
         // Verificamos que sean iguales
-        assertEquals(true, this.areEqualArrays(this.planningZone,  mission.layout()));
-        
+        assertArrayEquals(this.planningZone,  mission.layout());
         
         // Verificamos que el contador de cajas robadas haya aumentado
         assertEquals(stolenBoxes, mission.stolen());
@@ -217,8 +182,7 @@ public class MissionTestC2
         stolenBoxes += 2;
         
         // Verificamos que sean iguales
-        assertEquals(true, this.areEqualArrays(this.planningZone,  mission.layout()));
-        
+        assertArrayEquals(this.planningZone,  mission.layout());
         
         // Verificamos que el contador de cajas robadas haya aumentado        
         assertEquals(stolenBoxes, mission.stolen()); 
@@ -226,12 +190,11 @@ public class MissionTestC2
     }
     
     /**
-     * segunMG
      * Test for returning the last stolen box.
      * @result The box was returned successfully.
      */
     @Test
-    public void shouldReturnBox(){
+    public void shouldReturnBoxMG(){
         int row = 1;
         int col = 1;
         
@@ -251,7 +214,7 @@ public class MissionTestC2
         this.planningZone[row - 1][col - 1]--;
         
         // Verificamos que la zona de planeación de mission y la zona de planeación local sean iguales
-        assertEquals(true, this.areEqualArrays(this.planningZone, mission.layout()));
+        assertArrayEquals(this.planningZone, mission.layout());
         
         // Devolvemos la caja en mission
         mission.returnBox();
@@ -260,18 +223,15 @@ public class MissionTestC2
         this.planningZone[row - 1][col - 1]++;
 
         // Verificamos que la zona de planeación de mission y la zona de planeación local sean iguales
-        assertEquals(true, this.areEqualArrays(this.planningZone, mission.layout()));
-        
-        
+        assertArrayEquals(this.planningZone, mission.layout());                
     }
     
     /**
-     * segunMG
      * Test for arranging the planning zone.
      * @result The box was arranged successfully.
      */
     @Test
-    public void shouldArrange(){
+    public void shouldArrangeMG(){
         int row = 1;
         int col = 1;
         
@@ -295,8 +255,8 @@ public class MissionTestC2
         
         this.planningZone[to[0] - 1][to[0] - 1]++;
         
-        // Verificamos que ambas zonas sean iguales
-        assertEquals(true, this.areEqualArrays(this.planningZone, mission.layout()));
+        // Verificamos que ambas zonas sean iguales        
+        assertArrayEquals(this.planningZone, mission.layout());
         
     }
     
@@ -307,7 +267,7 @@ public class MissionTestC2
     @Test
     public void shouldConsultPositionOT(){
         mission.store(1, 1);
-        mission.store(1,2);
+        mission.store(1, 2);
 
         mission.copy();
         this.copyPlanningZone();
@@ -322,6 +282,41 @@ public class MissionTestC2
 
         assertArrayEquals(answer, mission.toSteal());
 
+    }
+    
+    /**
+     * Verifies if the undo/redo method works for the store method
+     * @result True if works, false otherwise
+     */
+    @Test
+    public void shouldUndoRedoStoreMG(){
+        int row = 1;
+        int col = 1;
+        
+        // Agregamos una caja a la bodega
+        mission.store(row, col);
+        
+        // Copiamos la bodega
+        mission.copy();
+        
+        // Eliminamos la caja de la bodega
+        mission.undo();        
+        
+        // Al editar la bodega debemos hacer un reset de la zona de planeación
+        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};
+        assertArrayEquals(res, mission.layout());        
+        assertArrayEquals(res, mission.warehouse());
+        
+        // Al hacer redo volvemos la caja a la posición (1,1) de la bodega
+        mission.redo();
+        
+        int[][] res2 = {{1,0,0},{0,0,0},{0,0,0}};
+        assertArrayEquals(res2, mission.warehouse());
+        
+        // La función copy debe dejar la zona de planeación con una caja en la posición (1,1)
+        mission.copy();
+        
+        assertArrayEquals(res2, mission.layout()); 
     }
     
     @Test

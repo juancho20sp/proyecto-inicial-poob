@@ -156,17 +156,17 @@ public class Board
     /**
      * Method for removing a box from the board
      * @param   row     The row where we want to insert the box
-     * @param   col     The column where we want to insert the box     * 
-     * @param   isStore The box to remove is placed on the warehouse
+     * @param   col     The column where we want to insert the box 
      */
-    public void removeBox(int row, int col, boolean isStore){
+    public void removeBox(int row, int col){
         // Actualizamos la cantidad de cajas en la posición dada
         //this.values[row][col]--;
         
-        if(!isStore){
+        //if(!isStore){
             // Sumamos uno a la cantidad de cajas robadas
+            this.values[row][col]--;
             this.stolenBoxes++;
-        }        
+        //}        
     }   
     
     

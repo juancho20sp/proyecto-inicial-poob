@@ -335,7 +335,7 @@
             // Verificamos si hay cajas para robar en la posición
             if (this.planningZone.getValues()[newRow][newCol] > 0){                
                 // Sacamos una caja de la posición objetivo
-                this.planningZone.removeBox(newRow, newCol, false);
+                this.planningZone.removeBox(newRow, newCol);
                 
                 // Re pintamos la zona de planeación
                 this.repaintPlanningZone();
@@ -666,7 +666,7 @@
                 // Verificamos si en esa posición hay una caja    
                 if (this.planningZone.getValues()[oldRow][oldCol] > 0){
                     // Retiramos una caja de esa posición
-                    this.planningZone.removeBox(oldRow, oldCol, false);
+                    this.planningZone.removeBox(oldRow, oldCol);
                     //this.planningZoneValues[oldRow][oldCol]--;
                     
                     // Agregamos la caja a la nueva posición
