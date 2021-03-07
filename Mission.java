@@ -487,8 +487,10 @@
         
         switch(name){
             case "store":
-                this.warehouse.removeBox(from[0], from[1], true);
-                this.warehouse.refreshBoard(this.wareHouseColor, this.wareHouseColor);
+                
+                //this.warehouse.refreshBoard(this.wareHouseColor, this.warehouseBoxColor);
+                this.warehouse.uncolorRefresh(from[0], from[1], this.wareHouseColor);
+                //this.warehouse.removeBox(from[0], from[1], true);
                 this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
                 break;
             case "steal":
