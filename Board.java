@@ -1,6 +1,7 @@
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
     
 /**
  * Here will be all the information regarding to the boards (warehouse and planning zone)
@@ -32,6 +33,14 @@ public class Board
         
     // ¿Acción válida?
     private boolean isOk = false;
+    
+    // Stack front
+    Stack<Coordinate> stackFront = new Stack<Coordinate>();
+    
+    // Stack side
+    Stack<Coordinate> stackSide = new Stack<Coordinate>();
+    
+    
     
     /**
      * Constructor for objects of class Board
@@ -217,7 +226,11 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 'f', boxColor);
-                //this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
+                
+                int row = this.rows - j - 1;
+                int col = i;
+                
+                this.stackFront.push(new Coordinate(row, col));           
             }
         }
     }
@@ -243,7 +256,12 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesSide[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 's', boxColor);
-                //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
+                //this.sideView[this.rows - j - 1][i].changeColor(boxColor); 
+                
+                int row = this.rows - j - 1;
+                int col = i;
+                
+                this.stackSide.push(new Coordinate(row, col));
             }
         }
     }
@@ -269,6 +287,11 @@ public class Board
     }
     
     // -------------------
+    /**
+     * Method for uncoloring the board
+     * @param The color of the boxes. ie 'black', 'red', 'blue'
+     * @param The background color
+     */
     public void uncolorRefresh(int row, int col, String bgColor){
         System.out.println("UNCOLOR REFRESH!");
         
@@ -294,27 +317,10 @@ public class Board
     
     public void uncolorFrontView(String bgColor){
         System.out.println("UNCOLOR FRONT!");
-        // Traemos los máximos por columna
-        int[] valuesFront = this.maxValuePerColumn(this.values);
-        System.out.println("valuesFront: " + Arrays.toString(valuesFront));
         
-        // Corregimos los valores para evitar errores al dibujar
-        for(int i = 0; i < this.rows; i++){
-            if(valuesFront[i] > this.rows){
-                valuesFront[i] = this.rows - 1;
-            }
-        }
-        
-        // Dibujamos las cajas en la vista frontal
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < valuesFront[i]; j++){
-                System.out.println("Se debe eliminar la posición [" + i + "][" + j +"]" + " de la vista frontal");
-                this.paintBox(this.rows - j - 1, i, 'f', bgColor);
-                
-                
-                //this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
-            }
-        }
+        // Eliminamos la caja más alta de la vista frontal
+        Coordinate toDelete = this.stackFront.pop();        
+        this.paintBox(toDelete.getRow(), toDelete.getCol(), 'f', bgColor);
     }
     
     
@@ -325,12 +331,19 @@ public class Board
      */
     public void uncolorSideView(String bgColor){
         System.out.println("UNCOLOR SIDE!");
-        // Traemos los máximos por fila
-        int[] valuesSide = this.maxValuePerRow(this.values);
-        System.out.println("valuesSide: " + Arrays.toString(valuesSide));
+        
+        // Eliminamos la caja más alta de la vista lateral
+        Coordinate toDelete = this.stackSide.pop();     
+        
+        System.out.println("Lateral: " + toDelete.getRow() + "->" + toDelete.getCol());
+        
+        this.paintBox(toDelete.getRow(), toDelete.getCol(), 's', bgColor);
+        
+        
+        
         
         // Corregimos los valores para evitar errores al dibujar
-        for(int i = 0; i < this.rows; i++){
+        /*for(int i = 0; i < this.rows; i++){
             if(valuesSide[i] > this.rows){
                 valuesSide[i] = this.rows - 1;
             }
@@ -341,10 +354,10 @@ public class Board
             for(int j = 0; j < valuesSide[i]; j++){
                 System.out.println("Se debe eliminar la posición [" + i + "][" + j +"]" + " de la vista lateral");
                 this.paintBox(this.rows - j - 1, i, 's', bgColor);
-                
+                break;
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
             }
-        }
+        }*/
     }   
     
     
