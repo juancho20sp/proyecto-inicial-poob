@@ -168,14 +168,8 @@ public class Board
      * @param   col     The column where we want to insert the box 
      */
     public void removeBox(int row, int col){
-        // Actualizamos la cantidad de cajas en la posición dada
-        //this.values[row][col]--;
-        
-        //if(!isStore){
-            // Sumamos uno a la cantidad de cajas robadas
-            this.values[row][col]--;
-            this.stolenBoxes++;
-        //}        
+        this.values[row][col]--;
+        this.stolenBoxes++;                
     }   
     
     
@@ -202,8 +196,7 @@ public class Board
                 break;
         }
         
-    }
-    
+    }    
     
     
     /**
@@ -286,10 +279,11 @@ public class Board
         }
     }
     
-    // -------------------
+    
     /**
      * Method for uncoloring the board
-     * @param The color of the boxes. ie 'black', 'red', 'blue'
+     * @param The row we are uncoloring
+     * @param The column we are uncoloring
      * @param The background color
      */
     public void uncolorRefresh(int row, int col, String bgColor){
@@ -301,7 +295,11 @@ public class Board
         this.uncolorTopView(bgColor);
     }
     
-    public void uncolorTopView(String bgColor){
+    /**
+     * Method for painting the top view as the original background
+     * @param The color the view will be painted
+     */
+    private void uncolorTopView(String bgColor){
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
@@ -312,7 +310,11 @@ public class Board
         }
     }
     
-    public void uncolorFrontView(String bgColor){        
+    /**
+     * Method for painting the front view as the original background
+     * @param The color the view will be painted
+     */
+    private void uncolorFrontView(String bgColor){        
         // Eliminamos la caja más alta de la vista frontal
         if (this.stackFront.size() > 0){
             Coordinate toDelete = this.stackFront.pop();        
@@ -322,11 +324,10 @@ public class Board
     
     
     /**
-     * Method for coloring the boxes of the side view
-     * @param The color of the boxes. ie 'black', 'red', 'blue'
-     * @param The background color
+     * Method for painting the side view as the original background
+     * @param The color the view will be painted
      */
-    public void uncolorSideView(String bgColor){        
+    private void uncolorSideView(String bgColor){        
         // Eliminamos la caja más alta de la vista lateral
         if (this.stackSide.size() > 0){ 
             Coordinate toDelete = this.stackSide.pop();     
@@ -337,8 +338,6 @@ public class Board
         }
     }   
     
-    
-    // -------------------
     
     /**
      * Verify max values per column for the locations
@@ -359,47 +358,10 @@ public class Board
                     res[j] = location[i][j];
                 }
             }
-        }        
-               
-        //System.out.println("Column: " +Arrays.toString(res));        
+        }            
         
         return res;
     }
-    
-    /**
-     * Method for resetting the board
-     * @param boxColor -> The color of the boxes
-     * @param bgColor -> The background color
-     */
-    public void resetBoard(String boxColor, String bgColor){
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                if (this.values[i][j] > 0){
-                    
-                } 
-                this.uncolorRefresh(i, j, bgColor);
-                this.values[i][j] = 0;                
-            }
-        }
-        
-        
-        this.refreshBoard(boxColor, bgColor);
-    }
-    
-    /**
-     * Method for restarting the boards
-     * @param The background color of the board
-     */
-    public void restartBoard(String bgColor){
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                this.topView[i][j].changeColor(bgColor);
-                this.frontView[i][j].changeColor(bgColor);
-                this.sideView[i][j].changeColor(bgColor);
-            }
-        }
-    }
-    
     
     /**
      * Verify max values per row for the locations
@@ -421,11 +383,40 @@ public class Board
                 }
             }
         }
-        
-        //System.out.println("Row: " + Arrays.toString(res));
-        
+                
         return res;
     }
+    
+    /**
+     * Method for resetting the board
+     * @param boxColor -> The color of the boxes
+     * @param bgColor -> The background color
+     */
+    public void resetBoard(String boxColor, String bgColor){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.uncolorRefresh(i, j, bgColor);
+                this.values[i][j] = 0;                
+            }
+        }        
+        
+        this.refreshBoard(boxColor, bgColor);
+    }
+    
+    /**
+     * Method for restarting the boards
+     * @param The background color of the board
+     */
+    public void restartBoard(String bgColor){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.topView[i][j].changeColor(bgColor);
+                this.frontView[i][j].changeColor(bgColor);
+                this.sideView[i][j].changeColor(bgColor);
+            }
+        }
+    }
+           
     
     /**
      * Method for changing the board color
@@ -440,7 +431,7 @@ public class Board
             }
         }
     }
-    
+        
     /**
      * Method for making the board invisible   
      */
@@ -492,7 +483,6 @@ public class Board
         // Repintamos el tablero
         this.paintBoard(false);
     }
-    
     
     /**
      * Method for moving the board vertically
