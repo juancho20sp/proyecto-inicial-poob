@@ -85,7 +85,6 @@ public class MissionTestC2
         // Verificamos que se haya guardado
         // Restamos 1 a cada posición porque según el negocio los 
         // índices empiezan en 1
-        System.out.println("test 1: " + mission.warehouse()[row - 1][col - 1]);
         assertEquals(++totalBoxes, mission.warehouse()[row - 1][col - 1]);
         
         
@@ -93,8 +92,6 @@ public class MissionTestC2
         // Usamos la segunda versión del método
         int[] position = {row, col};
         mission.store(position);
-        
-        System.out.println("HOliw" + mission.warehouse()[row - 1][col - 1]);
         
         // Verificamos que se haya guardado
         // Restamos 1 a cada posición porque según el negocio los 
@@ -292,21 +289,20 @@ public class MissionTestC2
     public void shouldUndoRedoStoreMG(){
         int row = 1;
         int col = 1;
-        
+                
         // Agregamos una caja a la bodega
         mission.store(row, col);
         
         // Copiamos la bodega
-        mission.copy();
+        mission.copy();        
         
         // Eliminamos la caja de la bodega
-        mission.undo();        
+        mission.undo();   
         
         // Al editar la bodega debemos hacer un reset de la zona de planeación
-        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};
-        assertArrayEquals(res, mission.layout());        
+        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};        
         assertArrayEquals(res, mission.warehouse());
-        
+                
         // Al hacer redo volvemos la caja a la posición (1,1) de la bodega
         mission.redo();
         
@@ -316,7 +312,40 @@ public class MissionTestC2
         // La función copy debe dejar la zona de planeación con una caja en la posición (1,1)
         mission.copy();
         
-        assertArrayEquals(res2, mission.layout()); 
+        assertArrayEquals(res2, mission.layout());     }
+    
+    /**
+     * Verifies if the undo/redo method works for the steal method
+     * @result True if works, false otherwise
+     */
+    @Test
+    public void shouldUndoRedoStealMG(){
+        int row = 1;
+        int col = 1;
+        
+        // Agregamos una caja a la bodega
+        mission.store(row, col);
+        
+        // Copiamos la bodega
+        mission.copy();
+        
+        // Eliminamos la caja de la bodega
+        mission.steal(row, col);        
+        
+        // Al editar la bodega debemos hacer un reset de la zona de planeación
+        int[][] res = {{0,0,0},{0,0,0},{0,0,0}};    
+        
+        assertArrayEquals(res, mission.layout());
+        
+        // Al hacer redo volvemos la caja a la posición (1,1) de la bodega
+        mission.undo();
+        
+        int[][] res2 = {{1,0,0},{0,0,0},{0,0,0}};
+        assertArrayEquals(res2, mission.layout());
+        
+        // Al hacer undo volvemos a robar la caja de la posición (1,1) de la zona de planeación
+        mission.redo();        
+        assertArrayEquals(res, mission.layout()); 
     }
     
     @Test

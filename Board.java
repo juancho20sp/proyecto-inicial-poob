@@ -293,8 +293,6 @@ public class Board
      * @param The background color
      */
     public void uncolorRefresh(int row, int col, String bgColor){
-        System.out.println("UNCOLOR REFRESH!");
-        
         this.uncolorSideView(bgColor);
         this.uncolorFrontView(bgColor);
         
@@ -304,7 +302,6 @@ public class Board
     }
     
     public void uncolorTopView(String bgColor){
-        System.out.println("UNCOLOR TOP!");
         // Dibujamos las cajas en la vista frontal
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
@@ -315,9 +312,7 @@ public class Board
         }
     }
     
-    public void uncolorFrontView(String bgColor){
-        System.out.println("UNCOLOR FRONT!");
-        
+    public void uncolorFrontView(String bgColor){        
         // Eliminamos la caja más alta de la vista frontal
         if (this.stackFront.size() > 0){
             Coordinate toDelete = this.stackFront.pop();        
@@ -331,9 +326,7 @@ public class Board
      * @param The color of the boxes. ie 'black', 'red', 'blue'
      * @param The background color
      */
-    public void uncolorSideView(String bgColor){
-        System.out.println("UNCOLOR SIDE!");
-        
+    public void uncolorSideView(String bgColor){        
         // Eliminamos la caja más alta de la vista lateral
         if (this.stackSide.size() > 0){ 
             Coordinate toDelete = this.stackSide.pop();     
@@ -342,26 +335,6 @@ public class Board
             
             this.paintBox(toDelete.getRow(), toDelete.getCol(), 's', bgColor);
         }
-        
-        
-        
-        
-        // Corregimos los valores para evitar errores al dibujar
-        /*for(int i = 0; i < this.rows; i++){
-            if(valuesSide[i] > this.rows){
-                valuesSide[i] = this.rows - 1;
-            }
-        }
-        
-        // Dibujamos las cajas en la vista frontal
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < valuesSide[i]; j++){
-                System.out.println("Se debe eliminar la posición [" + i + "][" + j +"]" + " de la vista lateral");
-                this.paintBox(this.rows - j - 1, i, 's', bgColor);
-                break;
-                //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
-            }
-        }*/
     }   
     
     
