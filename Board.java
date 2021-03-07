@@ -319,8 +319,10 @@ public class Board
         System.out.println("UNCOLOR FRONT!");
         
         // Eliminamos la caja más alta de la vista frontal
-        Coordinate toDelete = this.stackFront.pop();        
-        this.paintBox(toDelete.getRow(), toDelete.getCol(), 'f', bgColor);
+        if (this.stackFront.size() > 0){
+            Coordinate toDelete = this.stackFront.pop();        
+            this.paintBox(toDelete.getRow(), toDelete.getCol(), 'f', bgColor);
+        }
     }
     
     
@@ -333,11 +335,13 @@ public class Board
         System.out.println("UNCOLOR SIDE!");
         
         // Eliminamos la caja más alta de la vista lateral
-        Coordinate toDelete = this.stackSide.pop();     
-        
-        System.out.println("Lateral: " + toDelete.getRow() + "->" + toDelete.getCol());
-        
-        this.paintBox(toDelete.getRow(), toDelete.getCol(), 's', bgColor);
+        if (this.stackSide.size() > 0){ 
+            Coordinate toDelete = this.stackSide.pop();     
+            
+            System.out.println("Lateral: " + toDelete.getRow() + "->" + toDelete.getCol());
+            
+            this.paintBox(toDelete.getRow(), toDelete.getCol(), 's', bgColor);
+        }
         
         
         
@@ -398,8 +402,9 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
                 if (this.values[i][j] > 0){
-                    this.uncolorRefresh(i, j, bgColor);
-                }                
+                    
+                } 
+                this.uncolorRefresh(i, j, bgColor);
                 this.values[i][j] = 0;                
             }
         }
