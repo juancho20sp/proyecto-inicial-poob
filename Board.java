@@ -86,6 +86,50 @@ public class Board
     }
     
     /**
+     * Constructor for objects of class Board
+     * @param   rows    Number of rows of the board
+     * @param   cols    Number of columns of the board    
+     */
+
+    public Board(int rows, int cols, int[][] values)
+    {
+        this.rows = rows;
+        this.cols = cols;
+        
+        // Creamos las vistas del tablero
+        this.topView = new Rectangle[rows][cols];
+        this.frontView = new Rectangle[rows][cols];
+        this.sideView = new Rectangle[rows][cols];
+        
+        // Preparamos la matriz de valores
+        this.values = values;
+        
+        // Inicializamos cada posición de los tableros        
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                // Agregamos un rectángulo a cada posición
+                this.topView[i][j] = new Rectangle(this.size - 2);
+                this.frontView[i][j] = new Rectangle(this.size - 2);
+                this.sideView[i][j] = new Rectangle(this.size - 2);
+                
+                // Movemos la vista frontal a la posición adecuada
+                this.frontView[i][j].moveHorizontal(this.size * j);
+                this.frontView[i][j].moveVertical(this.size * i);
+                
+                // Movemos la vista lateral a la posición adecuada
+                this.sideView[i][j].moveHorizontal((this.size * this.cols) +
+                    this.size * j + 25);
+                this.sideView[i][j].moveVertical(this.size * i);
+                
+                // Movemos la vista superior a la posición adecuada
+                this.topView[i][j].moveHorizontal((this.size * this.cols * 2) +
+                    this.size * j + 50);
+                this.topView[i][j].moveVertical(this.size * i); 
+            }
+        }
+    }
+    
+    /**
      * Method for painting and repainting the board
      * @param True if it is a new board, false if it is a repaint
      */
@@ -138,7 +182,7 @@ public class Board
     }
     
 
-     * Method for adding a box to the board
+     /** Method for adding a box to the board
      * @param   row     The row where we want to insert the box
      * @param   col     The column where we want to insert the box
      * @param   color   The color of the boxes. ie 'black', 'red', 'blue'
@@ -158,6 +202,28 @@ public class Board
         // Dibujamos la vista lateral
         this.colorSideView(color, bgColor);
     }  
+    
+    /** Method for adding a box to the board
+     * @param   row     The row where we want to insert the box
+     * @param   col     The column where we want to insert the box
+     * @param   color   The color of the boxes. ie 'black', 'red', 'blue'
+     * @param   bgColor The background color
+     * @param   isStart Check if we entered
+     */
+    public void insertBox(int row, int col, String color, String bgColor, boolean isStart){
+        // Actualizamos la cantidad de cajas en la posición dada
+        this.values[row][col]++;
+        
+        // Dibujamos la caja
+        this.colorTopView(color, bgColor);
+        //this.topView[row][col].changeColor(color);
+        
+        // Dibujamos la vista frontal
+        this.colorFrontView(color, bgColor);
+        
+        // Dibujamos la vista lateral
+        this.colorSideView(color, bgColor);
+    }
     
     /**
      * Method for removing a box from the board
@@ -284,9 +350,6 @@ public class Board
         }
     }
     
-<<<<<<< HEAD
-=======
-    
     /**
      * Method for uncoloring the board
      * @param The row we are uncoloring
@@ -345,8 +408,6 @@ public class Board
         }
     }   
     
-    
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Verify max values per column for the locations
      * @param  location A matrix with the values of the boxes per index of the location
@@ -432,8 +493,6 @@ public class Board
         }
     }
            
-    
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Method for changing the board color
      * @param The new color. ie 'black', 'blue', 'red'

@@ -82,7 +82,46 @@
      * with a blue print
      */
     public Mission(int length, int width, int[][] heights){
+        this.rows = length;
+        this.cols = width;
+        
+        this.warehouse = new Board(this.rows, this.cols, heights);
+        this.planningZone = new Board(this.rows, this.cols);
+        
+        // Le cambiamos el color a la zona de planeación
+        this.planningZone.changeColor(this.planningZoneColor);
+        
+        // Movemos la zona de planeación verticalmente
+        this.planningZone.moveVertical((this.size * this.rows) + this.size); 
+        
+        // Coloreamos la bodega
+        this.warehouse.refreshBoard(this.warehouseBoxColor, this.wareHouseColor);
+        
+        // Creamos los stacks para el manejo de acciones
+        this.redoStack = new Stack<Action>();
+        this.undoStack = new Stack<Action>();
+        
+        // La creación fue exitosa
+        this.setIsOk(true);
     } 
+    
+    /**
+     * Method for solving the problem
+     */
+    public void solve(){      
+        if (this.warehouse.getValues() == null){
+            this.printOutput("Debe ingresar valores a la bodega");
+        } else {
+            MissionContest solver = new MissionContest();
+            
+            int solution = solver.solve(this.warehouse.getValues());
+            
+            System.out.println(solution);
+        }               
+        
+        
+    }
+    
     
     /**
      * Method for refreshing the boards
@@ -258,7 +297,7 @@
      * Test method for entering the matrix as a parameter
      */
     private void setWarehouseValues(int[][] values){
-        //this.warehouseValues = values;
+            //this.warehouse = values;
         
             // Valores
             // {{1,4,0,5,2}, {2,1,2,0,1}, {0,2,3,4,4}, {0,3,0,3,1}, {1,2,2,1,1}}

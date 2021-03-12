@@ -344,26 +344,7 @@ public class MissionTestC2
         mission.redo();        
         assertArrayEquals(res, mission.layout()); 
     }
-    @Test
-    public void shouldConsultPositionOT(){
-        mission.store(1, 1);
-        mission.store(1,2);
-
-        mission.copy();
-        this.copyPlanningZone();
-
-        mission.steal(1, 1);
-        mission.steal(1, 2);
-
-        this.planningZone[0][0] -= 1;
-        this.planningZone[0][1] -= 1;
-
-        int[][] answer = {{0,0},{0,1}};
-
-        assertArrayEquals(answer, mission.toSteal());
-
-    }
-    
+      
     /**
      * Verifies if the undo/redo method works for the arrange method
      * @result True if works, false otherwise
