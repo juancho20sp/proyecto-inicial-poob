@@ -24,31 +24,6 @@ public class MissionTestC2
     private int[][] planningZone;
     
     /**
-<<<<<<< HEAD
-     * segunMG
-     * Verifies if two arrays are equal.
-     * @param   The first array.
-     * @param   The second array
-     */
-    private boolean areEqualArrays(int[][] array1, int[][] array2){
-        boolean areEqual = true;
-        
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                if (array1[i][j] != array2[i][j]){
-                    areEqual = false;
-                    break;
-                }                
-            }
-        }
-        
-        return areEqual;
-    }
-    
-    
-    /**
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Creates a copy of the mission's planning zone
      */
     private void copyPlanningZone() {
@@ -67,33 +42,16 @@ public class MissionTestC2
         // Creamos el croquis de la zona de planeación
         planningZone = new int[this.rows][this.cols];
         
-<<<<<<< HEAD
-        
-        //mission.zoom('+');
-        //mission.zoom('-');
-        //mission.zoom('+');
-        //mission.zoom('+');
-        // Mantenemos el tablero invisible
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         mission.makeInvisible();
     }
     
     
     /**
-<<<<<<< HEAD
-     * segunMG
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Test for creating boards
      * @result The boards were created correctly.
      */
     @Test    
-<<<<<<< HEAD
-    public void shouldCreateBoards(){
-=======
     public void shouldCreateBoardsMG(){
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         // Verificamos los tamaños de los tableros de valores
         // Warehouse values
         assertEquals(rows, mission.warehouse().length);
@@ -110,19 +68,11 @@ public class MissionTestC2
     }
     
     /**
-<<<<<<< HEAD
-     * segunMG
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Test for storing boxes on the warehouse
      * @result The box was stored correctly.
      */
     @Test
-<<<<<<< HEAD
-    public void shouldStore() {
-=======
     public void shouldStoreMG() {
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         int row = 1;
         int col = 1;
         
@@ -135,10 +85,6 @@ public class MissionTestC2
         // Verificamos que se haya guardado
         // Restamos 1 a cada posición porque según el negocio los 
         // índices empiezan en 1
-<<<<<<< HEAD
-        System.out.println("test 1: " + mission.warehouse()[row - 1][col - 1]);
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         assertEquals(++totalBoxes, mission.warehouse()[row - 1][col - 1]);
         
         
@@ -147,11 +93,6 @@ public class MissionTestC2
         int[] position = {row, col};
         mission.store(position);
         
-<<<<<<< HEAD
-        System.out.println("HOliw" + mission.warehouse()[row - 1][col - 1]);
-        
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         // Verificamos que se haya guardado
         // Restamos 1 a cada posición porque según el negocio los 
         // índices empiezan en 1
@@ -159,31 +100,18 @@ public class MissionTestC2
     }
     
     /**
-<<<<<<< HEAD
-     * segunMG
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Test for copying the warehouse
      * @result The boards were copied correctly.
      */
     @Test
-<<<<<<< HEAD
-    public void shouldCopy(){
-=======
     public void shouldCopyMG(){
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         int[][] warehouse = mission.warehouse();
         
         // Copiamos el estado del warehouse
         mission.copy();        
               
         // Verificamos la igualdad componente a componente
-<<<<<<< HEAD
-        assertEquals(true, areEqualArrays(warehouse, mission.layout()));
-        
-=======
         assertArrayEquals(warehouse, mission.layout());
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         // Agregamos 4 cajas a la bodega 
         mission.store(1,1);
@@ -195,28 +123,15 @@ public class MissionTestC2
         mission.copy();
         
         // Verificamos la igualdad componente a componente
-<<<<<<< HEAD
-        assertEquals(true, areEqualArrays(warehouse, mission.layout()));
-                
-    }
-    
-    /**
-     * segunMG
-=======
         assertArrayEquals(warehouse, mission.layout());
     }
     
     /**
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Test for stealing a box of the planning zone.
      * @result The box was stealed successfully.
      */
     @Test
-<<<<<<< HEAD
-    public void shouldSteal() {
-=======
     public void shouldStealMG() {
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         int stolenBoxes = 0;
         
         // Agregamos 5 cajas a la bodega
@@ -243,12 +158,7 @@ public class MissionTestC2
         stolenBoxes += 1;
         
         // Verificamos que sean iguales
-<<<<<<< HEAD
-        assertEquals(true, this.areEqualArrays(this.planningZone,  mission.layout()));
-        
-=======
         assertArrayEquals(this.planningZone,  mission.layout());
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         // Verificamos que el contador de cajas robadas haya aumentado
         assertEquals(stolenBoxes, mission.stolen());
@@ -269,12 +179,7 @@ public class MissionTestC2
         stolenBoxes += 2;
         
         // Verificamos que sean iguales
-<<<<<<< HEAD
-        assertEquals(true, this.areEqualArrays(this.planningZone,  mission.layout()));
-        
-=======
         assertArrayEquals(this.planningZone,  mission.layout());
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         // Verificamos que el contador de cajas robadas haya aumentado        
         assertEquals(stolenBoxes, mission.stolen()); 
@@ -282,19 +187,11 @@ public class MissionTestC2
     }
     
     /**
-<<<<<<< HEAD
-     * segunMG
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Test for returning the last stolen box.
      * @result The box was returned successfully.
      */
     @Test
-<<<<<<< HEAD
-    public void shouldReturnBox(){
-=======
     public void shouldReturnBoxMG(){
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         int row = 1;
         int col = 1;
         
@@ -314,11 +211,7 @@ public class MissionTestC2
         this.planningZone[row - 1][col - 1]--;
         
         // Verificamos que la zona de planeación de mission y la zona de planeación local sean iguales
-<<<<<<< HEAD
-        assertEquals(true, this.areEqualArrays(this.planningZone, mission.layout()));
-=======
         assertArrayEquals(this.planningZone, mission.layout());
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         // Devolvemos la caja en mission
         mission.returnBox();
@@ -327,29 +220,15 @@ public class MissionTestC2
         this.planningZone[row - 1][col - 1]++;
 
         // Verificamos que la zona de planeación de mission y la zona de planeación local sean iguales
-<<<<<<< HEAD
-        assertEquals(true, this.areEqualArrays(this.planningZone, mission.layout()));
-        
-        
-    }
-    
-    /**
-     * segunMG
-=======
         assertArrayEquals(this.planningZone, mission.layout());                
     }
     
     /**
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Test for arranging the planning zone.
      * @result The box was arranged successfully.
      */
     @Test
-<<<<<<< HEAD
-    public void shouldArrange(){
-=======
     public void shouldArrangeMG(){
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         int row = 1;
         int col = 1;
         
@@ -373,13 +252,8 @@ public class MissionTestC2
         
         this.planningZone[to[0] - 1][to[0] - 1]++;
         
-<<<<<<< HEAD
-        // Verificamos que ambas zonas sean iguales
-        assertEquals(true, this.areEqualArrays(this.planningZone, mission.layout()));
-=======
         // Verificamos que ambas zonas sean iguales        
         assertArrayEquals(this.planningZone, mission.layout());
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
     }
     
@@ -390,11 +264,7 @@ public class MissionTestC2
     @Test
     public void shouldConsultPositionOT(){
         mission.store(1, 1);
-<<<<<<< HEAD
-        mission.store(1,2);
-=======
         mission.store(1, 2);
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
 
         mission.copy();
         this.copyPlanningZone();
@@ -411,17 +281,6 @@ public class MissionTestC2
 
     }
     
-<<<<<<< HEAD
-    @Test
-    public void shouldRepaint() {
-        // Guardamos una caja
-        mission.store(1, 1);
-        
-        // Copiamos la caja a la zona de planeación
-        mission.copy();
-    }
-    
-=======
     /**
      * Verifies if the undo/redo method works for the store method
      * @result True if works, false otherwise
@@ -572,7 +431,6 @@ public class MissionTestC2
         mission.redo();        
         assertArrayEquals(res2, mission.layout()); 
     }
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
     /**
      * Tears down the test fixture.
