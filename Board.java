@@ -1,10 +1,7 @@
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Arrays;
-<<<<<<< HEAD
-=======
 import java.util.Stack;
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
 /**
  * Here will be all the information regarding to the boards (warehouse and planning zone)
@@ -35,24 +32,18 @@ public class Board
     private ArrayList<String> stealHistorial = new ArrayList<String>();
         
     // ¿Acción válida?
-    private boolean isOk = false;
-    
-<<<<<<< HEAD
-=======
+    private boolean isOk = false;   
     // Stack front
     Stack<Coordinate> stackFront = new Stack<Coordinate>();
     
     // Stack side
     Stack<Coordinate> stackSide = new Stack<Coordinate>();
-    
-    
-    
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Constructor for objects of class Board
      * @param   rows    Number of rows of the board
      * @param   cols    Number of columns of the board    
      */
+
     public Board(int rows, int cols)
     {
         this.rows = rows;
@@ -146,24 +137,7 @@ public class Board
         this.colorSideView(color, bgColor);
     }
     
-    /**
-<<<<<<< HEAD
-     * This is a hotfix :c
-     * @param The background color of the warehouse
-     */    
-    public void recolorWarehouse(String bgColor){
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                if(this.values[i][j] == 0){
-                    this.topView[i][j].changeColor(bgColor);
-                }
-            }
-        }
-    }
-    
-    /**
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
+
      * Method for adding a box to the board
      * @param   row     The row where we want to insert the box
      * @param   col     The column where we want to insert the box
@@ -188,25 +162,12 @@ public class Board
     /**
      * Method for removing a box from the board
      * @param   row     The row where we want to insert the box
-<<<<<<< HEAD
-     * @param   col     The column where we want to insert the box     * 
-     * @param   isStore The box to remove is placed on the warehouse
-     */
-    public void removeBox(int row, int col, boolean isStore){
-        // Actualizamos la cantidad de cajas en la posición dada
-        this.values[row][col]--;
-        
-        if(!isStore){
-            // Sumamos uno a la cantidad de cajas robadas
-            this.stolenBoxes++;
-        }        
-=======
+
      * @param   col     The column where we want to insert the box 
      */
     public void removeBox(int row, int col){
         this.values[row][col]--;
         this.stolenBoxes++;                
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     }   
     
     
@@ -233,12 +194,10 @@ public class Board
                 break;
         }
         
-<<<<<<< HEAD
-    }
-    
-=======
+
+
     }    
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
+
     
     
     /**
@@ -261,24 +220,13 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 'f', boxColor);
-<<<<<<< HEAD
-                //this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
-            }
-        }
-        
-        // Repintamos del color original si tiene posiciones vacías
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                if(this.getValues()[i][j] == 0){
-                    //this.paintBox(this.rows - j - 1, i, 'f', bgColor);
-                }
-=======
+
+                
                 
                 int row = this.rows - j - 1;
                 int col = i;
                 
-                this.stackFront.push(new Coordinate(row, col));           
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
+                this.stackFront.push(new Coordinate(row, col));
             }
         }
     }
@@ -304,25 +252,14 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesSide[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 's', boxColor);
-<<<<<<< HEAD
-                //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
-            }
-        }
-        
-        // Repintamos del color original si tiene posiciones vacías
-        for(int i = 0; i < this.rows; i++){
-            for(int j = 0; j < this.cols; j++){
-                if(this.getValues()[i][j] == 0){
-                    //this.paintBox(this.rows - j - 1, i, 's', bgColor);
-                }
-=======
+
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor); 
                 
                 int row = this.rows - j - 1;
                 int col = i;
                 
                 this.stackSide.push(new Coordinate(row, col));
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
+
             }
         }
     }
@@ -429,19 +366,14 @@ public class Board
                     res[j] = location[i][j];
                 }
             }
-<<<<<<< HEAD
-        }        
-               
-        //System.out.println("Column: " +Arrays.toString(res));        
-=======
+
         }            
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         return res;
     }
     
     /**
-<<<<<<< HEAD
+
      * Method for resetting the board
      * @param boxColor -> The color of the boxes
      * @param bgColor -> The background color
@@ -457,8 +389,7 @@ public class Board
     }
     
     /**
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
+
      * Verify max values per row for the locations
      * @param   location   A matrix with the values of the boxes per index of the location
      */
@@ -478,14 +409,8 @@ public class Board
                 }
             }
         }
-<<<<<<< HEAD
-        
-        //System.out.println("Row: " + Arrays.toString(res));
-        
-        return res;
-    }
     
-=======
+
                 
         return res;
     }
@@ -522,11 +447,7 @@ public class Board
             }
         }
     }
-<<<<<<< HEAD
-    
-=======
         
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Method for making the board invisible   
      */
@@ -578,11 +499,6 @@ public class Board
         // Repintamos el tablero
         this.paintBoard(false);
     }
-    
-<<<<<<< HEAD
-    
-=======
->>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Method for moving the board vertically
      * @param   The number of units the board will move vertically
