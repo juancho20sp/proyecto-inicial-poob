@@ -1,6 +1,10 @@
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Arrays;
+<<<<<<< HEAD
+=======
+import java.util.Stack;
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
 /**
  * Here will be all the information regarding to the boards (warehouse and planning zone)
@@ -33,6 +37,17 @@ public class Board
     // ¿Acción válida?
     private boolean isOk = false;
     
+<<<<<<< HEAD
+=======
+    // Stack front
+    Stack<Coordinate> stackFront = new Stack<Coordinate>();
+    
+    // Stack side
+    Stack<Coordinate> stackSide = new Stack<Coordinate>();
+    
+    
+    
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Constructor for objects of class Board
      * @param   rows    Number of rows of the board
@@ -132,6 +147,7 @@ public class Board
     }
     
     /**
+<<<<<<< HEAD
      * This is a hotfix :c
      * @param The background color of the warehouse
      */    
@@ -146,6 +162,8 @@ public class Board
     }
     
     /**
+=======
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Method for adding a box to the board
      * @param   row     The row where we want to insert the box
      * @param   col     The column where we want to insert the box
@@ -170,6 +188,7 @@ public class Board
     /**
      * Method for removing a box from the board
      * @param   row     The row where we want to insert the box
+<<<<<<< HEAD
      * @param   col     The column where we want to insert the box     * 
      * @param   isStore The box to remove is placed on the warehouse
      */
@@ -181,6 +200,13 @@ public class Board
             // Sumamos uno a la cantidad de cajas robadas
             this.stolenBoxes++;
         }        
+=======
+     * @param   col     The column where we want to insert the box 
+     */
+    public void removeBox(int row, int col){
+        this.values[row][col]--;
+        this.stolenBoxes++;                
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     }   
     
     
@@ -207,8 +233,12 @@ public class Board
                 break;
         }
         
+<<<<<<< HEAD
     }
     
+=======
+    }    
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
     
     /**
@@ -231,6 +261,7 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 'f', boxColor);
+<<<<<<< HEAD
                 //this.frontView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
@@ -241,6 +272,13 @@ public class Board
                 if(this.getValues()[i][j] == 0){
                     //this.paintBox(this.rows - j - 1, i, 'f', bgColor);
                 }
+=======
+                
+                int row = this.rows - j - 1;
+                int col = i;
+                
+                this.stackFront.push(new Coordinate(row, col));           
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
             }
         }
     }
@@ -266,6 +304,7 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesSide[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 's', boxColor);
+<<<<<<< HEAD
                 //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
             }
         }
@@ -276,6 +315,14 @@ public class Board
                 if(this.getValues()[i][j] == 0){
                     //this.paintBox(this.rows - j - 1, i, 's', bgColor);
                 }
+=======
+                //this.sideView[this.rows - j - 1][i].changeColor(boxColor); 
+                
+                int row = this.rows - j - 1;
+                int col = i;
+                
+                this.stackSide.push(new Coordinate(row, col));
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
             }
         }
     }
@@ -300,6 +347,69 @@ public class Board
         }
     }
     
+<<<<<<< HEAD
+=======
+    
+    /**
+     * Method for uncoloring the board
+     * @param The row we are uncoloring
+     * @param The column we are uncoloring
+     * @param The background color
+     */
+    public void uncolorRefresh(int row, int col, String bgColor){
+        this.uncolorSideView(bgColor);
+        this.uncolorFrontView(bgColor);
+        
+        this.values[row][col]--;
+        
+        this.uncolorTopView(bgColor);
+    }
+    
+    /**
+     * Method for painting the top view as the original background
+     * @param The color the view will be painted
+     */
+    private void uncolorTopView(String bgColor){
+        // Dibujamos las cajas en la vista frontal
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                if (this.getValues()[i][j] == 0){
+                    this.paintBox(i, j, 't', bgColor);
+                }
+            }
+        }
+    }
+    
+    /**
+     * Method for painting the front view as the original background
+     * @param The color the view will be painted
+     */
+    private void uncolorFrontView(String bgColor){        
+        // Eliminamos la caja más alta de la vista frontal
+        if (this.stackFront.size() > 0){
+            Coordinate toDelete = this.stackFront.pop();        
+            this.paintBox(toDelete.getRow(), toDelete.getCol(), 'f', bgColor);
+        }
+    }
+    
+    
+    /**
+     * Method for painting the side view as the original background
+     * @param The color the view will be painted
+     */
+    private void uncolorSideView(String bgColor){        
+        // Eliminamos la caja más alta de la vista lateral
+        if (this.stackSide.size() > 0){ 
+            Coordinate toDelete = this.stackSide.pop();     
+            
+            System.out.println("Lateral: " + toDelete.getRow() + "->" + toDelete.getCol());
+            
+            this.paintBox(toDelete.getRow(), toDelete.getCol(), 's', bgColor);
+        }
+    }   
+    
+    
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Verify max values per column for the locations
      * @param  location A matrix with the values of the boxes per index of the location
@@ -319,14 +429,19 @@ public class Board
                     res[j] = location[i][j];
                 }
             }
+<<<<<<< HEAD
         }        
                
         //System.out.println("Column: " +Arrays.toString(res));        
+=======
+        }            
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         return res;
     }
     
     /**
+<<<<<<< HEAD
      * Method for resetting the board
      * @param boxColor -> The color of the boxes
      * @param bgColor -> The background color
@@ -342,6 +457,8 @@ public class Board
     }
     
     /**
+=======
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
      * Verify max values per row for the locations
      * @param   location   A matrix with the values of the boxes per index of the location
      */
@@ -361,12 +478,37 @@ public class Board
                 }
             }
         }
+<<<<<<< HEAD
         
         //System.out.println("Row: " + Arrays.toString(res));
         
         return res;
     }
     
+=======
+                
+        return res;
+    }
+    
+       
+    /**
+     * Method for restarting the boards
+     * @param The background color of the board
+     */
+    public void restartBoard(String bgColor){
+        for(int i = 0; i < this.rows; i++){
+            for(int j = 0; j < this.cols; j++){
+                this.values[i][j] = 0;
+                
+                this.topView[i][j].changeColor(bgColor);
+                this.frontView[i][j].changeColor(bgColor);
+                this.sideView[i][j].changeColor(bgColor);
+            }
+        }
+    }
+           
+    
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Method for changing the board color
      * @param The new color. ie 'black', 'blue', 'red'
@@ -380,7 +522,11 @@ public class Board
             }
         }
     }
+<<<<<<< HEAD
     
+=======
+        
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Method for making the board invisible   
      */
@@ -433,7 +579,10 @@ public class Board
         this.paintBoard(false);
     }
     
+<<<<<<< HEAD
     
+=======
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     /**
      * Method for moving the board vertically
      * @param   The number of units the board will move vertically

@@ -1,7 +1,13 @@
+<<<<<<< HEAD
     import javax.swing.JOptionPane;
     import java.util.ArrayList;
     import java.util.Arrays;
     import java.util.Stack;
+=======
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.Stack;
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
     /**
     * Initial project for POOB
@@ -11,7 +17,10 @@
     */
     public class Mission
     {
+<<<<<<< HEAD
     
+=======
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     // Dimensiones de las bodegas
     private int rows;
     private int cols;
@@ -49,10 +58,17 @@
     
     // Stack de acciones para realizar undo
     // nombre-POS1,POS2 -> store-1,1    
+<<<<<<< HEAD
     Stack<String> undoStack;
     
     // Stack de acciones para realizar redo
     Stack<String> redoStack;
+=======
+    Stack<Action> undoStack;
+    
+    // Stack de acciones para realizar redo
+    Stack<Action> redoStack;
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
     /**
     * Mission class constructor
@@ -71,8 +87,13 @@
         this.planningZone.moveVertical((this.size * this.rows) + this.size); 
         
         // Creamos los stacks para el manejo de acciones
+<<<<<<< HEAD
         this.redoStack = new Stack<String>();
         this.undoStack = new Stack<String>();
+=======
+        this.redoStack = new Stack<Action>();
+        this.undoStack = new Stack<Action>();
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         // La creación fue exitosa
         this.setIsOk(true);
@@ -102,10 +123,18 @@
         // actualizamos las cajas
         if (this.isCopied){
             // Pintamos únicamente las cajas copiadas
+<<<<<<< HEAD
+=======
+            
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
             this.planningZone.refreshBoard(this.planningZoneBoxColor, this.planningZoneColor);
             
             // Si las vistas de la zona de planeación son diferentes a las de la bodega,
             // pintamos la zona de planeación de color rojo
+<<<<<<< HEAD
+=======
+            
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
             this.repaintPlanningZone();
         }
     }
@@ -121,6 +150,7 @@
         int newCol = column - 1;
         
         if(this.isValidPosition(newRow, newCol)){
+<<<<<<< HEAD
             // Guardamos la caja en la casilla seleccionada
             this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor, this.wareHouseColor);            
             
@@ -136,6 +166,19 @@
             this.planningZone.resetBoard(this.planningZoneBoxColor, this.planningZoneColor);
             this.resetPlanningZoneColor();
             
+=======
+            String stringForRow = String.valueOf(newRow);
+            String stringForCol = String.valueOf(newCol);
+            // Guardamos la caja en la casilla seleccionada
+            this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor, this.wareHouseColor);            
+            
+            // Agregamos la acción al stack
+            undoStack.push(new Action("store", newRow, newCol)); 
+            
+            // Reset a la zona de planeación
+            this.restartPlanningZone();
+                        
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
             // La operación 'store' fue exitosa
             this.setIsOk(true);
         } else {
@@ -156,9 +199,19 @@
         // Tomamos los valores del arreglo
         int newRow = crate[0];
         int newCol = crate[1];
+<<<<<<< HEAD
         
         // Guardamos la caja
         this.store(newRow, newCol);    
+=======
+
+        String strForRow = String.valueOf(newRow);
+        String strForCol = String.valueOf(newCol);
+        
+        // Guardamos la caja
+        this.store(newRow, newCol);
+        
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     }
     
     /**
@@ -191,9 +244,23 @@
     /**
     * Copy actual state of the warehouse into the planning zone
     */
+<<<<<<< HEAD
     public void copy(){
         // Dibujamos la zona de planeación
         //this.createPlanningZone();
+=======
+    public void copy(){   
+        // Agregamos la acción al stack        
+        if (undoStack.size() > 0){
+             Action lastAction = undoStack.peek();
+             
+             if(!lastAction.getAction().equals("copy")){
+                 undoStack.push(new Action("copy", -1, -1));
+            }
+        } else {
+            undoStack.push(new Action("copy", -1, -1));
+        }
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         // Actualizamos la bandera
         this.isCopied = true;
@@ -212,8 +279,12 @@
     private void copyValues(){
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < this.cols; j++){
+<<<<<<< HEAD
                 // Agregamos los valores de las cajas en bodega
                 //this.planningZoneValues[i][j] = this.warehouseValues[i][j]; 
+=======
+                // Agregamos los valores de las cajas en bodega 
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                 this.planningZone.copyValues(this.warehouse);
             }
         }
@@ -239,10 +310,15 @@
                 // Si hay una o más cajas, las dibujamos
                 if(0 < this.planningZone.getValues()[i][j]){
                     this.planningZone.paintBox(i, j, 't', this.planningZoneBoxColor);
+<<<<<<< HEAD
                     //this.planningZone[i][j].changeColor(this.planningZoneBoxColor);
                 } else {
                     this.planningZone.paintBox(i, j, 't', color);
                     //this.planningZone[i][j].changeColor(color);
+=======
+                } else {
+                    this.planningZone.paintBox(i, j, 't', color);
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                 }
             }
         }
@@ -279,6 +355,15 @@
         this.planningZone.changeColor(color); 
     }   
     
+<<<<<<< HEAD
+=======
+    /**
+     * Method for restarting the planning zone
+     */    
+    private void restartPlanningZone(){
+        this.planningZone.restartBoard(this.planningZoneColor);
+    }
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
     /**
      * Method for verifying if the warehouse and the planning zone have the same views on the cameras
@@ -301,24 +386,35 @@
                 // Igualdad de la vista lateral 
                 if(this.warehouse.getSideView()[i][j].getColor() == this.warehouseBoxColor 
                     && this.planningZone.getSideView()[i][j].getColor() != this.planningZoneBoxColor){
+<<<<<<< HEAD
                     areEqual &= false;
                     
                     //JOptionPane.showMessageDialog(null, "Error en vista lateral");
+=======
+                    areEqual &= false;                    
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                 }
                 
                 // Igualdad de la vista frontal                 
                 if(this.warehouse.getFrontView()[i][j].getColor() == this.warehouseBoxColor 
                     && this.planningZone.getFrontView()[i][j].getColor() != this.planningZoneBoxColor){
                     areEqual &= false;
+<<<<<<< HEAD
                     
                     //JOptionPane.showMessageDialog(null, "Error en vista frontal");
+=======
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                 }
                     
             }
         }
+<<<<<<< HEAD
         
         //JOptionPane.showMessageDialog(null, "Equal: " + areEqual);
         
+=======
+                
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         this.areEqual = areEqual;
     }
     
@@ -337,15 +433,25 @@
             // Verificamos si hay cajas para robar en la posición
             if (this.planningZone.getValues()[newRow][newCol] > 0){                
                 // Sacamos una caja de la posición objetivo
+<<<<<<< HEAD
                 this.planningZone.removeBox(newRow, newCol, false);
+=======
+                this.planningZone.removeBox(newRow, newCol);
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                 
                 // Re pintamos la zona de planeación
                 this.repaintPlanningZone();
                 
+<<<<<<< HEAD
                 // Agregamos la acción de robo al stack de cosas por deshacer
                 String res = "steal-" + newRow + "," + newCol;
                 this.undoStack.push(res);
                 
+=======
+                // Preparamos la cadena para el stack
+                undoStack.push(new Action("steal", newRow, newCol));
+                                
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                 // Le damos formato a la tupla
                 String tuple = newRow + "-" + newCol;
     
@@ -385,6 +491,7 @@
     
     /**
      * Consults the position of the stolen crates
+<<<<<<< HEAD
      */
     public int[][] toSteal(){
         int[][] stolenCrates = new int[this.stealHistorial.size()][2];
@@ -395,6 +502,19 @@
 
         }
 
+=======
+     * @return the position of the Stolen Crates
+     */
+    public int[][] toSteal(){
+        int[][] stolenCrates = new int[this.stealHistorial.size()][2];
+        
+        for(int i=0; i<stealHistorial.size();i++){
+            String tuple = this.stealHistorial.get(i);
+            int[] tup = {Character.getNumericValue(tuple.charAt(0))+1,Character.getNumericValue(tuple.charAt(2))+1};
+            stolenCrates[i] = tup;
+
+        }
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         return stolenCrates;
     }
     
@@ -413,8 +533,12 @@
             int newCol = Integer.parseInt(pos[1]);
             
             // Aumentamos el contador de cajas en esa posición
+<<<<<<< HEAD
             this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
             //this.planningZoneValues[newRow][newCol]++;           
+=======
+            this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);          
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                        
             // Re pintamos la devolución de la caja
             this.repaintPlanningZone();
@@ -436,6 +560,7 @@
     /**
      * Undo the last valid action 
      */
+<<<<<<< HEAD
     public void undo(){
         // nombre-POS1,POS2
         // nombre-POS1,POS2|POS1,POS2
@@ -514,11 +639,45 @@
         
         // La agregamos al stack de cosas por rehacer
         redoStack.add(action);
+=======
+    public void undo(){        
+        if (this.undoStack.size() > 0){
+            // Tomamos la última acción
+            Action action = undoStack.pop();
+            
+            switch(action.getAction()){
+            case "store":                
+                this.warehouse.uncolorRefresh(action.getInitialRow(), action.getInitialCol(), this.wareHouseColor); 
+                this.restartPlanningZone();
+                break;
+                
+            case "steal":
+                this.returnBox();
+                break;
+                
+            case "arrange":
+                int[] myFrom = {action.getFinalRow() + 1, action.getFinalCol() + 1};
+                int[] myTo = {action.getInitialRow() + 1, action.getInitialCol() + 1};
+                this.arrange(myFrom, myTo);
+                break;
+                
+            case "copy":
+                this.restartPlanningZone();
+                break;
+        }
+        
+        // La agregamos al stack de cosas por rehacer
+        redoStack.add(action);
+        } else {
+            printOutput("No hay nada por deshacer");
+        }        
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     }
     
     /**
      * Redo the last undone action
      */
+<<<<<<< HEAD
     public void redo(){
         // nombre-POS1,POS2
         // nombre-POS1,POS2|POS1,POS2
@@ -582,10 +741,44 @@
                 int[] myFrom = {from[0] + 1, from[1] + 1};
                 int[] myTo = {to[0] + 1, to[1] + 1};
                 this.arrange(myFrom, myTo);
+=======
+    public void redo(){        
+        if (this.redoStack.size() > 0){
+            // Tomamos la última acción
+            Action action = redoStack.pop();
+            
+            switch(action.getAction()){
+            case "store":
+                this.store(action.getInitialRow() + 1, action.getInitialCol() + 1);
+                
+                this.areEqual = true;
+                this.restartPlanningZone(); 
+                break;
+                
+            case "steal":
+                this.steal(action.getInitialRow() + 1, action.getInitialRow() + 1);                
+                break;
+                
+            case "arrange":
+                int[] myFrom = {action.getInitialRow() + 1, action.getInitialRow() + 1};
+                int[] myTo = {action.getFinalRow() + 1, action.getFinalCol() + 1};
+                this.arrange(myFrom, myTo);
+                break;
+                
+            case "copy":
+                this.copy();
+                break;
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         }
         
         // La agregamos al stack de cosas por deshacer
         undoStack.add(action);
+<<<<<<< HEAD
+=======
+        } else {
+            printOutput("No hay nada por rehacer");
+        }
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     }
     
     /**
@@ -671,7 +864,11 @@
                 // Verificamos si en esa posición hay una caja    
                 if (this.planningZone.getValues()[oldRow][oldCol] > 0){
                     // Retiramos una caja de esa posición
+<<<<<<< HEAD
                     this.planningZone.removeBox(oldRow, oldCol, false);
+=======
+                    this.planningZone.removeBox(oldRow, oldCol);
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                     //this.planningZoneValues[oldRow][oldCol]--;
                     
                     // Agregamos la caja a la nueva posición
@@ -680,8 +877,13 @@
                     
                     // Guardamos la información para undo/redo
                     // nombre-POS1,POS2;POS1,POS2
+<<<<<<< HEAD
                     String res = "arrange-" + oldRow + "," + oldCol + ";" + newRow + "," + newCol;
                     this.undoStack.push(res);
+=======
+                    //String res = "arrange-" + oldRow + "," + oldCol + ";" + newRow + "," + newCol;
+                    this.undoStack.push(new Action("arrange", oldRow, oldCol, newRow, newCol));
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
                     
                     // Re pintamos la zona de planeación
                     this.repaintPlanningZone();
@@ -759,10 +961,14 @@
         } else {
             // Imprimimos el output
             this.printOutput("En la bodega hay " + numBoxes + " cajas");            
+<<<<<<< HEAD
         }        
         
         //System.out.println("Warehouse values: " + Arrays.toString(this.warehouse.getValues()));       
         
+=======
+        }  
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
         
         return this.warehouse.getValues();
     }
@@ -893,6 +1099,10 @@
      */
     public int getSize(){
         return this.size;
+<<<<<<< HEAD
     }    
+=======
+    } 
+>>>>>>> a15ae4395b19e4fc975c33da1ac12b6409a9acaf
     
 }
