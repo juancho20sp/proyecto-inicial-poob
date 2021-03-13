@@ -35,6 +35,8 @@ public class MissionContest {
                 answer += max_row.get(i) - 1;
             }
         }
+        
+        
         return answer;
     }
     /**
