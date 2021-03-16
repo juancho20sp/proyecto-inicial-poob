@@ -1,7 +1,6 @@
-    import javax.swing.JOptionPane;
-    import java.util.ArrayList;
-    import java.util.Arrays;
-    import java.util.Stack;
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
+import java.util.Stack;
     
     /**
     * Initial project for POOB
@@ -11,7 +10,6 @@
     */
     public class Mission
     {
-    
     // Dimensiones de las bodegas
     private int rows;
     private int cols;
@@ -123,6 +121,8 @@
         int newCol = column - 1;
         
         if(this.isValidPosition(newRow, newCol)){
+            String stringForRow = String.valueOf(newRow);
+            String stringForCol = String.valueOf(newCol);
             // Guardamos la caja en la casilla seleccionada
             this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor, this.wareHouseColor);            
             
@@ -152,9 +152,13 @@
         // Tomamos los valores del arreglo
         int newRow = crate[0];
         int newCol = crate[1];
+
+        String strForRow = String.valueOf(newRow);
+        String strForCol = String.valueOf(newCol);
         
         // Guardamos la caja
-        this.store(newRow, newCol);    
+        this.store(newRow, newCol);
+        
     }
     
     /**
@@ -385,17 +389,17 @@
     
     /**
      * Consults the position of the stolen crates
+     * @return the position of the Stolen Crates
      */
     public int[][] toSteal(){
         int[][] stolenCrates = new int[this.stealHistorial.size()][2];
         
         for(int i=0; i<stealHistorial.size();i++){
             String tuple = this.stealHistorial.get(i);
-            int[] tup = {Character.getNumericValue(tuple.charAt(0)),Character.getNumericValue(tuple.charAt(2))};
+            int[] tup = {Character.getNumericValue(tuple.charAt(0))+1,Character.getNumericValue(tuple.charAt(2))+1};
             stolenCrates[i] = tup;
 
         }
-
         return stolenCrates;
     }
     
@@ -809,6 +813,6 @@
      */
     public int getSize(){
         return this.size;
-    }    
+    } 
     
 }
