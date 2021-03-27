@@ -240,7 +240,7 @@ public class Board
             this.values[row][col]--;
             this.stolenBoxes++;
         } else {
-            throw new MissionException(MissionException.NADA_PARA_ROBAR);
+            throw new MissionException(MissionException.NOTHING_TO_STEAL);
         }
                         
     }   

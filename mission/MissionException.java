@@ -9,7 +9,9 @@ package mission;
  */
 public class MissionException extends Exception
 {
-    public static final String NADA_PARA_ROBAR = "¡No hay nada para robar en esa posición!";
+    public static final String NOTHING_TO_STEAL = "¡No hay nada para robar en esa posición!";
+    public static final String INVALID_POSITION = "Posición no existente, inténtelo nuevamente";
+    public static final String NOTHING_TO_RETURN = "No hay cajas para devolver";
     
     /**
      * Constructor for the class

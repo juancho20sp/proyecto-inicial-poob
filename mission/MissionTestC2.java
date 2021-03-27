@@ -150,7 +150,7 @@ public class MissionTestC2
         this.copyPlanningZone();
         
         
-        // Robamos una caja
+        // Robamos una caja        
         mission.steal(1, 1);
         
         // Restamos 1 a nuestra copia
@@ -168,11 +168,13 @@ public class MissionTestC2
         
         // Robamos más cajas de las posibles
         int[] position = {1,1};
+        
         mission.steal(position);        
         mission.steal(1, 1);        
         mission.steal(position);
         mission.steal(1, 1);
         mission.steal(position);
+        
         
         // Seteamos el valor en 0 en esa posición
         this.planningZone[0][0] = 0;
@@ -206,8 +208,9 @@ public class MissionTestC2
         // Creamos una copia local de la zona de planeación
         this.copyPlanningZone();
         
-        // Robamos la caja
+        // Robamos la caja        
         mission.steal(row, col);
+        
         
         // La eliminamos de la copia local
         this.planningZone[row - 1][col - 1]--;
@@ -270,10 +273,9 @@ public class MissionTestC2
 
         mission.copy();
         this.copyPlanningZone();
-
+        
         mission.steal(1, 1);
         mission.steal(1, 2);
-
         this.planningZone[0][0] -= 1;
         this.planningZone[0][1] -= 1;
 

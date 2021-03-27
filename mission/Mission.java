@@ -368,50 +368,14 @@ private void verifyEquality(){
 * @param   row     int
 * @param   column  int
 */
-public void steal(int row, int col) throws MissionException{
+public void steal(int row, int col) {
     // Ajustamos los indices
     int newRow = row - 1;
     int newCol = col - 1;
     
     
-    if(this.isValidPosition(newRow, newCol)){
-        // Verificamos si hay cajas para robar en la posición
+    if(this.isValidPosition(newRow, newCol)){    
         try {
-            // Sacamos una caja de la posición objetivo
-            try {
-                this.planningZone.removeBox(newRow, newCol);
-            } catch(MissionException e){                
-                this.printOutput(e.getMessage());
-            }
-            
-            // Re pintamos la zona de planeación
-            this.repaintPlanningZone();
-            
-            // Preparamos la cadena para el stack
-            undoStack.push(new Action("steal", newRow, newCol));
-                            
-            // Le damos formato a la tupla
-            String tuple = newRow + "-" + newCol;
-
-            // Guardamos la tupla
-            this.stealHistorial.add(tuple);
-            
-            // La operación 'steal' fue exitosa
-            this.setIsOk(true);
-        } catch(Exception e){
-            // Imprimimos el output
-            //this.printOutput("¡No hay nada para robar en esa posición!");
-            
-            //System.out.println(e);
-            
-            // La operación 'steal' no fue exitosa
-            //this.setIsOk(false);
-            
-            //throw new MissionException(MissionException.NADA_PARA_ROBAR);
-        }
-    }
-        
-        /*if (this.planningZone.getValues()[newRow][newCol] > 0){                
             // Sacamos una caja de la posición objetivo
             this.planningZone.removeBox(newRow, newCol);
             
@@ -429,22 +393,19 @@ public void steal(int row, int col) throws MissionException{
             
             // La operación 'steal' fue exitosa
             this.setIsOk(true);
-        } else {
-            // Imprimimos el output
-            this.printOutput("¡No hay nada para robar en esa posición!");
             
-            
-            // La operación 'steal' no fue exitosa
+        } catch(MissionException e){                
+            this.printOutput(e.getMessage());
             this.setIsOk(false);
-        }
+        }   
     } else {
         // Imprimimos el output
-        this.printOutput("Posición no existente, inténtelo nuevamente");   
+        this.printOutput(MissionException.INVALID_POSITION);   
         
         // La operación 'steal' no fue exitosa
         this.setIsOk(false);
-    }*/
-}
+        }
+    }
 
 /**
 * Steal method
@@ -456,11 +417,8 @@ public void steal(int[] crate){
     int newCol = crate[1];
     
     // Robamos la caja en dicha posición
-    try {
-        this.steal(newRow, newCol);
-    } catch(MissionException e){
-        JOptionPane.showMessageDialog(null, e);
-    }
+    this.steal(newRow, newCol);
+    
 }
 
 /**
@@ -565,12 +523,8 @@ public void redo(){
             this.restartPlanningZone(); 
             break;
             
-        case "steal":
-            try {
-                this.steal(action.getInitialRow() + 1, action.getInitialRow() + 1);                
-            } catch(MissionException e){
-                JOptionPane.showMessageDialog(null, "excepción en redo()");
-            }
+        case "steal":            
+            this.steal(action.getInitialRow() + 1, action.getInitialRow() + 1);            
             break;
             
         case "arrange":
