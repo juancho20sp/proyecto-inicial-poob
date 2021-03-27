@@ -117,9 +117,7 @@
             int solution = solver.solve(this.warehouse.getValues());
             
             System.out.println(solution);
-        }               
-        
-        
+        } 
     }
     
     
