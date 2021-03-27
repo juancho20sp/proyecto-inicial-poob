@@ -235,9 +235,14 @@ public class Board
 
      * @param   col     The column where we want to insert the box 
      */
-    public void removeBox(int row, int col){
-        this.values[row][col]--;
-        this.stolenBoxes++;                
+    public void removeBox(int row, int col) throws MissionException{
+        if (this.values[row][col] > 0){
+            this.values[row][col]--;
+            this.stolenBoxes++;
+        } else {
+            throw new MissionException(MissionException.NADA_PARA_ROBAR);
+        }
+                        
     }   
     
     

@@ -192,13 +192,9 @@ public void store(int [] crate){
     // Tomamos los valores del arreglo
     int newRow = crate[0];
     int newCol = crate[1];
-
-    String strForRow = String.valueOf(newRow);
-    String strForCol = String.valueOf(newCol);
     
     // Guardamos la caja
-    this.store(newRow, newCol);
-    
+    this.store(newRow, newCol);    
 }
 
 /**
@@ -372,7 +368,7 @@ private void verifyEquality(){
 * @param   row     int
 * @param   column  int
 */
-public void steal(int row, int col){
+public void steal(int row, int col) throws MissionException{
     // Ajustamos los indices
     int newRow = row - 1;
     int newCol = col - 1;
@@ -380,7 +376,42 @@ public void steal(int row, int col){
     
     if(this.isValidPosition(newRow, newCol)){
         // Verificamos si hay cajas para robar en la posición
-        if (this.planningZone.getValues()[newRow][newCol] > 0){                
+        try {
+            // Sacamos una caja de la posición objetivo
+            try {
+                this.planningZone.removeBox(newRow, newCol);
+            } catch(MissionException e){                
+                this.printOutput(e.getMessage());
+            }
+            
+            // Re pintamos la zona de planeación
+            this.repaintPlanningZone();
+            
+            // Preparamos la cadena para el stack
+            undoStack.push(new Action("steal", newRow, newCol));
+                            
+            // Le damos formato a la tupla
+            String tuple = newRow + "-" + newCol;
+
+            // Guardamos la tupla
+            this.stealHistorial.add(tuple);
+            
+            // La operación 'steal' fue exitosa
+            this.setIsOk(true);
+        } catch(Exception e){
+            // Imprimimos el output
+            //this.printOutput("¡No hay nada para robar en esa posición!");
+            
+            //System.out.println(e);
+            
+            // La operación 'steal' no fue exitosa
+            //this.setIsOk(false);
+            
+            //throw new MissionException(MissionException.NADA_PARA_ROBAR);
+        }
+    }
+        
+        /*if (this.planningZone.getValues()[newRow][newCol] > 0){                
             // Sacamos una caja de la posición objetivo
             this.planningZone.removeBox(newRow, newCol);
             
@@ -402,6 +433,7 @@ public void steal(int row, int col){
             // Imprimimos el output
             this.printOutput("¡No hay nada para robar en esa posición!");
             
+            
             // La operación 'steal' no fue exitosa
             this.setIsOk(false);
         }
@@ -411,7 +443,7 @@ public void steal(int row, int col){
         
         // La operación 'steal' no fue exitosa
         this.setIsOk(false);
-    }
+    }*/
 }
 
 /**
@@ -424,7 +456,11 @@ public void steal(int[] crate){
     int newCol = crate[1];
     
     // Robamos la caja en dicha posición
-    this.steal(newRow, newCol);
+    try {
+        this.steal(newRow, newCol);
+    } catch(MissionException e){
+        JOptionPane.showMessageDialog(null, e);
+    }
 }
 
 /**
@@ -530,7 +566,11 @@ public void redo(){
             break;
             
         case "steal":
-            this.steal(action.getInitialRow() + 1, action.getInitialRow() + 1);                
+            try {
+                this.steal(action.getInitialRow() + 1, action.getInitialRow() + 1);                
+            } catch(MissionException e){
+                JOptionPane.showMessageDialog(null, "excepción en redo()");
+            }
             break;
             
         case "arrange":
@@ -634,7 +674,13 @@ public void arrange(int[] from, int[] to){
             // Verificamos si en esa posición hay una caja    
             if (this.planningZone.getValues()[oldRow][oldCol] > 0){
                 // Retiramos una caja de esa posición
-                this.planningZone.removeBox(oldRow, oldCol);
+                try {
+                    this.planningZone.removeBox(oldRow, oldCol);
+                } catch(MissionException e){
+                    System.out.println("Excepcion atrapada en arrange()");
+                    System.out.println(e);
+                }
+                
                 //this.planningZoneValues[oldRow][oldCol]--;
                 
                 // Agregamos la caja a la nueva posición
