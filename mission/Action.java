@@ -1,3 +1,5 @@
+package mission;
+
 
 /**
  * A class for storing all the actions done in the board

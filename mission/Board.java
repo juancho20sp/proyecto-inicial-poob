@@ -1,3 +1,7 @@
+package mission;
+
+import shapes.Rectangle;
+
 import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -401,9 +405,7 @@ public class Board
         // Eliminamos la caja más alta de la vista lateral
         if (this.stackSide.size() > 0){ 
             Coordinate toDelete = this.stackSide.pop();     
-            
-            System.out.println("Lateral: " + toDelete.getRow() + "->" + toDelete.getCol());
-            
+                        
             this.paintBox(toDelete.getRow(), toDelete.getCol(), 's', bgColor);
         }
     }   

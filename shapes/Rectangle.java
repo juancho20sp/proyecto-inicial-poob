@@ -1,3 +1,5 @@
+package shapes;
+
 import java.awt.*;
 
 /**

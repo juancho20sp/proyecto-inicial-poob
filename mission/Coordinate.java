@@ -1,3 +1,5 @@
+package mission;
+
 
 /**
  * This is a class for the coordinates of the board
