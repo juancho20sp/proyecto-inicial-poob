@@ -279,7 +279,7 @@ public class MissionTestC2
         this.planningZone[0][0] -= 1;
         this.planningZone[0][1] -= 1;
 
-        int[][] answer = {{0,0},{0,1}};
+        int[][] answer = {{1,1},{1,2}};
 
         assertArrayEquals(answer, mission.toSteal());
 

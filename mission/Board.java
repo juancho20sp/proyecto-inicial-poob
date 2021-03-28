@@ -176,7 +176,6 @@ public class Board
     public void refreshBoard(String color, String bgColor){
         // Dibujamos la caja
         this.colorTopView(color, bgColor);
-        //this.topView[row][col].changeColor(color);
         
         // Dibujamos la vista frontal
         this.colorFrontView(color, bgColor);
@@ -198,7 +197,6 @@ public class Board
         
         // Dibujamos la caja
         this.colorTopView(color, bgColor);
-        //this.topView[row][col].changeColor(color);
         
         // Dibujamos la vista frontal
         this.colorFrontView(color, bgColor);
@@ -220,7 +218,6 @@ public class Board
         
         // Dibujamos la caja
         this.colorTopView(color, bgColor);
-        //this.topView[row][col].changeColor(color);
         
         // Dibujamos la vista frontal
         this.colorFrontView(color, bgColor);
@@ -265,15 +262,10 @@ public class Board
                     this.sideView[row][col].changeColor(color);
                     break;
             default:
-                Mission.printOutput("El caracter ingresado no es válido, ingrese 't' o 's' o 'f' ");
+                Mission.printOutput(MissionException.INVALID_CHARACTER);
                 break;
         }
-        
-
-
-    }    
-
-    
+    } 
     
     /**
      * Method for coloring the boxes of the front view
@@ -295,8 +287,6 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesFront[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 'f', boxColor);
-
-                
                 
                 int row = this.rows - j - 1;
                 int col = i;
@@ -327,14 +317,11 @@ public class Board
         for(int i = 0; i < this.rows; i++){
             for(int j = 0; j < valuesSide[i]; j++){
                 this.paintBox(this.rows - j - 1, i, 's', boxColor);
-
-                //this.sideView[this.rows - j - 1][i].changeColor(boxColor); 
                 
                 int row = this.rows - j - 1;
                 int col = i;
                 
                 this.stackSide.push(new Coordinate(row, col));
-
             }
         }
     }
@@ -350,11 +337,7 @@ public class Board
             for(int j = 0; j < this.cols; j++){
                 if (this.getValues()[i][j] > 0){
                     this.paintBox(i, j, 't', boxColor);
-                }else {
-                    //this.paintBox(i, j, 't', bgColor);
-                }
-                
-                //this.sideView[this.rows - j - 1][i].changeColor(boxColor);            
+                }           
             }
         }
     }
@@ -477,8 +460,6 @@ public class Board
                 }
             }
         }
-    
-
                 
         return res;
     }

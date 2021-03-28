@@ -8,45 +8,46 @@ import java.awt.*;
  * @author  Michael Kolling and David J. Barnes (Modified), Juan David Murillo, Carlos Orduz
  * @version 1.0  (15 July 2000)()
  */
-
-
- 
-public class Rectangle{
-
+public class Rectangle extends Shape{
     public static int EDGES = 4;
     
     private int height;
     private int width;
-    private int xPosition;
-    private int yPosition;
-    private String color;
-    private boolean isVisible;
 
     /**
      * Create a new rectangle at default position with default color.
      */
     public Rectangle(){
+        super("green", true, 5, 5);
         height = 20;
         width = 20;
-        xPosition = 5;
-        yPosition = 5;
-        color = "green";
-        
-        this.makeVisible();
     }
     
     /**
      * Create a new rectangle at default position with an specific size
      */
     public Rectangle(int size){
+        super("green", true, 5, 5);
         this.height = size;
         this.width = size;
-        
-        xPosition = 5;
-        yPosition = 5;
-        color = "green";
-        
-        this.makeVisible();
+    }
+
+    /**
+     * Make this rectangle visible. If it was already visible, do nothing.
+     */
+    @Override
+    public void makeVisible(){
+        super.setVisible(true);
+        draw();
+    }
+    
+    /**
+     * Make this rectangle invisible. If it was already invisible, do nothing.
+     */
+    @Override
+    public void makeInvisible(){
+        erase();
+        super.setVisible(false);
     }
     
     /**
@@ -69,8 +70,7 @@ public class Rectangle{
                 this.height = this.height - (int)newHeight;
                 this.width = this.width - (int)newWidth;
                 break;
-        }       
-        
+        }
         
         // Dibujamos el cuadro
         this.draw();
@@ -82,81 +82,39 @@ public class Rectangle{
     public void resetPosition(){
         this.erase();
         
-        this.xPosition = 5;
-        this.yPosition = 5;
+        super.setXPosition(5);
+        super.setYPosition(5);
         
         this.draw();
     }
-    
-
+        
     /**
-     * Make this rectangle visible. If it was already visible, do nothing.
-     */
-    public void makeVisible(){
-        isVisible = true;
-        draw();
-    }
-    
-    /**
-     * Make this rectangle invisible. If it was already invisible, do nothing.
-     */
-    public void makeInvisible(){
-        erase();
-        isVisible = false;
-    }
-    
-    /**
-     * Move the rectangle a few pixels to the right.
-     */
-    public void moveRight(){
-        moveHorizontal(20);
-    }
-
-    /**
-     * Move the rectangle a few pixels to the left.
-     */
-    public void moveLeft(){
-        moveHorizontal(-20);
-    }
-
-    /**
-     * Move the rectangle a few pixels up.
-     */
-    public void moveUp(){
-        moveVertical(-20);
-    }
-
-    /**
-     * Move the rectangle a few pixels down.
-     */
-    public void moveDown(){
-        moveVertical(20);
-    }
-
-    /**
-     * Move the rectangle horizontally.
+     * Move the circle vertically.
      * @param distance the desired distance in pixels
      */
-    public void moveHorizontal(int distance){
-        erase();
-        xPosition += distance;
-        draw();
-    }
-
-    /**
-     * Move the rectangle vertically.
-     * @param distance the desired distance in pixels
-     */
+    @Override
     public void moveVertical(int distance){
         erase();
-        yPosition += distance;
+        super.setYPosition(super.getYPosition() + distance);
+        draw();
+    }
+    
+    /**
+     * Move the circle horizontally.
+     * @param distance the desired distance in pixels
+     */
+    @Override
+    public void moveHorizontal(int distance){
+        erase();
+        super.setXPosition(super.getXPosition() + distance);
         draw();
     }
 
     /**
-     * Slowly move the rectangle horizontally.
+     * Slowly move the circle horizontally.
      * @param distance the desired distance in pixels
      */
+    @Override
     public void slowMoveHorizontal(int distance){
         int delta;
 
@@ -168,39 +126,31 @@ public class Rectangle{
         }
 
         for(int i = 0; i < distance; i++){
-            xPosition += delta;
+            super.setXPosition(super.getXPosition() + delta);
             draw();
         }
     }
 
     /**
-     * Slowly move the rectangle vertically.
+     * Slowly move the circle vertically
      * @param distance the desired distance in pixels
      */
+    @Override
     public void slowMoveVertical(int distance){
         int delta;
 
         if(distance < 0) {
             delta = -1;
             distance = -distance;
-        } else {
+        }else {
             delta = 1;
         }
 
         for(int i = 0; i < distance; i++){
-            yPosition += delta;
+            super.setYPosition(super.getYPosition() + delta);
             draw();
         }
     }
-
-    /**
-     * Get method for isVisible property
-     * @return true if component is visible
-     */
-    public boolean isVisible() {
-        return this.isVisible;
-    }
-    
     
     /**
      * Change the size to the new size
@@ -214,43 +164,37 @@ public class Rectangle{
         draw();
     }
     
+    
     /**
      * Change the color. 
      * @param color the new color. Valid colors are "red", "yellow", "blue", "green",
      * "magenta" and "black".
      */
     public void changeColor(String newColor){
-        color = newColor;
+        super.setColor(newColor);
         draw();
     }
-
+     
     /**
-     * Getter for the color attribute
-     * @return  String      color of the rectangle
-     */
-    public String getColor(){
-        return this.color;
-    }
-    
-    /*
      * Draw the rectangle with current specifications on screen.
      */
-
-    private void draw() {
-        if(isVisible) {
+    @Override
+    protected void draw() {
+        if(super.isVisible()) {
             Canvas canvas = Canvas.getCanvas();
-            canvas.draw(this, color,
-                new java.awt.Rectangle(xPosition, yPosition, 
+            canvas.draw(this, super.getColor(),
+                new java.awt.Rectangle(super.getXPosition(), super.getYPosition(), 
                                        width, height));
             canvas.wait(10);
         }
     }
 
-    /*
+    /**
      * Erase the rectangle on screen.
      */
-    private void erase(){
-        if(isVisible) {
+    @Override
+    protected void erase(){
+        if(super.isVisible()) {
             Canvas canvas = Canvas.getCanvas();
             canvas.erase(this);
         }

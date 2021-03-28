@@ -140,13 +140,11 @@ public void refreshBoards(){
     // Si la zona de planeación fue copiada antes de hacer zoom, 
     // actualizamos las cajas
     if (this.isCopied){
-        // Pintamos únicamente las cajas copiadas
-        
+        // Pintamos únicamente las cajas copiadas        
         this.planningZone.refreshBoard(this.planningZoneBoxColor, this.planningZoneColor);
         
         // Si las vistas de la zona de planeación son diferentes a las de la bodega,
-        // pintamos la zona de planeación de color rojo
-        
+        // pintamos la zona de planeación de color rojo        
         this.repaintPlanningZone();
     }
 }
@@ -207,8 +205,8 @@ public void printOccupationMap(){
     
     for(int i = 0; i < this.rows; i++){
         for(int j = 0; j < this.cols; j++){
-        warehouseRes += this.warehouse.getValues()[i][j];
-        planningZoneRes += this.planningZone.getValues()[i][j];
+            warehouseRes += this.warehouse.getValues()[i][j];
+            planningZoneRes += this.planningZone.getValues()[i][j];
         }
         warehouseRes += "\n";
         planningZoneRes += "\n";
@@ -229,14 +227,14 @@ public void printOccupationMap(){
 * Copy actual state of the warehouse into the planning zone
 */
 public void copy(){   
-    // Agregamos la acción al stack        
-    if (undoStack.size() > 0){
+    // Agregamos la acción al stack
+    try{
          Action lastAction = undoStack.peek();
          
          if(!lastAction.getAction().equals("copy")){
              undoStack.push(new Action("copy", -1, -1));
         }
-    } else {
+    } catch (EmptyStackException e) {
         undoStack.push(new Action("copy", -1, -1));
     }
     
@@ -512,7 +510,7 @@ public void undo(){
  * Redo the last undone action
  */
 public void redo(){        
-    if (this.redoStack.size() > 0){
+    try{
         // Tomamos la última acción
         Action action = redoStack.pop();
         
@@ -541,8 +539,8 @@ public void redo(){
     
     // La agregamos al stack de cosas por deshacer
     undoStack.add(action);
-    } else {
-        printOutput("No hay nada por rehacer");
+    } catch (EmptyStackException e) {
+        this.printOutput(MissionException.NOTHING_TO_REDO);
     }
 }
 
@@ -603,7 +601,7 @@ public void zoom(char z){
             this.refreshBoards();
             break;
         default:
-            this.printOutput("¡Ingrese una opción válida para el zoom! ('+', '-')");
+            this.printOutput(MissionException.INVALID_ZOOM_OPTION);
             break;
     }              
 }
@@ -627,49 +625,44 @@ public void arrange(int[] from, int[] to){
         // Verificamos si la posición nueva es válida
         if(this.isValidPosition(newRow, newCol)){
             // Verificamos si en esa posición hay una caja    
-            if (this.planningZone.getValues()[oldRow][oldCol] > 0){
-                // Retiramos una caja de esa posición
+            if (this.planningZone.getValues()[oldRow][oldCol] > 0){                
                 try {
+                    // Retiramos una caja de esa posición
                     this.planningZone.removeBox(oldRow, oldCol);
+                
+                    // Agregamos la caja a la nueva posición
+                    this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
+                    //this.planningZoneValues[newRow][newCol]++;
+                    
+                    // Guardamos la información para undo/redo
+                    this.undoStack.push(new Action("arrange", oldRow, oldCol, newRow, newCol));
+                    
+                    // Re pintamos la zona de planeación
+                    this.repaintPlanningZone();
+                    
+                    // La operación 'arrange' fue exitosa
+                    this.setIsOk(true);
                 } catch(MissionException e){
-                    System.out.println("Excepcion atrapada en arrange()");
-                    System.out.println(e);
-                }
-                
-                //this.planningZoneValues[oldRow][oldCol]--;
-                
-                // Agregamos la caja a la nueva posición
-                this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
-                //this.planningZoneValues[newRow][newCol]++;
-                
-                // Guardamos la información para undo/redo
-                // nombre-POS1,POS2;POS1,POS2
-                //String res = "arrange-" + oldRow + "," + oldCol + ";" + newRow + "," + newCol;
-                this.undoStack.push(new Action("arrange", oldRow, oldCol, newRow, newCol));
-                
-                // Re pintamos la zona de planeación
-                this.repaintPlanningZone();
-                
-                // La operación 'arrange' fue exitosa
-                this.setIsOk(true);
+                    this.printOutput(e.getMessage());
+                }          
                 
             } else {
                 // Imprimimos el output
-                this.printOutput("¡No hay cajas para ubicar en esa posición!");
+                this.printOutput(MissionException.NO_BOXES_TO_PLACE);
                 
                 // La operación 'arrange' no fue exitosa
                 this.setIsOk(false);
             }  
         } else {
             // Imprimimos el output
-            this.printOutput("La posición 'to' no es válida");
+            this.printOutput(MissionException.INVALID_TO_POSITION);
             
             // La operación 'arrange' no fue exitosa
             this.setIsOk(false);
         }
     } else {
         // Imprimimos el output
-        this.printOutput("La posición 'from' no es válida"); 
+        this.printOutput(MissionException.INVALID_FROM_POSITION); 
         
         // La operación 'arrange' no fue exitosa
         this.setIsOk(false);

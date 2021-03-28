@@ -6,104 +6,86 @@ import java.awt.geom.*;
 /**
  * A circle that can be manipulated and that draws itself on a canvas.
  * 
- * @author  Michael Kolling and David J. Barnes
+ * @author  Juan David Murillo - Carlos Orduz
  * @version 1.0.  (15 July 2000) 
  */
 
-public class Circle{
+public class Circle extends Shape{
 
     public static final double PI=3.1416;
     
     private int diameter;
-    private int xPosition;
-    private int yPosition;
-    private String color;
-    private boolean isVisible;
     
-
+    /**
+     * Constructor for the circle class
+     */
     public Circle(){
+        super("blue", false, 20, 15);
         diameter = 30;
-        xPosition = 20;
-        yPosition = 15;
-        color = "blue";
-        isVisible = false;
     }
-
-
-       
+     
+    /**
+     * Makes the circle visible
+     */
+    @Override
     public void makeVisible(){
-        isVisible = true;
+        super.setVisible(true);
         draw();
     }
     
-
+    /**
+     * Makes the circle invisible
+     */
+    @Override
     public void makeInvisible(){
         erase();
-        isVisible = false;
+        super.setVisible(false);
     }
 
-    private void draw(){
-        if(isVisible) {
+    /**
+     * Draw the circle
+     */
+    @Override
+    protected void draw(){
+        if(super.isVisible()) {
             Canvas canvas = Canvas.getCanvas();
-            canvas.draw(this, color, 
-                new Ellipse2D.Double(xPosition, yPosition, 
+            canvas.draw(this, super.getColor(), 
+                new Ellipse2D.Double(super.getXPosition(), super.getYPosition(), 
                 diameter, diameter));
             canvas.wait(10);
         }
     }
-
-    private void erase(){
-        if(isVisible) {
+    
+    /**
+     * Erase the circle
+     */
+    @Override
+    protected void erase(){
+        if(super.isVisible()) {
             Canvas canvas = Canvas.getCanvas();
             canvas.erase(this);
         }
-    }
-    
-    /**
-     * Move the circle a few pixels to the right.
-     */
-    public void moveRight(){
-        moveHorizontal(20);
-    }
-
-    /**
-     * Move the circle a few pixels to the left.
-     */
-    public void moveLeft(){
-        moveHorizontal(-20);
-    }
-
-    /**
-     * Move the circle a few pixels up.
-     */
-    public void moveUp(){
-        moveVertical(-20);
-    }
-
-    /**
-     * Move the circle a few pixels down.
-     */
-    public void moveDown(){
-        moveVertical(20);
-    }
-
-    /**
-     * Move the circle horizontally.
-     * @param distance the desired distance in pixels
-     */
-    public void moveHorizontal(int distance){
-        erase();
-        xPosition += distance;
-        draw();
     }
 
     /**
      * Move the circle vertically.
      * @param distance the desired distance in pixels
      */
+    @Override
     public void moveVertical(int distance){
         erase();
-        yPosition += distance;
+        super.setYPosition(super.getYPosition() + distance);
+        draw();
+    }
+    
+    /**
+     * Move the circle horizontally.
+     * @param distance the desired distance in pixels
+     */
+    @Override
+    public void moveHorizontal(int distance){
+        erase();
+        super.setXPosition(super.getXPosition() + distance);
         draw();
     }
 
@@ -111,6 +93,7 @@ public class Circle{
      * Slowly move the circle horizontally.
      * @param distance the desired distance in pixels
      */
+    @Override
     public void slowMoveHorizontal(int distance){
         int delta;
 
@@ -122,7 +105,7 @@ public class Circle{
         }
 
         for(int i = 0; i < distance; i++){
-            xPosition += delta;
+            super.setXPosition(super.getXPosition() + delta);
             draw();
         }
     }
@@ -131,6 +114,7 @@ public class Circle{
      * Slowly move the circle vertically
      * @param distance the desired distance in pixels
      */
+    @Override
     public void slowMoveVertical(int distance){
         int delta;
 
@@ -142,7 +126,7 @@ public class Circle{
         }
 
         for(int i = 0; i < distance; i++){
-            yPosition += delta;
+            super.setYPosition(super.getYPosition() + delta);
             draw();
         }
     }
@@ -162,11 +146,9 @@ public class Circle{
      * @param color the new color. Valid colors are "red", "yellow", "blue", "green",
      * "magenta" and "black".
      */
+    @Override
     public void changeColor(String newColor){
-        color = newColor;
+        super.setColor(newColor);
         draw();
     }
-
-
-
 }
