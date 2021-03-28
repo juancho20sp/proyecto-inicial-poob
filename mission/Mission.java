@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Stack;
+import java.util.EmptyStackException;
 
 /**
 * Initial project for POOB
@@ -176,7 +177,7 @@ public void store(int row, int column){
         this.setIsOk(true);
     } else {
         // Imprimimos el output
-        this.printOutput("La posición ingresada no es válida");      
+        this.printOutput(MissionException.INVALID_POS);      
         
         // La operación 'store' fue no exitosa
         this.setIsOk(false);
@@ -443,7 +444,7 @@ public int[][] toSteal(){
 */
 public void returnBox(){      
     // Si hay movimientos, podemos deshacerlos
-    if(this.stealHistorial.size() > 0){
+    try{
         // Tomamos el movimiento
         String lastMove = this.stealHistorial.get(this.stealHistorial.size() - 1);
         String pos[] = lastMove.split("-");
@@ -462,9 +463,9 @@ public void returnBox(){
         
         // La operación 'returnBox' fue exitosa
         this.setIsOk(true);
-    } else {
+    } catch(IndexOutOfBoundsException e) {
         // Imprimimos el output
-        this.printOutput("No hay cajas para devolver");
+        this.printOutput(MissionException.NOTHING_TO_RETURN);
         
         // La operación 'returnBox' no fue exitosa
         this.setIsOk(false);
@@ -475,7 +476,7 @@ public void returnBox(){
  * Undo the last valid action 
  */
 public void undo(){        
-    if (this.undoStack.size() > 0){
+    try {
         // Tomamos la última acción
         Action action = undoStack.pop();
         
@@ -498,12 +499,12 @@ public void undo(){
         case "copy":
             this.restartPlanningZone();
             break;
-    }
-    
-    // La agregamos al stack de cosas por rehacer
-    redoStack.add(action);
-    } else {
-        printOutput("No hay nada por deshacer");
+        }
+        
+        redoStack.add(action);
+        
+    } catch (EmptyStackException e){
+        this.printOutput(MissionException.NOTHING_TO_RETURN);
     }        
 }
 
