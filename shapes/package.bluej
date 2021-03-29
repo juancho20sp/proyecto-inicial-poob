@@ -11,6 +11,7 @@ dependency3.type=UsesDependency
 dependency4.from=Triangle
 dependency4.to=Canvas
 dependency4.type=UsesDependency
+<<<<<<< HEAD
 objectbench.height=95
 objectbench.width=432
 package.divider.horizontal=0.5704261954261954
@@ -21,6 +22,18 @@ package.editor.x=100
 package.editor.y=100
 package.frame.height=610
 package.frame.width=804
+=======
+objectbench.height=107
+objectbench.width=457
+package.divider.horizontal=0.5997931747673216
+package.divider.vertical=0.7822085889570551
+package.editor.height=402
+package.editor.width=641
+package.editor.x=492
+package.editor.y=78
+package.frame.height=620
+package.frame.width=808
+>>>>>>> refactor
 package.numDependencies=4
 package.numTargets=5
 package.showExtends=true
@@ -35,6 +48,7 @@ target1.name=Circle
 target1.showInterface=false
 target1.type=ClassTarget
 target1.width=120
+<<<<<<< HEAD
 target1.x=440
 target1.y=40
 target2.height=50
@@ -44,24 +58,50 @@ target2.type=AbstractTarget
 target2.width=80
 target2.x=180
 target2.y=10
+=======
+target1.x=310
+target1.y=60
+target2.height=70
+target2.name=Shape
+target2.showInterface=false
+target2.type=AbstractTarget
+target2.width=120
+target2.x=30
+target2.y=260
+>>>>>>> refactor
 target3.height=70
 target3.name=Canvas
 target3.showInterface=false
 target3.type=ClassTarget
 target3.width=120
+<<<<<<< HEAD
 target3.x=70
 target3.y=130
+=======
+target3.x=20
+target3.y=140
+>>>>>>> refactor
 target4.height=70
 target4.name=Rectangle
 target4.showInterface=false
 target4.type=ClassTarget
 target4.width=120
+<<<<<<< HEAD
 target4.x=290
 target4.y=250
+=======
+target4.x=380
+target4.y=260
+>>>>>>> refactor
 target5.height=70
 target5.name=Triangle
 target5.showInterface=false
 target5.type=ClassTarget
 target5.width=120
+<<<<<<< HEAD
 target5.x=50
 target5.y=290
+=======
+target5.x=200
+target5.y=350
+>>>>>>> refactor

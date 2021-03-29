@@ -26,6 +26,7 @@ dependency8.type=UsesDependency
 dependency9.from=Mission
 dependency9.to=MissionException
 dependency9.type=UsesDependency
+<<<<<<< HEAD
 objectbench.height=92
 objectbench.width=452
 package.divider.horizontal=0.5995297805642633
@@ -38,6 +39,20 @@ package.frame.height=600
 package.frame.width=800
 package.numDependencies=9
 package.numTargets=9
+=======
+objectbench.height=160
+objectbench.width=452
+package.divider.horizontal=0.5995297805642633
+package.divider.vertical=0.6658692185007974
+package.editor.height=328
+package.editor.width=633
+package.editor.x=347
+package.editor.y=112
+package.frame.height=600
+package.frame.width=800
+package.numDependencies=9
+package.numTargets=8
+>>>>>>> refactor
 package.showExtends=true
 package.showUses=true
 readme.height=58
@@ -71,8 +86,13 @@ target4.name=Action
 target4.showInterface=false
 target4.type=ClassTarget
 target4.width=80
+<<<<<<< HEAD
 target4.x=140
 target4.y=150
+=======
+target4.x=310
+target4.y=90
+>>>>>>> refactor
 target5.height=50
 target5.name=Board
 target5.showInterface=false
@@ -95,6 +115,7 @@ target7.width=150
 target7.x=40
 target7.y=310
 target8.height=50
+<<<<<<< HEAD
 target8.name=Box
 target8.showInterface=false
 target8.type=ClassTarget
@@ -108,3 +129,11 @@ target9.type=ClassTarget
 target9.width=80
 target9.x=330
 target9.y=210
+=======
+target8.name=Mission
+target8.showInterface=false
+target8.type=ClassTarget
+target8.width=80
+target8.x=330
+target8.y=210
+>>>>>>> refactor

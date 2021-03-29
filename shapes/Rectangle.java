@@ -8,7 +8,7 @@ import java.awt.*;
  * @author  Michael Kolling and David J. Barnes (Modified), Juan David Murillo, Carlos Orduz
  * @version 1.0  (15 July 2000)()
  */
-public class Rectangle extends Shape{
+public class Rectangle extends myShape{
     public static int EDGES = 4;
     
     private int height;
