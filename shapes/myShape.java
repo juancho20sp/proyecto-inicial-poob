@@ -6,7 +6,7 @@ package shapes;
  * @author: Juan David Murillo - Carlos Orduz 
  * Date: 27/03/2021
  */
-public abstract class Shape
+public abstract class myShape
 {
     private String color;
     private boolean isVisible;    
@@ -18,7 +18,7 @@ public abstract class Shape
      * @param The color of the shape
      * @param The visibility of the shape
      */
-    public Shape(String color, boolean isVisible, int xPosition, int yPosition){
+    public myShape(String color, boolean isVisible, int xPosition, int yPosition){
         this.color = color;
         this.isVisible = isVisible;
         this.xPosition = xPosition;
