@@ -42,6 +42,8 @@ public class Board
     
     // Stack side
     Stack<Coordinate> stackSide = new Stack<Coordinate>();
+
+    Stack<Box>[][] boxes;
     /**
      * Constructor for objects of class Board
      * @param   rows    Number of rows of the board
@@ -60,6 +62,7 @@ public class Board
         
         // Preparamos la matriz de valores
         this.values = new int[rows][cols];
+        this.boxes = (Stack<Box>[][]) new Stack[rows][cols];
         
         // Inicializamos cada posición de los tableros        
         for(int i = 0; i < this.rows; i++){
@@ -71,7 +74,7 @@ public class Board
                 
                 // Inicializamos los valores
                 this.values[i][j] = 0;
-                
+                boxes[i][j] = new Stack<>();
                 // Movemos la vista frontal a la posición adecuada
                 this.frontView[i][j].moveHorizontal(this.size * j);
                 this.frontView[i][j].moveVertical(this.size * i);
@@ -191,18 +194,20 @@ public class Board
      * @param   color   The color of the boxes. ie 'black', 'red', 'blue'
      * @param   bgColor The background color
      */
-    public void insertBox(int row, int col, String color, String bgColor){
+    public void insertBox(Box box, String bgColor){
         // Actualizamos la cantidad de cajas en la posición dada
-        this.values[row][col]++;
+        box.add(boxes, values);
+        
+        
         
         // Dibujamos la caja
-        this.colorTopView(color, bgColor);
+        this.colorTopView(box.getColor(), bgColor);
         
         // Dibujamos la vista frontal
-        this.colorFrontView(color, bgColor);
+        this.colorFrontView(box.getColor(), bgColor);
         
         // Dibujamos la vista lateral
-        this.colorSideView(color, bgColor);
+        this.colorSideView(box.getColor(), bgColor);
     }  
     
     /** Method for adding a box to the board
@@ -212,18 +217,19 @@ public class Board
      * @param   bgColor The background color
      * @param   isStart Check if we entered
      */
-    public void insertBox(int row, int col, String color, String bgColor, boolean isStart){
+    public void insertBox(Box box, String bgColor, boolean isStart){
         // Actualizamos la cantidad de cajas en la posición dada
-        this.values[row][col]++;
+        box.add(boxes, values);
+        values[box.getPositionX()][box.getPositionY()]++;
         
         // Dibujamos la caja
-        this.colorTopView(color, bgColor);
+        this.colorTopView(box.getColor(), bgColor);
         
         // Dibujamos la vista frontal
-        this.colorFrontView(color, bgColor);
+        this.colorFrontView(box.getColor(), bgColor);
         
         // Dibujamos la vista lateral
-        this.colorSideView(color, bgColor);
+        this.colorSideView(box.getColor(), bgColor);
     }
     
     /**
@@ -232,10 +238,12 @@ public class Board
 
      * @param   col     The column where we want to insert the box 
      */
-    public void removeBox(int row, int col) throws MissionException{
-        if (this.values[row][col] > 0){
-            this.values[row][col]--;
+    public void removeBox(Box box) throws MissionException{
+        if (this.values[box.getPositionX()][box.getPositionY()] > 0){
+            box.steal(boxes, values,stolenBoxes);
+            this.values[box.getPositionX()][box.getPositionY()]--;
             this.stolenBoxes++;
+            
         } else {
             throw new MissionException(MissionException.NOTHING_TO_STEAL);
         }
@@ -616,6 +624,10 @@ public class Board
      */
     public Rectangle[][] getSideView(){        
         return this.sideView;
-    }   
+    }
+    
+    public Stack<Box>[][] getBoxes(){
+        return this.boxes;
+    }
         
 }

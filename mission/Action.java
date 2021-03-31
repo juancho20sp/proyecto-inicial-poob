@@ -10,10 +10,8 @@ package mission;
 public class Action
 {
     private String action;
-    private int initialRow;
-    private int initialCol;
-    private int finalRow;
-    private int finalCol;
+    private Box initialBox;
+    private Box finalBox;
     
     
     /**
@@ -22,11 +20,12 @@ public class Action
      * @param The initial row of the crate we are modifying
      * @param The initial column of the crate we are modifying
      */
-    public Action(String action, int initialRow, int initialCol)
+    public Action(String action, Box initialBox)
     {
         this.action = action;
-        this.initialRow = initialRow;
-        this.initialCol = initialCol;
+        this.initialBox = initialBox;
+        
+        
     }
     
     
@@ -38,13 +37,13 @@ public class Action
      * @param The target row for the crate we are modifying
      * @param The target col for the crate we are modifying
      */
-    public Action(String action, int initialRow, int initialCol, int finalRow, int finalCol)
+    public Action(String action, Box initialBox, Box finalBox)
     {
         this.action = action;
-        this.initialRow = initialRow;
-        this.initialCol = initialCol;
-        this.finalRow = finalRow;
-        this.finalCol = finalCol;
+        this.initialBox = initialBox;
+
+        this.finalBox = finalBox;
+        
     }
     
     /**
@@ -54,38 +53,14 @@ public class Action
     public String getAction(){
         return this.action;
     }
-    
-    /**
-     * Getter for the initial row
-     * @returns The initial row
-     */
-    public int getInitialRow(){
-        return this.initialRow;
+
+    public Box getInitialBox(){
+        return this.initialBox;
     }
-    
-    /**
-     * Getter for the initial col
-     * @returns The initial col
-     */
-    public int getInitialCol(){
-        return this.initialCol;
+    public Box getFinalBox(){
+        return this.finalBox;
     }
-    
-    /**
-     * Getter for the final row
-     * @returns The final row
-     */
-    public int getFinalRow(){
-        return this.finalRow;
-    }
-    
-    /**
-     * Getter for the final col
-     * @returns The final col
-     */
-    public int getFinalCol(){
-        return this.finalCol;
-    }
+   
 
     
 }

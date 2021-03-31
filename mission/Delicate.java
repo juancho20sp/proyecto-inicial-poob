@@ -1,15 +1,17 @@
 package mission;
-
+import java.util.Stack;
 public class Delicate extends Box{
-
-    public Delicate(int positionX, int positionY, String color){
-        super(positionX, positionY, color);
+    private String Color;
+    public Delicate(int positionX, int positionY){
+        super(positionX,positionY);
+        this.setColor("red");
     }
 
     @Override
-    public void add(Box boxes[][]){
-        boxes[getPositionX()][getPositionY()] = new Delicate(getPositionX(),getPositionY(), getColor());
+    public void add(Stack<Box> boxes[][],int [][] values){
+            boxes[getPositionX()][getPositionY()].push(this);
+            values[getPositionX()][getPositionY()]++;
     }
 
-    
+
 }

@@ -1,14 +1,15 @@
 package mission;
-
+import java.util.Stack;
 public class Rebel extends Box{
     
 
-    public Rebel(int positionX, int positionY,String color){
-        super(positionY, positionX, color);
+    public Rebel(int positionX, int positionY){
+        super(positionY, positionX);
     }
 
     @Override
-    public void add(Box[][] boxes){
-        boxes[getPositionY()][getPositionX()] = new Rebel( getPositionX(),getPositionY(), getColor());
+    public void add(Stack<Box>[][] boxes,int[][] values){
+        boxes[getPositionY()][getPositionX()].push(this);
+        values[getPositionY()][getPositionX()]++;
     }
 }

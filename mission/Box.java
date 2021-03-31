@@ -1,5 +1,5 @@
 package mission;
-import java.util.ArrayList;
+import java.util.Stack;
 
 /**
  * Write a description of class Box here.
@@ -13,21 +13,26 @@ public class Box implements BoxActions{
    private String color;
    
    
-   public Box(int positionX, int positionY, String color){
+   public Box(int positionX, int positionY){
        this.positionX = positionX;
        this.positionY = positionY;
-       this.color = color;
+       this.color = "blue";
    }
    
 
    @Override
-   public void add(Box[][] boxes){
-        boxes[positionX][positionY] = new Box(positionX,positionY,color);
+   public void add(Stack<Box>[][] boxes,int[][] values){
+           
+           boxes[positionX][positionY].push(this);
+           values[positionX][positionY]++;
+           
    }
 
    @Override
-   public void steal(Box[][] boxes){
-    boxes[positionX][positionY] = null;
+   public void steal(Stack<Box>[][] boxes,int[][] values,int stolenBoxes){
+        boxes[positionX][positionY].pop();
+        values[positionX][positionY]--;
+        stolenBoxes++;
    }
    
 
@@ -41,4 +46,16 @@ public class Box implements BoxActions{
    public String getColor(){
        return this.color;
    }
+
+   public void setPositionX(int positionX){
+       this.positionX = positionX;
+   }
+
+   public void setPositionY(int positionY){
+        this.positionY = positionY;
+    }
+   public void setColor(String color){
+        this.color = color;
+   }
+
 }

@@ -22,7 +22,7 @@ private int cols;
 private int size = 22;
 
 // Historial de posiciones de cajas robadas
-private ArrayList<String> stealHistorial = new ArrayList<String>();
+private ArrayList<Box> stealHistorial = new ArrayList<Box>();
     
 // ¿Las bodegas son iguales?
 private boolean areEqual = true;
@@ -154,19 +154,29 @@ public void refreshBoards(){
 * @param   row     The row where we want to put the box
 * @param   col     The col where we want to put the box
 */
-public void store(int row, int column){
+public void store(Box box){
     // Arreglamos índices
-    int newRow = row - 1;
-    int newCol = column - 1;
+    int newRow = box.getPositionX() - 1;
+    int newCol = box.getPositionY() - 1;
+    box.setPositionX(newRow);
+    box.setPositionY(newCol);
     
     if(this.isValidPosition(newRow, newCol)){
         String stringForRow = String.valueOf(newRow);
         String stringForCol = String.valueOf(newCol);
         // Guardamos la caja en la casilla seleccionada
-        this.warehouse.insertBox(newRow, newCol, this.warehouseBoxColor, this.wareHouseColor);            
-        
+        Stack<Box>[][] boxes = this.warehouse.getBoxes();
+        if(boxes[newRow][newCol].size() <= 1){
+            this.warehouse.insertBox(box,wareHouseColor);            
+        }else{
+            Box box1 = boxes[newRow][newCol].get(boxes[newRow][newCol].size()-1);
+            wareHouseColor = box1.getColor();
+            this.warehouse.insertBox(box,wareHouseColor);
+            
+        }
         // Agregamos la acción al stack
-        undoStack.push(new Action("store", newRow, newCol)); 
+        
+        undoStack.push(new Action("store", box)); 
         
         // Reset a la zona de planeación
         this.restartPlanningZone();
@@ -187,13 +197,12 @@ public void store(int row, int column){
 * Method for storing a new box on the warehouse board
 * @param   crate   Array[row, col]
 */
-public void store(int [] crate){
+public void store(Box[] box){
     // Tomamos los valores del arreglo
-    int newRow = crate[0];
-    int newCol = crate[1];
-    
     // Guardamos la caja
-    this.store(newRow, newCol);    
+    for(Box b: box){
+        store(b);
+    }   
 }
 
 /**
@@ -232,10 +241,13 @@ public void copy(){
          Action lastAction = undoStack.peek();
          
          if(!lastAction.getAction().equals("copy")){
-             undoStack.push(new Action("copy", -1, -1));
+             Box box =lastAction.getInitialBox();
+             box.setPositionX(-1);
+             box.setPositionY(-1);
+             undoStack.push(new Action("copy", box));
         }
     } catch (EmptyStackException e) {
-        undoStack.push(new Action("copy", -1, -1));
+       
     }
     
     // Actualizamos la bandera
@@ -280,7 +292,7 @@ private void colorPlanningZone(){
         for(int j = 0; j < this.cols; j++){                
             // Si hay una o más cajas, las dibujamos
             if(0 < this.planningZone.getValues()[i][j]){
-                this.planningZone.paintBox(i, j, 't', this.planningZoneBoxColor);
+                this.planningZone.paintBox(i, j, 't', this.planningZone.getBoxes()[i][j].peek().getColor());
             } else {
                 this.planningZone.paintBox(i, j, 't', color);
             }
@@ -367,28 +379,30 @@ private void verifyEquality(){
 * @param   row     int
 * @param   column  int
 */
-public void steal(int row, int col) {
+public void steal(Box box) {
     // Ajustamos los indices
-    int newRow = row - 1;
-    int newCol = col - 1;
+    int newRow = box.getPositionX() - 1;
+    int newCol = box.getPositionY() - 1;
+    box.setPositionX(newRow);
+    box.setPositionY(newCol);
     
     
     if(this.isValidPosition(newRow, newCol)){    
         try {
             // Sacamos una caja de la posición objetivo
-            this.planningZone.removeBox(newRow, newCol);
+            this.planningZone.removeBox(box);
             
             // Re pintamos la zona de planeación
             this.repaintPlanningZone();
             
             // Preparamos la cadena para el stack
-            undoStack.push(new Action("steal", newRow, newCol));
+            undoStack.push(new Action("steal", box));
                             
             // Le damos formato a la tupla
             String tuple = newRow + "-" + newCol;
 
             // Guardamos la tupla
-            this.stealHistorial.add(tuple);
+            this.stealHistorial.add(box);
             
             // La operación 'steal' fue exitosa
             this.setIsOk(true);
@@ -410,13 +424,12 @@ public void steal(int row, int col) {
 * Steal method
 * @param   crate   Array having the position of the crate: [row, col]
 */
-public void steal(int[] crate){
-    // Tomamos los índices
-    int newRow = crate[0];
-    int newCol = crate[1];
+public void steal(Box[] boxes){
     
     // Robamos la caja en dicha posición
-    this.steal(newRow, newCol);
+    for(Box b: boxes){
+        steal(b);
+    }
     
 }
 
@@ -428,8 +441,8 @@ public int[][] toSteal(){
     int[][] stolenCrates = new int[this.stealHistorial.size()][2];
     
     for(int i=0; i<stealHistorial.size();i++){
-        String tuple = this.stealHistorial.get(i);
-        int[] tup = {Character.getNumericValue(tuple.charAt(0))+1,Character.getNumericValue(tuple.charAt(2))+1};
+        Box box = this.stealHistorial.get(i);
+        int[] tup = {box.getPositionX() + 1, box.getPositionY() + 1};
         stolenCrates[i] = tup;
 
     }
@@ -444,14 +457,11 @@ public void returnBox(){
     // Si hay movimientos, podemos deshacerlos
     try{
         // Tomamos el movimiento
-        String lastMove = this.stealHistorial.get(this.stealHistorial.size() - 1);
-        String pos[] = lastMove.split("-");
+        Box lastMove = this.stealHistorial.get(this.stealHistorial.size() - 1);
         
-        int newRow = Integer.parseInt(pos[0]);
-        int newCol = Integer.parseInt(pos[1]);
         
         // Aumentamos el contador de cajas en esa posición
-        this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);          
+        this.planningZone.insertBox(lastMove, this.planningZoneColor);          
                    
         // Re pintamos la devolución de la caja
         this.repaintPlanningZone();
@@ -480,7 +490,7 @@ public void undo(){
         
         switch(action.getAction()){
         case "store":                
-            this.warehouse.uncolorRefresh(action.getInitialRow(), action.getInitialCol(), this.wareHouseColor); 
+            this.warehouse.uncolorRefresh(action.getInitialBox().getPositionX(), action.getInitialBox().getPositionY(), this.wareHouseColor); 
             this.restartPlanningZone();
             break;
             
@@ -489,8 +499,15 @@ public void undo(){
             break;
             
         case "arrange":
-            int[] myFrom = {action.getFinalRow() + 1, action.getFinalCol() + 1};
-            int[] myTo = {action.getInitialRow() + 1, action.getInitialCol() + 1};
+           
+            Box myFrom = action.getInitialBox();
+            Box myTo = action.getFinalBox();
+
+            myFrom.setPositionX(myFrom.getPositionX() + 1);
+            myFrom.setPositionY(myFrom.getPositionY() + 1);
+
+            myTo.setPositionX(myTo.getPositionX() + 1);
+            myTo.setPositionY(myTo.getPositionY() + 1);
             this.arrange(myFrom, myTo);
             break;
             
@@ -516,20 +533,23 @@ public void redo(){
         
         switch(action.getAction()){
         case "store":
-            this.store(action.getInitialRow() + 1, action.getInitialCol() + 1);
+            this.store(action.getInitialBox());
             
             this.areEqual = true;
             this.restartPlanningZone(); 
             break;
             
         case "steal":            
-            this.steal(action.getInitialRow() + 1, action.getInitialRow() + 1);            
+            this.steal(action.getInitialBox()); 
             break;
             
         case "arrange":
-            int[] myFrom = {action.getInitialRow() + 1, action.getInitialRow() + 1};
-            int[] myTo = {action.getFinalRow() + 1, action.getFinalCol() + 1};
-            this.arrange(myFrom, myTo);
+            action.getInitialBox().setPositionX(action.getInitialBox().getPositionX() + 1);
+            action.getInitialBox().setPositionY(action.getInitialBox().getPositionY() + 1);
+
+            action.getFinalBox().setPositionX(action.getFinalBox().getPositionX() + 1);
+            action.getFinalBox().setPositionY(action.getFinalBox().getPositionY() + 1);
+            this.arrange(action.getInitialBox(), action.getFinalBox());
             break;
             
         case "copy":
@@ -611,14 +631,18 @@ public void zoom(char z){
 * @param   from    Array with two values [row, col]
 * @param   to      Array with two values [row, col]
 */
-public void arrange(int[] from, int[] to){
+public void arrange(Box from, Box to){
     // Guardamos los valores, restamos uno porque nuestros índices inician desde 0
     // y el usuario ingresa valores desde 1      
-    int oldRow = from[0] - 1;
-    int oldCol = from[1] - 1;
+    int oldRow = from.getPositionX() - 1;
+    from.setPositionX(oldRow);
+    int oldCol = from.getPositionY() - 1;
+    from.setPositionY(oldCol);
     
-    int newRow = to[0] - 1;
-    int newCol = to[1] - 1;
+    int newRow = to.getPositionX() - 1;
+    to.setPositionX(newRow);
+    int newCol = to.getPositionY() - 1;
+    to.setPositionY(newCol);
     
     // Verificamos si la posición anterior es válida
     if(this.isValidPosition(oldRow, oldCol)){
@@ -628,14 +652,15 @@ public void arrange(int[] from, int[] to){
             if (this.planningZone.getValues()[oldRow][oldCol] > 0){                
                 try {
                     // Retiramos una caja de esa posición
-                    this.planningZone.removeBox(oldRow, oldCol);
+                    this.planningZone.removeBox(from);
                 
                     // Agregamos la caja a la nueva posición
-                    this.planningZone.insertBox(newRow, newCol, this.planningZoneBoxColor, this.planningZoneColor);
+                    this.planningZone.insertBox(to, this.planningZoneColor);
+                    to.setColor(this.planningZoneBoxColor);
                     //this.planningZoneValues[newRow][newCol]++;
                     
                     // Guardamos la información para undo/redo
-                    this.undoStack.push(new Action("arrange", oldRow, oldCol, newRow, newCol));
+                    this.undoStack.push(new Action("arrange", from, to));
                     
                     // Re pintamos la zona de planeación
                     this.repaintPlanningZone();

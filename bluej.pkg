@@ -1,35 +1,18 @@
 #BlueJ package file
-<<<<<<< HEAD
-editor.fx.0.height=27
-editor.fx.0.width=159
-editor.fx.0.x=-25600
-editor.fx.0.y=-25600
-objectbench.height=344
-objectbench.width=474
-package.divider.horizontal=0.6000499001996008
-package.divider.vertical=0.37642045454545453
-package.editor.height=206
-package.editor.width=683
-package.editor.x=644
-package.editor.y=136
-package.frame.height=662
-package.frame.width=836
-=======
-editor.fx.0.height=737
-editor.fx.0.width=814
-editor.fx.0.x=390
-editor.fx.0.y=82
-objectbench.height=98
-objectbench.width=458
-package.divider.horizontal=0.5772095332671301
-package.divider.vertical=0.7925867507886436
-package.editor.height=396
-package.editor.width=687
-package.editor.x=262
-package.editor.y=130
-package.frame.height=606
-package.frame.width=840
->>>>>>> refactor
+editor.fx.0.height=838
+editor.fx.0.width=1550
+editor.fx.0.x=-7
+editor.fx.0.y=-7
+objectbench.height=161
+objectbench.width=903
+package.divider.horizontal=0.600263852242744
+package.divider.vertical=0.7724567099567099
+package.editor.height=564
+package.editor.width=1397
+package.editor.x=0
+package.editor.y=0
+package.frame.height=838
+package.frame.width=1550
 package.numDependencies=0
 package.numTargets=2
 package.showExtends=true
@@ -40,20 +23,6 @@ readme.name=@README
 readme.width=47
 readme.x=10
 readme.y=10
-<<<<<<< HEAD
-target1.height=62
-target1.name=mission
-target1.type=PackageTarget
-target1.width=80
-target1.x=90
-target1.y=10
-target2.height=62
-target2.name=shapes
-target2.type=PackageTarget
-target2.width=80
-target2.x=180
-target2.y=10
-=======
 target1.height=82
 target1.name=mission
 target1.type=PackageTarget
@@ -66,4 +35,3 @@ target2.type=PackageTarget
 target2.width=120
 target2.x=120
 target2.y=110
->>>>>>> refactor
